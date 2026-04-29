@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoFaygo — Official</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────── */
+    :root {
+      --pink:       #FF1493;
+      --pink-dim:   #c0106f;
+      --black:      #080808;
+      --dark:       #101010;
+      --panel:      #141414;
+      --white:      #FFFFFF;
+      --off-white:  #F5F4F2;
+      --muted:      rgba(255,255,255,0.55);
+      --border:     rgba(255,255,255,0.07);
+      --font-disp:  'Bebas Neue', sans-serif;
+      --font-body:  'Inter', sans-serif;
+    }
+
+    /* ── Reset ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── Utility ───────────────────────────────── */
+    .label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 18px;
+      display: block;
+    }
+    .label-muted { color: rgba(255,255,255,0.35); }
+    .divider-pink { width: 36px; height: 2px; background: var(--pink); margin: 28px 0; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 30px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      border: none;
+    }
+    .btn-pink  { background: var(--pink); color: var(--white); }
+    .btn-pink:hover  { background: var(--pink-dim); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.25); }
+    .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── Placeholder Image Fills ───────────────── */
+    .fill-a { background: #1a1228; }
+    .fill-b { background: #0d1a1a; }
+    .fill-c { background: #1a0d1a; }
+    .fill-d { background: #0a0a18; }
+    .fill-e { background: #1a1010; }
+    .fill-f { background: #0f0f0f; }
+    .fill-g { background: #e8e4de; }
+
+    /* ── NAV ───────────────────────────────────── */
+    nav {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 200;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 44px;
+      height: 64px;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-right { justify-content: flex-end; }
+    .nav-left a, .nav-right a {
+      font-size: 10.5px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      transition: color 0.2s;
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--pink); }
+    .nav-logo {
+      text-align: center;
+      font-family: var(--font-disp);
+      font-size: 26px;
+      letter-spacing: 0.06em;
+      color: var(--pink);
+    }
+
+    /* ── HERO ──────────────────────────────────── */
+    #hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100dvh;
+      padding-top: 64px;
+    }
+    .hero-photo {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-photo-inner {
+      position: absolute;
+      inset: 0;
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 72px 64px;
+      background: var(--black);
+    }
+    .hero-name {
+      font-family: var(--font-disp);
+      font-size: clamp(52px, 5.5vw, 84px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      margin-bottom: 0;
+    }
+    .hero-bio {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 380px;
+      margin-bottom: 48px;
+    }
+    .hero-badges {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 40px;
+    }
+    .badge {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* ── RECOGNITION ───────────────────────────── */
+    #recognition {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 72vh;
+    }
+    .recog-copy {
+      padding: 88px 64px;
+      background: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .recog-title {
+      font-family: var(--font-disp);
+      font-size: clamp(38px, 3.8vw, 58px);
+      line-height: 0.98;
+      color: var(--black);
+      margin-bottom: 0;
+    }
+    .recog-divider { width: 36px; height: 2px; background: var(--pink); margin: 28px 0; }
+    .recog-body {
+      font-size: 14px;
+      line-height: 1.85;
+      color: #4a4a4a;
+      max-width: 420px;
+    }
+    .recog-photo {
+      position: relative;
+      overflow: hidden;
+    }
+    .recog-photo-inner { position: absolute; inset: 0; }
+
+    /* ── SONGS ─────────────────────────────────── */
+    #songs {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr 1fr;
+      min-height: 68vh;
+    }
+    .songs-left, .songs-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .songs-left-inner, .songs-right-inner { position: absolute; inset: 0; }
+    .songs-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 52px;
+      background: var(--dark);
+    }
+    .songs-num {
+      font-family: var(--font-disp);
+      font-size: 96px;
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      margin-bottom: -24px;
+      user-select: none;
+    }
+    .songs-heading {
+      font-family: var(--font-disp);
+      font-size: 38px;
+      letter-spacing: 0.04em;
+      color: var(--pink);
+      margin-bottom: 36px;
+    }
+    .tracklist { list-style: none; }
+    .track-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.055);
+      cursor: pointer;
+      transition: background 0.15s;
+      border-radius: 2px;
+    }
+    .track-row:hover .track-title { color: var(--pink); }
+    .track-left { display: flex; align-items: center; gap: 14px; }
+    .track-idx {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      width: 18px;
+      flex-shrink: 0;
+    }
+    .track-title {
+      font-size: 13px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
+      transition: color 0.2s;
+    }
+    .track-dur {
+      font-size: 11px;
+      color: rgba(255,255,255,0.28);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── ALBUM FEATURE ─────────────────────────── */
+    .album-feat {
+      position: relative;
+      min-height: 86vh;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+    .album-feat-bg { position: absolute; inset: 0; }
+    .album-feat-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 55%, transparent 100%);
+    }
+    .album-feat-content {
+      position: relative;
+      z-index: 2;
+      padding: 64px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      width: 100%;
+      align-items: end;
+    }
+    .album-ghost-num {
+      position: absolute;
+      top: 32px;
+      right: 48px;
+      font-family: var(--font-disp);
+      font-size: clamp(140px, 18vw, 220px);
+      color: rgba(255,255,255,0.035);
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+    }
+    .album-year { color: var(--pink); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; display: block; }
+    .album-title {
+      font-family: var(--font-disp);
+      font-size: clamp(60px, 8vw, 108px);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+    }
+    .album-desc {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 360px;
+      margin-bottom: 40px;
+    }
+
+    /* ── CACTUS JACK ───────────────────────────── */
+    #cactus {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 72vh;
+    }
+    .cj-photo { position: relative; overflow: hidden; }
+    .cj-photo-inner { position: absolute; inset: 0; }
+    .cj-copy {
+      padding: 88px 64px;
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .cj-title {
+      font-family: var(--font-disp);
+      font-size: clamp(42px, 4vw, 64px);
+      line-height: 0.98;
+      margin-bottom: 0;
+    }
+    .cj-body {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 400px;
+    }
+
+    /* ── MERCH ─────────────────────────────────── */
+    #merch {
+      padding: 96px 64px;
+      background: var(--off-white);
+    }
+    .merch-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 56px;
+    }
+    .merch-hed {
+      font-family: var(--font-disp);
+      font-size: clamp(64px, 8vw, 96px);
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: 0.02em;
+    }
+    .merch-see-all {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--pink);
+      transition: opacity 0.2s;
+    }
+    .merch-see-all:hover { opacity: 0.7; }
+    .merch-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .merch-card {}
+    .merch-card-img {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
+    }
+    .merch-card-img-inner { position: absolute; inset: 0; transition: transform 0.45s ease; }
+    .merch-card:hover .merch-card-img-inner { transform: scale(1.05); }
+    .merch-card-name { font-size: 14px; font-weight: 500; color: var(--black); margin-bottom: 4px; }
+    .merch-card-price { font-size: 13px; color: #888; }
+
+    /* ── FOOTER ────────────────────────────────── */
+    footer {
+      padding: 72px 64px 48px;
+      background: var(--black);
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+    .footer-wordmark {
+      font-family: var(--font-disp);
+      font-size: 56px;
+      color: var(--pink);
+      letter-spacing: 0.05em;
+    }
+    .footer-tagline {
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.25);
+    }
+    .social-row {
+      display: flex;
+      gap: 12px;
+    }
+    .social-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.45);
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .social-btn:hover {
+      border-color: var(--pink);
+      color: var(--pink);
+      background: rgba(255,20,147,0.08);
+    }
+    .footer-bottom {
+      width: 100%;
+      padding-top: 28px;
+      margin-top: 12px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.2);
+      text-transform: uppercase;
+    }
+
+    /* ── SCROLL REVEAL ─────────────────────────── */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    [data-reveal].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ────────────────────────────── */
+    @media (max-width: 1100px) {
+      #songs { grid-template-columns: 1fr; }
+      .songs-left, .songs-right { display: none; }
+      .songs-copy { min-height: 60vh; }
+    }
+    @media (max-width: 900px) {
+      #hero, #recognition, #cactus { grid-template-columns: 1fr; }
+      .hero-photo { min-height: 55vh; }
+      .recog-photo { min-height: 50vh; order: -1; }
+      .cj-photo { min-height: 50vh; }
+      .album-feat-content { grid-template-columns: 1fr; }
+      .merch-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-left, .nav-right { display: none; }
+      .hero-copy, .recog-copy, .cj-copy { padding: 56px 24px; }
+      .songs-copy { padding: 56px 24px; }
+      #merch { padding: 64px 24px; }
+      .merch-grid { grid-template-columns: 1fr; }
+      .album-feat-content { padding: 40px 24px; }
+      footer { padding: 56px 24px 36px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────── -->
+<nav>
+  <ul class="nav-left">
+    <li><a href="#songs">Music</a></li>
+    <li><a href="#recognition">About</a></li>
+    <li><a href="#cactus">Label</a></li>
+  </ul>
+  <a href="#" class="nav-logo">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="#merch">Merch</a></li>
+    <li><a href="#" target="_blank">Stream</a></li>
+    <li><a href="#" target="_blank">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────── -->
+<section id="hero">
+  <div class="hero-photo fill-a">
+    <!-- Replace with: <img src="assets/sofaygo-hero.jpg" alt="SoFaygo"> -->
+  </div>
+  <div class="hero-copy">
+    <span class="label">Atlanta, Georgia</span>
+    <h1 class="hero-name">Andre<br>Dontrel<br>Burt Jr.</h1>
+    <div class="divider-pink"></div>
+    <div class="hero-badges">
+      <span class="badge">Rapper</span>
+      <span class="badge">Singer</span>
+      <span class="badge">Songwriter</span>
+    </div>
+    <p class="hero-bio">
+      SoFaygo is a rapper, singer, and songwriter from Atlanta, Georgia.
+      Known for his melodic style and introspective lyricism, he has become
+      one of the most compelling voices in the new wave of Southern hip-hop.
+    </p>
+    <a href="#songs" class="btn btn-pink">Listen Now ↓</a>
+  </div>
+</section>
+
+<!-- ── RECOGNITION ──────────────────────────────── -->
+<section id="recognition">
+  <div class="recog-copy" data-reveal>
+    <span class="label" style="color:#333; letter-spacing:0.2em;">Story</span>
+    <h2 class="recog-title">The First<br>Recognition</h2>
+    <div class="recog-divider"></div>
+    <p class="recog-body">
+      Breaking through with his debut project, SoFaygo captured the attention
+      of the industry with his unique blend of trap melodies and emotional
+      storytelling. His co-sign by Travis Scott's Cactus Jack label marked
+      a defining moment in his career.
+    </p>
+    <br>
+    <p class="recog-body">
+      His raw vulnerability and relentless artistry have earned him a devoted
+      fanbase that continues to grow with each release — cementing his place
+      as one of Atlanta's most promising voices.
+    </p>
+  </div>
+  <div class="recog-photo fill-c">
+    <!-- Replace with: <img src="assets/sofaygo-recognition.jpg" alt="SoFaygo performing"> -->
+  </div>
+</section>
+
+<!-- ── SONGS TO LISTEN ──────────────────────────── -->
+<section id="songs">
+  <div class="songs-left fill-b">
+    <!-- Replace with: <img src="assets/sofaygo-live.jpg" alt="SoFaygo live"> -->
+  </div>
+  <div class="songs-copy">
+    <div class="songs-num">01</div>
+    <h2 class="songs-heading">Songs<br>to Listen</h2>
+    <ul class="tracklist">
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">01</span>
+          <span class="track-title">Pink Hearts</span>
+        </div>
+        <span class="track-dur">3:12</span>
+      </li>
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">02</span>
+          <span class="track-title">Knock Knock</span>
+        </div>
+        <span class="track-dur">2:58</span>
+      </li>
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">03</span>
+          <span class="track-title">Turks (ft. Travis Scott)</span>
+        </div>
+        <span class="track-dur">3:24</span>
+      </li>
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">04</span>
+          <span class="track-title">Lost Boy</span>
+        </div>
+        <span class="track-dur">2:44</span>
+      </li>
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">05</span>
+          <span class="track-title">Show U Off</span>
+        </div>
+        <span class="track-dur">3:01</span>
+      </li>
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">06</span>
+          <span class="track-title">Paranoid</span>
+        </div>
+        <span class="track-dur">2:52</span>
+      </li>
+      <li class="track-row">
+        <div class="track-left">
+          <span class="track-idx">07</span>
+          <span class="track-title">On My Way</span>
+        </div>
+        <span class="track-dur">3:18</span>
+      </li>
+    </ul>
+  </div>
+  <div class="songs-right fill-e" style="position:relative; overflow:hidden;">
+    <!-- Replace with: <img src="assets/pink-heart-cover.jpg" alt="Pink Heart album"> -->
+    <div style="position:absolute; bottom:32px; left:32px;">
+      <span style="font-family:var(--font-disp); font-size:32px; color:var(--white); letter-spacing:0.04em;">Pink Heart</span>
+      <div style="font-size:11px; color:var(--pink); letter-spacing:0.15em; text-transform:uppercase; margin-top:6px;">Mixtape · 2021</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ANGELIC 7 ─────────────────────────────────── -->
+<div class="album-feat fill-a" id="angelic7">
+  <!-- Replace with: <img class="album-feat-bg" src="assets/angelic7-bg.jpg" alt="Angelic 7"> -->
+  <div class="album-feat-overlay"></div>
+  <span class="album-ghost-num">7</span>
+  <div class="album-feat-content" data-reveal>
+    <div>
+      <span class="album-year">Album · 2022</span>
+      <h2 class="album-title">Angelic<br>7</h2>
+      <div class="divider-pink"></div>
+      <p class="album-desc">
+        SoFaygo's most ambitious project — a collection of songs exploring
+        love, loss, and the relentless pursuit of greatness. His most personal
+        and introspective work to date.
+      </p>
+      <a href="#" class="btn btn-pink">Stream Album →</a>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:16px;">
+      <div style="text-align:right;">
+        <div style="font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:8px;">Tracklist highlight</div>
+        <div style="font-size:22px; font-family:var(--font-disp); letter-spacing:0.04em; color:var(--white); line-height:1.4;">
+          Angelic Love<br>
+          Forever Faygo<br>
+          <span style="color:var(--pink);">On My Own</span><br>
+          Drift
+        </div>
+      </div>
+      <a href="#" class="btn btn-outline">Full Tracklist</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── CACTUS JACK ───────────────────────────────── -->
+<section id="cactus">
+  <div class="cj-photo fill-d">
+    <!-- Replace with: <img src="assets/sofaygo-cj.jpg" alt="Cactus Jack"> -->
+  </div>
+  <div class="cj-copy" data-reveal>
+    <span class="label">Label</span>
+    <h2 class="cj-title">Cactus<br>Jack</h2>
+    <div class="divider-pink"></div>
+    <p class="cj-body">
+      Signed to Travis Scott's Cactus Jack Records, SoFaygo joined a
+      roster defined by creative boundary-pushing. The label gave him the
+      platform and freedom to evolve his craft and connect with a global
+      audience on his own terms.
+    </p>
+    <br>
+    <p class="cj-body">
+      Under Cactus Jack, SoFaygo has collaborated with some of the biggest
+      names in hip-hop while maintaining the raw authenticity that first
+      made him stand out from the crowd.
+    </p>
+    <div style="margin-top: 40px;">
+      <a href="#" class="btn btn-outline">Discography →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── MERCH ─────────────────────────────────────── -->
+<section id="merch">
+  <div class="merch-header" data-reveal>
+    <h2 class="merch-hed">Merch</h2>
+    <a href="#" class="merch-see-all">Shop All →</a>
+  </div>
+  <div class="merch-grid">
+    <div class="merch-card" data-reveal>
+      <div class="merch-card-img">
+        <div class="merch-card-img-inner fill-c"></div>
+        <!-- Replace with: <img src="assets/merch-hoodie.jpg" alt="Angelic 7 Hoodie"> -->
+      </div>
+      <div class="merch-card-name">Angelic 7 Hoodie</div>
+      <div class="merch-card-price">$65</div>
+    </div>
+    <div class="merch-card" data-reveal style="transition-delay:0.1s">
+      <div class="merch-card-img">
+        <div class="merch-card-img-inner fill-e"></div>
+        <!-- Replace with: <img src="assets/merch-tee.jpg" alt="Pink Heart Tee"> -->
+      </div>
+      <div class="merch-card-name">Pink Heart Tee</div>
+      <div class="merch-card-price">$40</div>
+    </div>
+    <div class="merch-card" data-reveal style="transition-delay:0.2s">
+      <div class="merch-card-img">
+        <div class="merch-card-img-inner fill-b"></div>
+        <!-- Replace with: <img src="assets/merch-cap.jpg" alt="SoFaygo Cap"> -->
+      </div>
+      <div class="merch-card-name">Faygo Vintage Cap</div>
+      <div class="merch-card-price">$35</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Atlanta · Cactus Jack Records</div>
+    <div class="social-row">
+      <a href="#" class="social-btn" title="Instagram">IG</a>
+      <a href="#" class="social-btn" title="Twitter / X">X</a>
+      <a href="#" class="social-btn" title="Spotify">SP</a>
+      <a href="#" class="social-btn" title="YouTube">YT</a>
+      <a href="#" class="social-btn" title="Apple Music">AM</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Scroll reveal */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
