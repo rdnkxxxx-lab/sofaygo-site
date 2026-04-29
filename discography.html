@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoFaygo — Discography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────── */
+    :root {
+      --pink:       #FFFFFF;
+      --pink-dim:   #CCCCCC;
+      --black:      #080808;
+      --dark:       #101010;
+      --panel:      #141414;
+      --white:      #FFFFFF;
+      --off-white:  #0f0f0f;
+      --muted:      rgba(255,255,255,0.55);
+      --border:     rgba(255,255,255,0.07);
+      --font-disp:  'Bebas Neue', sans-serif;
+      --font-body:  'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--pink); margin-bottom: 18px; display: block;
+    }
+    .divider-pink { width: 36px; height: 2px; background: var(--pink); margin: 28px 0; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 30px; font-family: var(--font-body);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease; border: none;
+    }
+    .btn-pink    { background: var(--pink); color: var(--black); }
+    .btn-pink:hover    { background: var(--pink-dim); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.25); }
+    .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── NAV ───────────────────────────────────── */
+    nav {
+      position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: 0 44px; height: 64px;
+      background: rgba(8,8,8,0.88); backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-right { justify-content: flex-end; }
+    .nav-left a, .nav-right a {
+      font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.65); transition: color 0.2s;
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--pink); }
+    .nav-logo { text-align: center; font-family: var(--font-disp); font-size: 26px; letter-spacing: 0.06em; color: var(--pink); }
+
+    /* ── THEME SWITCHER ─────────────────────────── */
+    .mode-switcher { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
+    .mode-btn {
+      padding: 5px 10px; background: transparent; color: rgba(255,255,255,0.35);
+      border: none; font-family: var(--font-body); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      white-space: nowrap; transition: background 0.2s, color 0.2s;
+    }
+    .mode-btn.active                { background: var(--pink); color: var(--black); }
+    body.pink-mode .mode-btn.active { color: var(--white); }
+    .mode-btn:not(.active):hover    { color: rgba(255,255,255,0.7); }
+
+    /* ── PINK MODE OVERRIDES ────────────────────── */
+    body.pink-mode {
+      --pink:      #FF1493;
+      --pink-dim:  #c0106f;
+      --off-white: #F5F4F2;
+    }
+    body.pink-mode .btn-pink { color: var(--white); }
+    body.pink-mode .section-alt { background: var(--off-white); }
+    body.pink-mode .section-alt .section-title,
+    body.pink-mode .section-alt .card-title { color: var(--black); }
+    body.pink-mode .section-alt .card-meta,
+    body.pink-mode .section-alt p { color: #4a4a4a; }
+    body.pink-mode .section-alt .label { color: #c0106f; }
+    body.pink-mode .section-alt .btn-outline { color: var(--black); border-color: rgba(0,0,0,0.25); }
+    body.pink-mode .section-alt .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── PAGE HEADER ────────────────────────────── */
+    .page-header {
+      padding-top: 64px;
+      background: var(--black);
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100dvh;
+    }
+    .page-header-copy {
+      padding: 96px 64px 96px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .page-header-photo {
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .page-title {
+      font-family: var(--font-disp);
+      font-size: clamp(80px, 10vw, 148px);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+    }
+    .page-subtitle {
+      font-size: 14px; color: var(--muted); margin-top: 32px; max-width: 480px; line-height: 1.8;
+    }
+    @media (max-width: 900px) {
+      .page-header { grid-template-columns: 1fr; }
+      .page-header-photo { min-height: 55vw; }
+      .page-header-copy { padding: 64px 24px; }
+    }
+
+    /* ── SECTION ────────────────────────────────── */
+    .section { padding: 88px 64px; }
+    .section-alt { background: var(--off-white); }
+    .section-header { margin-bottom: 56px; display: flex; align-items: baseline; justify-content: space-between; }
+    .section-title {
+      font-family: var(--font-disp);
+      font-size: clamp(48px, 6vw, 80px);
+      line-height: 1; letter-spacing: 0.02em;
+    }
+    .section-count { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+    /* ── FEATURED ALBUM ─────────────────────────── */
+    .featured-album {
+      display: grid; grid-template-columns: 360px 1fr; gap: 64px; align-items: start;
+    }
+    .featured-cover {
+      aspect-ratio: 1; background: #1a0d1a; position: relative; overflow: hidden; flex-shrink: 0;
+    }
+    .featured-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .featured-info { padding-top: 8px; }
+    .featured-type { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 16px; display: block; }
+    .featured-title { font-family: var(--font-disp); font-size: clamp(56px, 7vw, 96px); line-height: 0.9; margin-bottom: 8px; }
+    .featured-year { font-size: 13px; color: var(--muted); margin-bottom: 32px; letter-spacing: 0.08em; }
+    .featured-desc { font-size: 14px; line-height: 1.85; color: var(--muted); max-width: 440px; margin-bottom: 40px; }
+    .tracklist-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 16px; display: block; }
+    .tracklist { list-style: none; margin-bottom: 40px; }
+    .track-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.055);
+      cursor: default;
+    }
+    .track-left { display: flex; align-items: center; gap: 14px; }
+    .track-idx { font-size: 11px; color: rgba(255,255,255,0.25); width: 18px; flex-shrink: 0; }
+    .track-title { font-size: 13px; color: rgba(255,255,255,0.75); }
+    .track-feat { font-size: 11px; color: rgba(255,255,255,0.3); margin-left: 6px; }
+
+    /* ── RELEASE GRID ───────────────────────────── */
+    .release-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+    .release-card {}
+    .release-cover {
+      aspect-ratio: 1; overflow: hidden; margin-bottom: 16px;
+      position: relative; background: #111;
+    }
+    .release-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .release-cover-fill { width: 100%; height: 100%; }
+    .release-type { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pink); margin-bottom: 6px; }
+    .card-title { font-family: var(--font-disp); font-size: 22px; letter-spacing: 0.03em; margin-bottom: 4px; }
+    .card-meta { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+    .card-stream { font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.35); transition: color 0.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .card-stream:hover { color: var(--pink); }
+    body.pink-mode .card-stream { color: rgba(0,0,0,0.4); }
+    body.pink-mode .card-stream:hover { color: var(--pink); }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer { padding: 72px 64px 48px; background: var(--black); border-top: 1px solid var(--border); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 28px; }
+    .footer-wordmark { font-family: var(--font-disp); font-size: 56px; color: var(--pink); letter-spacing: 0.05em; }
+    .footer-tagline { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+    .social-row { display: flex; gap: 12px; }
+    .social-btn {
+      width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.45); transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .social-btn:hover { border-color: var(--pink); color: var(--pink); background: rgba(255,20,147,0.08); }
+    .footer-bottom {
+      width: 100%; padding-top: 28px; margin-top: 12px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between;
+      font-size: 10.5px; letter-spacing: 0.1em; color: rgba(255,255,255,0.2); text-transform: uppercase;
+    }
+
+    /* ── SCROLL REVEAL ─────────────────────────── */
+    [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    [data-reveal].visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 1100px) { .release-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px) {
+      .featured-album { grid-template-columns: 1fr; }
+      .featured-cover { max-width: 320px; }
+      .release-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-left, .nav-right { display: none; }
+      .page-header, .section { padding-left: 24px; padding-right: 24px; }
+      .release-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      footer { padding: 56px 24px 36px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+
+    /* fill colors */
+    .fill-a { background: #1a1228; }
+    .fill-b { background: #0d1a1a; }
+    .fill-c { background: #1a0d1a; }
+    .fill-d { background: #0a0a18; }
+    .fill-e { background: #1a1010; }
+    .fill-f { background: #0f0f0f; }
+    .fill-g { background: #121218; }
+    .fill-h { background: #180d0a; }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────── -->
+<nav>
+  <ul class="nav-left">
+    <li><a href="sofaygo.html">Home</a></li>
+    <li><a href="biography.html">About</a></li>
+    <li><a href="sofaygo.html#songs">Music</a></li>
+  </ul>
+  <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank">Stream</a></li>
+    <li><a href="sofaygo.html#cactus">Label</a></li>
+    <li>
+      <div class="mode-switcher">
+        <button class="mode-btn" id="btn-black">Go+</button>
+        <button class="mode-btn" id="btn-pink">Pink Heartz</button>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- ── PAGE HEADER ───────────────────────────────── -->
+<div class="page-header">
+  <div class="page-header-copy" data-reveal>
+    <span class="label">Andre Dontrel Burt Jr.</span>
+    <h1 class="page-title">Disco<br>graphy</h1>
+    <div class="divider-pink"></div>
+    <p class="page-subtitle">
+      Every project from Atlanta's SoFaygo — from early SoundCloud tapes to Cactus Jack releases.
+      Six years of melodic trap, raw vulnerability, and relentless artistry.
+    </p>
+  </div>
+  <div class="page-header-photo">
+    <img src="https://i.pinimg.com/1200x/3b/68/34/3b6834afadd00e5a366de7d64e505577.jpg" alt="SoFaygo">
+  </div>
+</div>
+
+<!-- ── STUDIO ALBUM ───────────────────────────────── -->
+<section class="section">
+  <div class="section-header" data-reveal>
+    <h2 class="section-title">Studio<br>Album</h2>
+    <span class="section-count">1 Release</span>
+  </div>
+  <div class="featured-album" data-reveal>
+    <div class="featured-cover fill-c">
+      <img src="https://i.scdn.co/image/ab67616d0000b273f5d35bf91a2b5f0009b010d4" alt="Pink Heartz">
+    </div>
+    <div class="featured-info">
+      <span class="featured-type">Studio Album · Cactus Jack / Epic</span>
+      <h2 class="featured-title">Pink<br>Heartz</h2>
+      <div class="featured-year">November 11, 2022 · 16 Tracks</div>
+      <p class="featured-desc">
+        SoFaygo's long-awaited debut studio album. Released on Cactus Jack Records,
+        Pink Heartz blends melodic trap with emotional vulnerability — a defining statement
+        for one of Atlanta's most compelling voices.
+      </p>
+      <span class="tracklist-label">Tracklist</span>
+      <ul class="tracklist">
+        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Transparency</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Out</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Hell Yeah<span class="track-feat">ft. Ken Carson</span></span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Blitz V2</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Stay Awake</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Me Too</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Goin Back</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Another One</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Slip</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">I'll Say</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Price</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Fasho</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Takeoff</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Greed</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Marvelous</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Forever</span></div></li>
+      </ul>
+      <a href="https://open.spotify.com/album/1POWgdYTzfFt9rhKlXFwsU" target="_blank" class="btn btn-pink">Stream on Spotify →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── MIXTAPES ────────────────────────────────────── -->
+<section class="section section-alt">
+  <div class="section-header" data-reveal>
+    <h2 class="section-title">Mix<br>tapes</h2>
+    <span class="section-count">4 Releases</span>
+  </div>
+  <div class="release-grid">
+
+    <div class="release-card" data-reveal>
+      <div class="release-cover">
+        <img src="https://i.scdn.co/image/ab67616d0000b2735960fbc0c240acd788c6ae2c" alt="Angelic 7">
+      </div>
+      <div class="release-type">Mixtape</div>
+      <div class="card-title">Angelic 7</div>
+      <div class="card-meta">January 10, 2020</div>
+      <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.05s">
+      <div class="release-cover">
+        <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me">
+      </div>
+      <div class="release-type">Mixtape</div>
+      <div class="card-title">After Me</div>
+      <div class="card-meta">December 17, 2020</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.1s">
+      <div class="release-cover">
+        <img src="https://i.scdn.co/image/ab67616d0000b2737ae48cc47bca5d26ea71f547" alt="War">
+      </div>
+      <div class="release-type">Mixtape</div>
+      <div class="card-title">War</div>
+      <div class="card-meta">June 29, 2019</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.15s">
+      <div class="release-cover">
+        <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania">
+      </div>
+      <div class="release-type">Mixtape · 19 Tracks</div>
+      <div class="card-title">Mania</div>
+      <div class="card-meta">November 21, 2025</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── EPs ────────────────────────────────────────── -->
+<section class="section">
+  <div class="section-header" data-reveal>
+    <h2 class="section-title">EPs</h2>
+    <span class="section-count">6 Releases</span>
+  </div>
+  <div class="release-grid">
+
+    <div class="release-card" data-reveal>
+      <div class="release-cover fill-b">
+        <div class="release-cover-fill"></div>
+      </div>
+      <div class="release-type">EP</div>
+      <div class="card-title">We Are Aliens</div>
+      <div class="card-meta">2017</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.05s">
+      <div class="release-cover fill-a">
+        <div class="release-cover-fill"></div>
+      </div>
+      <div class="release-type">EP</div>
+      <div class="card-title">Goonland</div>
+      <div class="card-meta">2017</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.1s">
+      <div class="release-cover fill-c">
+        <div class="release-cover-fill"></div>
+      </div>
+      <div class="release-type">EP · Cactus Jack</div>
+      <div class="card-title">B4Pink</div>
+      <div class="card-meta">June 2022</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.15s">
+      <div class="release-cover fill-h">
+        <div class="release-cover-fill"></div>
+      </div>
+      <div class="release-type">EP · SoundCloud</div>
+      <div class="card-title">Babyjack</div>
+      <div class="card-meta">July 15, 2022</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.2s">
+      <div class="release-cover fill-f">
+        <div class="release-cover-fill"></div>
+      </div>
+      <div class="release-type">EP · Cactus Jack</div>
+      <div class="card-title">GO+</div>
+      <div class="card-meta">June 14, 2023</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+    <div class="release-card" data-reveal style="transition-delay:0.25s">
+      <div class="release-cover fill-d">
+        <div class="release-cover-fill"></div>
+      </div>
+      <div class="release-type">EP · SoundCloud</div>
+      <div class="card-title">Pressure</div>
+      <div class="card-meta">2024</div>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Atlanta · Cactus Jack Records</div>
+    <div class="social-row">
+      <a href="#" class="social-btn" title="Instagram">IG</a>
+      <a href="#" class="social-btn" title="Twitter / X">X</a>
+      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="social-btn" title="Spotify">SP</a>
+      <a href="#" class="social-btn" title="YouTube">YT</a>
+      <a href="#" class="social-btn" title="Apple Music">AM</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Scroll reveal */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+  /* Theme switcher — shared with main site via localStorage */
+  function setMode(mode) {
+    document.body.classList.toggle('pink-mode', mode === 'pink');
+    localStorage.setItem('colorMode', mode);
+    document.getElementById('btn-black').classList.toggle('active', mode !== 'pink');
+    document.getElementById('btn-pink').classList.toggle('active', mode === 'pink');
+  }
+  document.getElementById('btn-black').addEventListener('click', () => setMode('black'));
+  document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
+  setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
+</script>
+
+</body>
+</html>

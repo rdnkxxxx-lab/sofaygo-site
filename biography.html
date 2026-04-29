@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoFaygo — Biography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600&family=Modak&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink:      #FFFFFF;
+      --pink-dim:  #CCCCCC;
+      --black:     #080808;
+      --dark:      #101010;
+      --white:     #FFFFFF;
+      --off-white: #0f0f0f;
+      --muted:     rgba(255,255,255,0.78);
+      --border:    rgba(255,255,255,0.07);
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'News Gothic MT Condensed','News Gothic Condensed','News Gothic MT','Barlow Condensed',sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── PINK MODE ─────────────────────────────── */
+    body.pink-mode { --pink: #FF1493; --pink-dim: #c0106f; --off-white: #F5F4F2; }
+    body.pink-mode .btn-pink { color: var(--white); }
+    body.pink-mode .acc-header { border-color: rgba(0,0,0,0.1); }
+    body.pink-mode .acc-header:hover { background: rgba(0,0,0,0.03); }
+    body.pink-mode .acc-body-inner { background: var(--off-white); }
+    body.pink-mode .entry-body,
+    body.pink-mode .quote-text  { color: #3a3a3a; }
+    body.pink-mode .entry-headline,
+    body.pink-mode .milestone-text { color: var(--black); }
+    body.pink-mode .milestone { border-color: rgba(0,0,0,0.12); }
+    body.pink-mode .tag { border-color: rgba(0,0,0,0.15); color: rgba(0,0,0,0.5); }
+    body.pink-mode .quote-source { color: rgba(0,0,0,0.3); }
+    body.pink-mode .acc-year-num { color: rgba(0,0,0,0.06); }
+    body.pink-mode .intro-band { background: #f0eeec; border-color: rgba(0,0,0,0.08); }
+    body.pink-mode .intro-item-sub { color: #4a4a4a; }
+    body.pink-mode .influences-section { background: #f0eeec; }
+    body.pink-mode .influence-name { color: rgba(0,0,0,0.45); border-color: rgba(0,0,0,0.08); }
+    body.pink-mode .footer-tagline,
+    body.pink-mode .footer-bottom { color: rgba(0,0,0,0.3); }
+    body.pink-mode footer { border-color: rgba(0,0,0,0.1); }
+
+    /* ── NAV ──────────────────────────────────── */
+    nav {
+      position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: 0 44px; height: 64px;
+      background: rgba(8,8,8,0.92); backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-right { justify-content: flex-end; }
+    .nav-left a, .nav-right a {
+      font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.82); transition: color 0.2s;
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--pink); }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 40px; letter-spacing: 0.04em; color: var(--pink); line-height: 1; }
+    .mode-switcher { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
+    .mode-btn {
+      padding: 5px 10px; background: transparent; color: rgba(255,255,255,0.35);
+      border: none; font-family: var(--font-body); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      white-space: nowrap; transition: background 0.2s, color 0.2s;
+    }
+    .mode-btn.active { background: var(--pink); color: var(--black); }
+    body.pink-mode .mode-btn.active { color: var(--white); }
+    .mode-btn:not(.active):hover { color: rgba(255,255,255,0.7); }
+
+    /* ── BTN ──────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px; padding: 13px 30px;
+      font-family: var(--font-body); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease; border: none;
+    }
+    .btn-pink { background: var(--pink); color: var(--black); }
+    .btn-pink:hover { background: var(--pink-dim); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.25); }
+    .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── HERO ─────────────────────────────────── */
+    .bio-hero {
+      min-height: 100dvh; padding-top: 64px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      background: var(--black); border-bottom: 1px solid var(--border);
+    }
+    .bio-hero-copy { display: flex; flex-direction: column; justify-content: flex-end; padding: 80px 64px; }
+    .bio-hero-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 20px; display: block; }
+    .bio-hero-title { font-family: var(--font-disp); font-size: clamp(72px, 11vw, 148px); line-height: 0.88; letter-spacing: 0.02em; margin-bottom: 32px; }
+    .bio-hero-sub { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 420px; margin-bottom: 44px; }
+    .bio-hero-stats { display: flex; gap: 48px; }
+    .stat-val { font-family: var(--font-disp); font-size: 42px; color: var(--pink); line-height: 1; }
+    .stat-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 4px; }
+    .bio-hero-photo { position: relative; overflow: hidden; }
+    .bio-hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+    /* ── INTRO BAND ───────────────────────────── */
+    .intro-band {
+      padding: 64px; background: var(--dark); border-bottom: 1px solid var(--border);
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 48px;
+    }
+    .intro-item-label { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 10px; display: block; }
+    .intro-item-val { font-family: var(--font-disp); font-size: 22px; letter-spacing: 0.03em; line-height: 1.2; }
+    .intro-item-sub { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.55; }
+
+    /* ── TIMELINE HEADER ──────────────────────── */
+    .timeline-header {
+      padding: 88px 64px 56px; background: var(--black); border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-end;
+    }
+    .timeline-header-left {}
+    .timeline-header-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 16px; display: block; }
+    .timeline-header-title { font-family: var(--font-disp); font-size: clamp(48px, 6vw, 80px); line-height: 1; letter-spacing: 0.02em; }
+    .timeline-header-count { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 10px; display: block; }
+    .expand-all-btn {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      background: none; border: 1px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.5);
+      padding: 10px 20px; cursor: pointer; transition: border-color 0.2s, color 0.2s; font-family: var(--font-body);
+      align-self: flex-end; margin-bottom: 4px;
+    }
+    .expand-all-btn:hover { border-color: var(--pink); color: var(--pink); }
+
+    /* ── ACCORDION ────────────────────────────── */
+    .acc-list { border-top: 1px solid var(--border); }
+
+    .acc-item { border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+
+    .acc-header {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      align-items: center;
+      gap: 40px;
+      padding: 36px 64px;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      width: 100%;
+      text-align: left;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .acc-header:hover { background: rgba(255,255,255,0.025); }
+    .acc-item.open .acc-header { background: rgba(255,255,255,0.03); }
+
+    .acc-year {
+      font-family: var(--font-disp);
+      font-size: 52px;
+      letter-spacing: 0.02em;
+      color: var(--pink);
+      line-height: 1;
+      transition: opacity 0.2s;
+    }
+    .acc-headline {
+      font-family: var(--font-disp);
+      font-size: clamp(24px, 2.8vw, 40px);
+      letter-spacing: 0.02em;
+      color: var(--white);
+      line-height: 1.05;
+    }
+    .acc-meta {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-top: 6px;
+    }
+    .acc-toggle {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: border-color 0.25s, transform 0.35s, background 0.2s;
+      color: rgba(255,255,255,0.5); font-size: 20px; line-height: 1;
+    }
+    .acc-item.open .acc-toggle {
+      transform: rotate(45deg);
+      border-color: var(--pink);
+      color: var(--pink);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* accordion body */
+    .acc-body { max-height: 0; overflow: hidden; transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1); }
+    .acc-body-inner {
+      position: relative;
+      padding: 0 64px 64px 64px;
+      background: rgba(255,255,255,0.015);
+      overflow: hidden;
+    }
+    .acc-year-num {
+      position: absolute; top: -40px; right: -16px;
+      font-family: var(--font-disp);
+      font-size: clamp(140px, 18vw, 220px);
+      color: rgba(255,255,255,0.03);
+      line-height: 1; user-select: none; pointer-events: none; letter-spacing: -0.02em;
+    }
+    .acc-content { position: relative; z-index: 1; padding-top: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+    .acc-content.full { grid-template-columns: 1fr; }
+
+    /* content elements */
+    .entry-headline {
+      font-family: var(--font-disp); font-size: clamp(36px, 4vw, 56px);
+      line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 28px;
+    }
+    .entry-body { font-size: 15px; line-height: 1.85; color: var(--muted); margin-bottom: 20px; }
+    .entry-body strong { color: var(--white); font-weight: 600; }
+    .entry-body em { font-style: italic; }
+
+    .quote-block { border-left: 2px solid var(--pink); padding: 4px 0 4px 22px; margin: 28px 0; }
+    .quote-text { font-size: 16px; line-height: 1.75; color: var(--muted); font-style: italic; }
+    .quote-source { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 10px; display: block; }
+
+    .milestones { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0; }
+    .milestone { border: 1px solid rgba(255,255,255,0.1); padding: 14px 20px; }
+    .milestone-label { font-size: 8px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 4px; display: block; }
+    .milestone-text { font-family: var(--font-disp); font-size: 18px; letter-spacing: 0.03em; }
+
+    .tags-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .tag { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 12px; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
+
+    .source-row { margin-top: 36px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 16px; flex-wrap: wrap; }
+    .source-link { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.28); transition: color 0.2s; }
+    .source-link:hover { color: var(--pink); }
+
+    /* ── INFLUENCES ──────────────────────────── */
+    .influences-section {
+      padding: 88px 64px; background: var(--dark); border-top: 1px solid var(--border);
+    }
+    .influences-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 16px; display: block; }
+    .influences-title { font-family: var(--font-disp); font-size: clamp(48px, 6vw, 80px); line-height: 0.92; margin-bottom: 52px; }
+    .influences-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; }
+    .influence-name { font-family: var(--font-disp); font-size: 19px; letter-spacing: 0.04em; color: rgba(255,255,255,0.45); padding: 18px 0; border-top: 1px solid var(--border); transition: color 0.2s; cursor: default; }
+    .influence-name:hover { color: var(--pink); }
+
+    /* ── FOOTER ──────────────────────────────── */
+    footer { padding: 72px 64px 48px; background: var(--black); border-top: 1px solid var(--border); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    .footer-wordmark { font-family: 'Modak', cursive; font-size: 48px; color: var(--pink); letter-spacing: 0.04em; }
+    .footer-tagline { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+    .footer-bottom { width: 100%; padding-top: 24px; margin-top: 8px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10.5px; letter-spacing: 0.1em; color: rgba(255,255,255,0.2); text-transform: uppercase; }
+
+    /* ── REVEAL ──────────────────────────────── */
+    [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    [data-reveal].visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 1100px) {
+      .acc-content { grid-template-columns: 1fr; gap: 0; }
+      .influences-grid { grid-template-columns: repeat(3,1fr); }
+    }
+    @media (max-width: 900px) {
+      .bio-hero { grid-template-columns: 1fr; }
+      .bio-hero-photo { min-height: 55vw; order: -1; }
+      .intro-band { grid-template-columns: repeat(2,1fr); }
+      .acc-header { grid-template-columns: 100px 1fr auto; gap: 20px; padding: 28px 24px; }
+      .acc-year { font-size: 38px; }
+      .acc-body-inner { padding: 0 24px 48px; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-left, .nav-right { display: none; }
+      .bio-hero-copy { padding: 48px 24px; }
+      .intro-band { padding: 48px 24px; grid-template-columns: 1fr 1fr; gap: 28px; }
+      .timeline-header { padding: 64px 24px 40px; flex-direction: column; align-items: flex-start; gap: 24px; }
+      .acc-header { grid-template-columns: 80px 1fr auto; gap: 14px; padding: 24px 16px; }
+      .influences-section { padding: 64px 24px; }
+      .influences-grid { grid-template-columns: repeat(2,1fr); }
+      footer { padding: 56px 24px 36px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+      .bio-hero-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────── -->
+<nav>
+  <ul class="nav-left">
+    <li><a href="sofaygo.html">Home</a></li>
+    <li><a href="discography.html">Discography</a></li>
+    <li><a href="sofaygo.html#songs">Music</a></li>
+  </ul>
+  <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank">Stream</a></li>
+    <li>
+      <div class="mode-switcher">
+        <button class="mode-btn" id="btn-black">Go+</button>
+        <button class="mode-btn" id="btn-pink">Pink Heartz</button>
+      </div>
+    </li>
+  </ul>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────── -->
+<div class="bio-hero">
+  <div class="bio-hero-copy">
+    <span class="bio-hero-label">Andre Dontrel Burt Jr.</span>
+    <h1 class="bio-hero-title">The<br>Story</h1>
+    <p class="bio-hero-sub">
+      From a church kid recording songs in his grandma's basement to a Cactus Jack signee
+      with a platinum record — SoFaygo's journey is one of patience, raw talent,
+      and refusing to be anything but himself.
+    </p>
+    <div class="bio-hero-stats">
+      <div><div class="stat-val">2001</div><div class="stat-label">Year Born</div></div>
+      <div><div class="stat-val">1×</div><div class="stat-label">Platinum RIAA</div></div>
+      <div><div class="stat-val">11</div><div class="stat-label">Projects</div></div>
+      <div><div class="stat-val">2021</div><div class="stat-label">Cactus Jack</div></div>
+    </div>
+  </div>
+  <div class="bio-hero-photo">
+    <img src="https://i.pinimg.com/736x/0c/11/01/0c1101701259c79c77d3fed0fe2c16b3.jpg" alt="SoFaygo">
+  </div>
+</div>
+
+<!-- ── INTRO FACTS ───────────────────────────────── -->
+<div class="intro-band" data-reveal>
+  <div class="intro-item">
+    <span class="intro-item-label">Born</span>
+    <div class="intro-item-val">Oct 3, 2001</div>
+    <div class="intro-item-sub">Grand Rapids, MI<br>Raised in Cobb County, GA</div>
+  </div>
+  <div class="intro-item">
+    <span class="intro-item-label">Label</span>
+    <div class="intro-item-val">Cactus Jack</div>
+    <div class="intro-item-sub">Signed Feb 2021<br>Travis Scott's imprint</div>
+  </div>
+  <div class="intro-item">
+    <span class="intro-item-label">Style</span>
+    <div class="intro-item-val">Trap · Plugg</div>
+    <div class="intro-item-sub">Melodic rap, rage<br>Hip-hop, pop rap</div>
+  </div>
+  <div class="intro-item">
+    <span class="intro-item-label">Family</span>
+    <div class="intro-item-val">3 Brothers</div>
+    <div class="intro-item-sub">Alijah & Alandre<br>Pastor father, evangelist mother</div>
+  </div>
+</div>
+
+<!-- ── TIMELINE HEADER ──────────────────────────── -->
+<div class="timeline-header">
+  <div class="timeline-header-left">
+    <span class="timeline-header-label">Year by Year</span>
+    <h2 class="timeline-header-title">The<br>Timeline</h2>
+    <span class="timeline-header-count">10 Chapters · 2001 — 2025</span>
+  </div>
+  <button class="expand-all-btn" id="expand-all-btn">Expand All</button>
+</div>
+
+<!-- ── ACCORDION ────────────────────────────────── -->
+<div class="acc-list">
+
+  <!-- 2001 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2001</div>
+      <div>
+        <div class="acc-headline">Born into Music</div>
+        <div class="acc-meta">Grand Rapids, Michigan · Religious Upbringing</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2001</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">The Beginning</h3>
+            <p class="entry-body">
+              Andre Dontrel Burt Jr. is born on <strong>October 3rd, 2001</strong>, in Grand Rapids, Michigan,
+              the eldest of three brothers — Alijah and Alandre would follow. His household is deeply
+              rooted in faith: his father is a pastor and his mother serves as an evangelist.
+              Rhythm, community, and spiritual expression shape his earliest world.
+            </p>
+            <p class="entry-body">
+              After spending his first two years in Grand Rapids, the family relocates to
+              <strong>Cobb County, Georgia</strong> — the northern suburbs of Atlanta — where Andre would
+              spend his entire childhood and adolescence. The Atlanta music scene would eventually become
+              the air he breathes.
+            </p>
+            <div class="tags-row">
+              <span class="tag">Grand Rapids, MI</span>
+              <span class="tag">Cobb County, GA</span>
+              <span class="tag">Pastor Father</span>
+              <span class="tag">Evangelist Mother</span>
+            </div>
+          </div>
+          <div>
+            <div class="milestones">
+              <div class="milestone">
+                <span class="milestone-label">Hometown</span>
+                <div class="milestone-text">Grand Rapids, MI</div>
+              </div>
+              <div class="milestone">
+                <span class="milestone-label">Raised In</span>
+                <div class="milestone-text">Atlanta, GA</div>
+              </div>
+            </div>
+            <div class="quote-block">
+              <p class="quote-text">"I always loved music, like ever since I was a little boy, so I always carried that over my years."</p>
+              <span class="quote-source">SoFaygo — HotNewHipHop, Rise & Grind (2021)</span>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://en.wikipedia.org/wiki/SoFaygo" target="_blank" class="source-link">Wikipedia ↗</a>
+          <a href="https://www.hotnewhiphop.com/377685-rise-and-grind-sofaygo-talks-signing-with-travis-scotts-cactus-jack-debut-album-and-more-news" target="_blank" class="source-link">HotNewHipHop ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2009–2010 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2009</div>
+      <div>
+        <div class="acc-headline">First Song in Grandma's Basement</div>
+        <div class="acc-meta">GarageBand · Fourth Grade · Early Spark</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2009</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">GarageBand<br>at Nine</h3>
+            <p class="entry-body">
+              In the fourth grade, Andre joins the school chorus — his first formal encounter with
+              making music. He quickly takes things further. In his <strong>grandmother's basement</strong>,
+              armed with nothing but a laptop and GarageBand, he records his very first song.
+              He's nine years old.
+            </p>
+            <p class="entry-body">
+              The quality doesn't matter. What matters is the feeling — a kid discovering that
+              something inside him sounds exactly right when it gets out of his head and into
+              a track. Before rap, he was drawn to <strong>dancing and acting</strong>. Music would
+              eventually win out, but those instincts for performance never left him.
+            </p>
+            <div class="tags-row">
+              <span class="tag">GarageBand</span>
+              <span class="tag">4th Grade Chorus</span>
+              <span class="tag">Self-Taught</span>
+            </div>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"He recorded his first song at nine years old in a friend's basement."</p>
+              <span class="quote-source">Wikipedia / Multiple Sources</span>
+            </div>
+            <div class="quote-block">
+              <p class="quote-text">"I'm a kid at heart. That's really what I want my listeners to pick up from me."</p>
+              <span class="quote-source">SoFaygo — Complex, May 2021</span>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://www.complex.com/music/sofaygo-interview-may-2021" target="_blank" class="source-link">Complex ↗</a>
+          <a href="https://en.wikipedia.org/wiki/SoFaygo" target="_blank" class="source-link">Wikipedia ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2015–2017 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2015</div>
+      <div>
+        <div class="acc-headline">Trvllinese — High School Years</div>
+        <div class="acc-meta">Etowah High School · Stage Name: Trvllinese · Meets Lil Tecca</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2015</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">Finding the<br>Voice</h3>
+            <p class="entry-body">
+              Junior and senior year of high school — that's when it gets serious.
+              While attending <strong>Etowah High School</strong> in Woodstock, Georgia, Andre starts
+              rapping under the name <strong>Trvllinese</strong>. The name is strange, intentionally
+              so — a signal that he doesn't plan to fit any existing mold.
+            </p>
+            <p class="entry-body">
+              Growing up moving between schools meant making friends was hard.
+              Music filled that gap. During this era he links with rapper <strong>Lil Tecca</strong>,
+              a creative partnership that would define his early sound.
+              He also later turns down a college path entirely, choosing music full-time
+              right after graduation.
+            </p>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"It was weird growing up in Atlanta because I moved schools a lot, so it was really hard for me to be around people and make friends. But I always loved music."</p>
+              <span class="quote-source">SoFaygo — HotNewHipHop (2021)</span>
+            </div>
+            <div class="milestones">
+              <div class="milestone">
+                <span class="milestone-label">School</span>
+                <div class="milestone-text">Etowah High</div>
+              </div>
+              <div class="milestone">
+                <span class="milestone-label">Stage Name</span>
+                <div class="milestone-text">Trvllinese</div>
+              </div>
+            </div>
+            <div class="tags-row">
+              <span class="tag">No College</span>
+              <span class="tag">Lil Tecca Link-Up</span>
+              <span class="tag">Woodstock, GA</span>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://www.hotnewhiphop.com/377685-rise-and-grind-sofaygo-talks-signing-with-travis-scotts-cactus-jack-debut-album-and-more-news" target="_blank" class="source-link">HotNewHipHop ↗</a>
+          <a href="https://1051theblock.com/sofaygo-interview/" target="_blank" class="source-link">1051 The Block ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2018 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2018</div>
+      <div>
+        <div class="acc-headline">First EPs Dropped</div>
+        <div class="acc-meta">We Are Aliens · Goonland · SoundCloud Underground</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2018</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">Into the<br>Underground</h3>
+            <p class="entry-body">
+              Still performing as Trvllinese, Andre drops <em>We Are Aliens</em> and
+              <em>Goonland</em> — two self-released EPs that circulate through SoundCloud
+              and underground rap communities. Raw and unpolished, they show a developing
+              melodic instinct that would become his calling card.
+            </p>
+            <p class="entry-body">
+              The projects don't reach mainstream ears yet. But they plant seeds.
+              A growing cult following begins to take notice of the Atlanta kid with
+              the alien stage name and the ability to make pain sound effortless.
+            </p>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">EP</span><div class="milestone-text">We Are Aliens</div></div>
+              <div class="milestone"><span class="milestone-label">EP</span><div class="milestone-text">Goonland</div></div>
+            </div>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"I'm just bringing myself, bro. I'm just being myself."</p>
+              <span class="quote-source">SoFaygo — Complex, May 2021</span>
+            </div>
+            <div class="tags-row">
+              <span class="tag">SoundCloud Era</span>
+              <span class="tag">Self-Released</span>
+              <span class="tag">Underground Atlanta</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2019 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2019</div>
+      <div>
+        <div class="acc-headline">War · Knock Knock · SoFaygo Is Born</div>
+        <div class="acc-meta">Debut Mixtape · Viral Single · Declines Internet Money</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2019</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">The Slow<br>Burn Begins</h3>
+            <p class="entry-body">
+              June 29th: debut mixtape <em>War</em> drops — eight tracks of melodic trap that earn him
+              real recognition in the Atlanta underground. July 31st: <em>"Knock Knock"</em> arrives,
+              produced with Lil Tecca, with a music video directed by <strong>Cole Bennett</strong>
+              of Lyrical Lemonade.
+            </p>
+            <p class="entry-body">
+              The song doesn't blow up overnight — but it has staying power that few tracks do.
+              This same year, Internet Money founder <strong>Taz Taylor</strong> offers him a deal.
+              He declines. The move is bold for a still-emerging artist, but it signals something:
+              Andre Burt Jr. is betting entirely on himself. The rebrand to <strong>SoFaygo</strong>
+              makes it official.
+            </p>
+          </div>
+          <div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">Mixtape · Jun 29</span><div class="milestone-text">War</div></div>
+              <div class="milestone"><span class="milestone-label">Single · Jul 31</span><div class="milestone-text">Knock Knock</div></div>
+              <div class="milestone"><span class="milestone-label">Video By</span><div class="milestone-text">Cole Bennett</div></div>
+            </div>
+            <div class="quote-block">
+              <p class="quote-text">"Up. Nowhere but up."</p>
+              <span class="quote-source">SoFaygo on his trajectory — Complex (2021)</span>
+            </div>
+            <div class="tags-row">
+              <span class="tag">Declined Internet Money</span>
+              <span class="tag">Name Change: SoFaygo</span>
+              <span class="tag">Cole Bennett</span>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://blog.lyricallemonade.com/p/sofaygo-interview-respecting-the-grind-and-the-evolution/" target="_blank" class="source-link">Lyrical Lemonade ↗</a>
+          <a href="https://en.wikipedia.org/wiki/SoFaygo" target="_blank" class="source-link">Wikipedia ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2020 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2020</div>
+      <div>
+        <div class="acc-headline">TikTok Explodes · Angelic 7 · After Me</div>
+        <div class="acc-meta">Knock Knock Goes Viral · Platinum RIAA · Two Projects</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2020</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">The Moment<br>Arrives</h3>
+            <p class="entry-body">
+              Late 2020: <em>"Knock Knock"</em> goes viral on TikTok. A song recorded a year prior
+              suddenly soundtracks millions of videos. Travis Scott — still not officially connected —
+              starts playing SoFaygo's music at his <strong>daughter Stormi's birthday party</strong>.
+              Industry heads take notice.
+            </p>
+            <p class="entry-body">
+              The track earns <strong>RIAA Platinum certification</strong>. Meanwhile, SoFaygo drops two
+              projects: <em>Angelic 7</em> (January 10) — his first all-platform release — and
+              <em>After Me</em> (December 17), a more polished tape featuring fan favourites
+              <em>"Off the Map"</em> and <em>"Everyday."</em> The song "Everyday" gained massive
+              attention and helped establish him as someone worth watching.
+            </p>
+          </div>
+          <div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">EP · Jan 10</span><div class="milestone-text">Angelic 7</div></div>
+              <div class="milestone"><span class="milestone-label">Mixtape · Dec 17</span><div class="milestone-text">After Me</div></div>
+              <div class="milestone"><span class="milestone-label">Certification</span><div class="milestone-text">Platinum RIAA</div></div>
+            </div>
+            <div class="tags-row">
+              <span class="tag">TikTok Viral</span>
+              <span class="tag">Travis Co-Sign</span>
+              <span class="tag">Stormi's Birthday</span>
+              <span class="tag">All-Platform Release</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2021 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2021</div>
+      <div>
+        <div class="acc-headline">Cactus Jack · Billboard Hot 100 · Turks</div>
+        <div class="acc-meta">Signed Feb 2021 · Hot 100 Debut #86 · Trippie Redd · Travis Scott</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2021</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">Everything<br>Changes</h3>
+            <p class="entry-body">
+              February 2021. SoFaygo flies out West. He meets Travis Scott.
+              He signs to <strong>Cactus Jack Records</strong>. The deal happens through
+              a chain of relationships: his friend Jamie introduced him to
+              co-manager <strong>Barry Hefner</strong> (manager of EarthGang and J.I.D),
+              who connected him with Travis directly. Multiple labels were interested.
+              He chose Cactus Jack.
+            </p>
+            <p class="entry-body">
+              June: he performs on Genius's <em>Open Mic</em> series. August 20:
+              he appears on <strong>Trippie Redd's</strong> <em>Trip at Knight</em> on "MP5" —
+              his <strong>Billboard Hot 100 debut at #86</strong>. September 1: he drops
+              <em>"Let's Lose Our Minds"</em>, his first Cactus Jack release and lead single
+              for the forthcoming debut album. He also links with Travis on
+              <em>"Turks"</em> — one of the year's standout moments.
+            </p>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"Really, Barry Hefner got us in contact. I met Barry through one of my mans, Jamie."</p>
+              <span class="quote-source">SoFaygo on how he met Travis Scott — HotNewHipHop (2021)</span>
+            </div>
+            <div class="quote-block">
+              <p class="quote-text">"There's a lot of love there with me and Trav. Who knows what to expect."</p>
+              <span class="quote-source">SoFaygo — Complex, May 2021</span>
+            </div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">Signed · Feb</span><div class="milestone-text">Cactus Jack</div></div>
+              <div class="milestone"><span class="milestone-label">Chart · Aug</span><div class="milestone-text">Hot 100 #86</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://www.complex.com/music/sofaygo-interview-may-2021" target="_blank" class="source-link">Complex ↗</a>
+          <a href="https://www.hotnewhiphop.com/377685-rise-and-grind-sofaygo-talks-signing-with-travis-scotts-cactus-jack-debut-album-and-more-news" target="_blank" class="source-link">HotNewHipHop ↗</a>
+          <a href="https://www.instagram.com/p/CNqjVdplc5E/" target="_blank" class="source-link">Instagram Announcement ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2022 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2022</div>
+      <div>
+        <div class="acc-headline">Pink Heartz — The Debut Album</div>
+        <div class="acc-meta">HipHopDX Rising Star · Apple Music Up Next · Beats by Dre Campaign</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2022</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">Heart on<br>the Sleeve</h3>
+            <p class="entry-body">
+              Two EPs arrive before the album: <em>B4Pink</em> in June and the
+              SoundCloud-exclusive <em>Babyjack</em> in July. Then <strong>November 11th</strong>:
+              <em>Pink Heartz</em> drops on Cactus Jack / Epic Records — 16 tracks featuring
+              Ken Carson, Lil Uzi Vert, and Pharrell Williams on <em>"Took Off."</em>
+              HipHopDX names him their <strong>Rising Star of 2022</strong>.
+              Apple Music crowns him their <strong>"Up Next"</strong> artist.
+              He lands a <strong>Beats by Dre campaign</strong> alongside LeBron and Bronny James.
+            </p>
+            <p class="entry-body">
+              The album is his most personal work — built on vulnerability, emotional
+              transparency, and the belief that wearing your heart on your sleeve is a strength,
+              not a weakness. Producer Bakkwoods helps him unlock a new level of maturity.
+            </p>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"Having a pink heart means you wear your heart on your sleeve. You're very open about your feelings and who you are."</p>
+              <span class="quote-source">SoFaygo — Hypebeast (Nov 2022)</span>
+            </div>
+            <div class="quote-block">
+              <p class="quote-text">"I go through emotions and that's what I'm trying to capture in Pink Heartz. I'm not trying to capture just one emotion either — we're going through a roller coaster."</p>
+              <span class="quote-source">SoFaygo — Hypebeast (Nov 2022)</span>
+            </div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">Album · Nov 11</span><div class="milestone-text">Pink Heartz</div></div>
+              <div class="milestone"><span class="milestone-label">Award</span><div class="milestone-text">HipHopDX Rising Star</div></div>
+              <div class="milestone"><span class="milestone-label">Apple Music</span><div class="milestone-text">Up Next Artist</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://hypebeast.com/2022/11/sofaygo-pink-heartz-debut-album-interview-music" target="_blank" class="source-link">Hypebeast ↗</a>
+          <a href="https://hiphopdx.com/news/id.70265/title.2022-hiphopdx-rising-star-sofaygo-confirms-his-pink-heartz-album-is-complete" target="_blank" class="source-link">HipHopDX ↗</a>
+          <a href="https://en.wikipedia.org/wiki/Pink_Heartz" target="_blank" class="source-link">Wikipedia ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2023 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2023</div>
+      <div>
+        <div class="acc-headline">GO+ · Growing Pains · Lyrical Lemonade</div>
+        <div class="acc-meta">EP Release · Touring · Artistic Evolution</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2023</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">Staying in<br>His World</h3>
+            <p class="entry-body">
+              June 14th: <em>GO+</em> drops — a 12-track EP on Cactus Jack that expands
+              his sonic vocabulary. The project gets covered by <strong>Lyrical Lemonade</strong>,
+              where he talks about respecting the grind and his evolution as an artist.
+            </p>
+            <p class="entry-body">
+              Behind the scenes, 2023 is a year of building. Touring. Recording.
+              A growing frustration begins to emerge — fans and press notice the gap
+              between his profile and his output. But SoFaygo stays patient, insisting
+              the right project takes the right time.
+            </p>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"I just want the world to remember Faygo for being Faygo, bro. Just being in his own world."</p>
+              <span class="quote-source">SoFaygo — Lyrical Lemonade (2023)</span>
+            </div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">EP · Jun 14</span><div class="milestone-text">GO+</div></div>
+            </div>
+            <div class="tags-row">
+              <span class="tag">Lyrical Lemonade Feature</span>
+              <span class="tag">12 Tracks</span>
+              <span class="tag">Cactus Jack</span>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://blog.lyricallemonade.com/p/sofaygo-interview-respecting-the-grind-and-the-evolution/" target="_blank" class="source-link">Lyrical Lemonade ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2024 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2024</div>
+      <div>
+        <div class="acc-headline">Precision · Rock Star Energy · Pressure</div>
+        <div class="acc-meta">Don Toliver Collab · Lil Tecca Tour · New Direction</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2024</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">War 2 On<br>the Horizon</h3>
+            <p class="entry-body">
+              SoFaygo re-emerges with <em>"Precision"</em> featuring <strong>Don Toliver</strong> —
+              a spacey, high-energy track that re-announces his presence on the map.
+              He follows with <em>"Life So Crazy"</em> and joins <strong>Lil Tecca's tour</strong>,
+              playing to some of the biggest crowds of his career.
+            </p>
+            <p class="entry-body">
+              In an EARMILK interview, he reveals he's been drawing new inspiration from
+              rock acts like <strong>The Ramones and Blondie</strong>, leaning into a
+              "young rock star" ethos. He's working on a full-length sequel to his 2019
+              debut <em>War</em> — aiming for 16–18 tracks. He's also candid about the
+              frustration: leaks have derailed multiple projects.
+              <em>Pressure</em>, a SoundCloud-only EP, drops late in the year.
+            </p>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"I'm a young rock star. I want to give off that same vibe, but I want to do it my own way."</p>
+              <span class="quote-source">SoFaygo — EARMILK (Jul 2024)</span>
+            </div>
+            <div class="quote-block">
+              <p class="quote-text">"Nothing is overnight... I'm just starting to become the performer and artist that I am."</p>
+              <span class="quote-source">SoFaygo — EARMILK (Jul 2024)</span>
+            </div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">Single</span><div class="milestone-text">Precision ft. Don Toliver</div></div>
+              <div class="milestone"><span class="milestone-label">EP · SoundCloud</span><div class="milestone-text">Pressure</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://earmilk.com/2024/07/13/sofaygo-talks-new-precision-single-and-war-sequel-album-interview/" target="_blank" class="source-link">EARMILK ↗</a>
+          <a href="https://www.hotnewhiphop.com/924589-sofaygo-frustration-career-travis-scott-jackboys-2-hip-hop-news" target="_blank" class="source-link">HotNewHipHop ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2025 -->
+  <div class="acc-item">
+    <button class="acc-header" onclick="toggleAcc(this)">
+      <div class="acc-year">2025</div>
+      <div>
+        <div class="acc-headline">JackBoys 2 · MANIA · The Story Continues</div>
+        <div class="acc-meta">Travis Scott Collab · 19-Track Mixtape · V Magazine</div>
+      </div>
+      <div class="acc-toggle">+</div>
+    </button>
+    <div class="acc-body">
+      <div class="acc-body-inner">
+        <div class="acc-year-num">2025</div>
+        <div class="acc-content">
+          <div>
+            <h3 class="entry-headline">Locked In<br>at Last</h3>
+            <p class="entry-body">
+              July 2025: <strong>JackBoys 2</strong> drops. SoFaygo appears on two tracks —
+              his first official collaboration with Travis Scott since signing to Cactus Jack
+              in 2021. The track <em>"MM3"</em> brings energy to his live shows and reconnects
+              him with the mainstream audience he'd been building toward.
+            </p>
+            <p class="entry-body">
+              October 31st: he announces <em>MANIA</em>. November 21st: it lands on all
+              platforms — 19 tracks with features from <strong>Kaash Paige</strong> and
+              <strong>Hardrock</strong>. V Magazine covers him in a feature titled
+              <em>"Back in the Mix and Feeling the Love."</em> After years of leaks,
+              delays, and "what happened to SoFaygo?" narratives, the answer is clear —
+              he never left. He was building.
+            </p>
+          </div>
+          <div>
+            <div class="quote-block">
+              <p class="quote-text">"For a n***a who been doing shows in AND out of country over the past few years... only 1 album. Y'all think I'm not dropping on purpose?"</p>
+              <span class="quote-source">SoFaygo — Social Media (2024/2025)</span>
+            </div>
+            <div class="milestones">
+              <div class="milestone"><span class="milestone-label">Jul 2025</span><div class="milestone-text">JackBoys 2</div></div>
+              <div class="milestone"><span class="milestone-label">Mixtape · Nov 21</span><div class="milestone-text">MANIA</div></div>
+              <div class="milestone"><span class="milestone-label">Press</span><div class="milestone-text">V Magazine</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="source-row">
+          <a href="https://vmagazine.com/article/sofaygo-back-in-the-mix-and-feeling-the-love/" target="_blank" class="source-link">V Magazine ↗</a>
+          <a href="https://www.hotnewhiphop.com/924589-sofaygo-frustration-career-travis-scott-jackboys-2-hip-hop-news" target="_blank" class="source-link">HotNewHipHop ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.acc-list -->
+
+<!-- ── INFLUENCES ───────────────────────────────── -->
+<div class="influences-section" data-reveal>
+  <span class="influences-label">Artistry</span>
+  <h2 class="influences-title">Influences</h2>
+  <div class="influences-grid">
+    <div class="influence-name">Drake</div>
+    <div class="influence-name">Travis Scott</div>
+    <div class="influence-name">Chief Keef</div>
+    <div class="influence-name">Lil Wayne</div>
+    <div class="influence-name">Chris Brown</div>
+    <div class="influence-name">Playboi Carti</div>
+    <div class="influence-name">Lil Uzi Vert</div>
+    <div class="influence-name">Lil Tecca</div>
+    <div class="influence-name">Don Toliver</div>
+    <div class="influence-name">Young Thug</div>
+    <div class="influence-name">The Ramones</div>
+    <div class="influence-name">Blondie</div>
+  </div>
+</div>
+
+<!-- ── FOOTER ───────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Atlanta · Cactus Jack Records</div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Accordion */
+  function toggleAcc(btn) {
+    const item = btn.closest('.acc-item');
+    const body = item.querySelector('.acc-body');
+    const isOpen = item.classList.contains('open');
+
+    if (isOpen) {
+      item.classList.remove('open');
+      body.style.maxHeight = '';
+    } else {
+      item.classList.add('open');
+      body.style.maxHeight = body.scrollHeight + 'px';
+      // re-measure after images load
+      setTimeout(() => { if (item.classList.contains('open')) body.style.maxHeight = body.scrollHeight + 'px'; }, 400);
+    }
+    updateExpandBtn();
+  }
+
+  /* Expand / Collapse All */
+  const expandBtn = document.getElementById('expand-all-btn');
+  function updateExpandBtn() {
+    const openCount = document.querySelectorAll('.acc-item.open').length;
+    const total = document.querySelectorAll('.acc-item').length;
+    expandBtn.textContent = openCount === total ? 'Collapse All' : 'Expand All';
+  }
+  expandBtn.addEventListener('click', () => {
+    const allOpen = document.querySelectorAll('.acc-item.open').length === document.querySelectorAll('.acc-item').length;
+    document.querySelectorAll('.acc-item').forEach(item => {
+      const body = item.querySelector('.acc-body');
+      if (allOpen) {
+        item.classList.remove('open');
+        body.style.maxHeight = '';
+      } else {
+        item.classList.add('open');
+        body.style.maxHeight = body.scrollHeight + 'px';
+      }
+    });
+    updateExpandBtn();
+  });
+
+  /* Scroll reveal */
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+  /* Theme */
+  function setMode(mode) {
+    document.body.classList.toggle('pink-mode', mode === 'pink');
+    localStorage.setItem('colorMode', mode);
+    document.getElementById('btn-black').classList.toggle('active', mode !== 'pink');
+    document.getElementById('btn-pink').classList.toggle('active', mode === 'pink');
+  }
+  document.getElementById('btn-black').addEventListener('click', () => setMode('black'));
+  document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
+  setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
+</script>
+</body>
+</html>
