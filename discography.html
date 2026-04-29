@@ -167,6 +167,43 @@
     .track-idx { font-size: 11px; color: rgba(255,255,255,0.25); width: 18px; flex-shrink: 0; }
     .track-title { font-size: 13px; color: rgba(255,255,255,0.75); }
     .track-feat { font-size: 11px; color: rgba(255,255,255,0.3); margin-left: 6px; }
+    .track-dur { font-size: 11px; color: rgba(255,255,255,0.28); letter-spacing: 0.06em; }
+
+    .featured-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .spotify-logo-link {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      margin-top: 6px;
+      opacity: 0.85;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .spotify-logo-link:hover { opacity: 1; transform: scale(1.08); }
+
+    .tracklist-toggle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin: 0 auto 32px;
+      transition: border-color 0.2s, background 0.2s;
+      color: rgba(255,255,255,0.6);
+      padding: 0;
+    }
+    .tracklist-toggle:hover { border-color: rgba(255,255,255,0.6); color: var(--white); }
+    .tracklist-toggle svg { transition: transform 0.35s ease; }
+    .tracklist-toggle.open svg { transform: rotate(180deg); }
 
     /* ── RELEASE GRID ───────────────────────────── */
     .release-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
@@ -233,9 +270,70 @@
     .fill-f { background: #0f0f0f; }
     .fill-g { background: #121218; }
     .fill-h { background: #180d0a; }
+
+    /* ── Liquid Glass Buttons ──────────────────────── */
+    .liquid-glass {
+      position: relative;
+      overflow: hidden;
+      border-radius: 9999px !important;
+      background: rgba(255,255,255,0.04) !important;
+      border: 1px solid rgba(255,255,255,0.22) !important;
+      color: rgba(255,255,255,0.9) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.14);
+      transition: transform 0.3s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    }
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow:
+        inset 1px 1px 1px -0.5px rgba(255,255,255,0.55),
+        inset -1px -1px 1px -0.5px rgba(255,255,255,0.5),
+        inset 0 0 8px 3px rgba(255,255,255,0.08),
+        inset 0 0 2px 1px rgba(255,255,255,0.05);
+    }
+    .liquid-glass:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.08) !important;
+      border-color: rgba(255,255,255,0.4) !important;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+    }
+    .liquid-glass:active { transform: scale(0.97); }
+    body.pink-mode .liquid-glass {
+      background: rgba(255,20,147,0.04) !important;
+      border-color: rgba(255,20,147,0.4) !important;
+      color: #FF1493 !important;
+      box-shadow: 0 2px 10px rgba(255,20,147,0.1);
+    }
+    body.pink-mode .liquid-glass::before {
+      box-shadow:
+        inset 1px 1px 1px -0.5px rgba(255,20,147,0.4),
+        inset -1px -1px 1px -0.5px rgba(255,20,147,0.38),
+        inset 0 0 8px 3px rgba(255,20,147,0.07),
+        inset 0 0 2px 1px rgba(255,20,147,0.04);
+    }
+    body.pink-mode .liquid-glass:hover {
+      background: rgba(255,20,147,0.08) !important;
+      border-color: rgba(255,20,147,0.68) !important;
+      box-shadow: 0 4px 18px rgba(255,20,147,0.16);
+    }
   </style>
 </head>
 <body>
+<svg id="liquid-glass-svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <filter id="lg-filter" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.065 0.065" numOctaves="1" seed="2" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="1.5" result="blurredNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feGaussianBlur in="displaced" stdDeviation="3"/>
+    </filter>
+  </defs>
+</svg>
 
 <!-- ── NAV ─────────────────────────────────────── -->
 <nav>
@@ -285,7 +383,14 @@
     </div>
     <div class="featured-info">
       <span class="featured-type">Studio Album · Cactus Jack / Epic</span>
-      <h2 class="featured-title">Pink<br>Heartz</h2>
+      <div class="featured-title-row">
+        <h2 class="featured-title">Pink<br>Heartz</h2>
+        <a href="https://open.spotify.com/album/1POWgdYTzfFt9rhKlXFwsU" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
+          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512">
+            <path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/>
+          </svg>
+        </a>
+      </div>
       <div class="featured-year">November 11, 2022 · 16 Tracks</div>
       <p class="featured-desc">
         SoFaygo's long-awaited debut studio album. Released on Cactus Jack Records,
@@ -294,32 +399,40 @@
       </p>
       <span class="tracklist-label">Tracklist</span>
       <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Transparency</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Out</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Hell Yeah<span class="track-feat">ft. Ken Carson</span></span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Blitz V2</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Stay Awake</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Me Too</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Goin Back</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Another One</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Slip</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">I'll Say</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Price</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Fasho</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Takeoff</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Greed</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Marvelous</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Forever</span></div></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Transparency</span></div><span class="track-dur">1:44</span></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Out</span></div><span class="track-dur">2:26</span></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Hell Yeah<span class="track-feat">ft. Ken Carson</span></span></div><span class="track-dur">2:17</span></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Blitz V2</span></div><span class="track-dur">2:22</span></li>
+        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Stay Awake</span></div><span class="track-dur">2:19</span></li>
       </ul>
-      <a href="https://open.spotify.com/album/1POWgdYTzfFt9rhKlXFwsU" target="_blank" class="btn btn-pink">Stream on Spotify →</a>
+      <div id="extra-tracks-disc" style="display:none;">
+        <ul class="tracklist">
+          <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Me Too</span></div><span class="track-dur">2:09</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Goin Back</span></div><span class="track-dur">2:33</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Another One</span></div><span class="track-dur">2:14</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Slip</span></div><span class="track-dur">2:52</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">I'll Say</span></div><span class="track-dur">2:26</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Price</span></div><span class="track-dur">2:48</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Fasho</span></div><span class="track-dur">2:11</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Takeoff</span></div><span class="track-dur">2:26</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Greed</span></div><span class="track-dur">2:13</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Marvelous</span></div><span class="track-dur">2:38</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Forever</span></div><span class="track-dur">3:12</span></li>
+        </ul>
+      </div>
+      <button class="tracklist-toggle liquid-glass" id="show-more-disc" onclick="(function(){var el=document.getElementById('extra-tracks-disc');var btn=document.getElementById('show-more-disc');var open=el.style.display!=='none';el.style.display=open?'none':'block';btn.classList.toggle('open',!open);})()" aria-label="Show full tracklist">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </button>
     </div>
   </div>
 </section>
 
-<!-- ── MIXTAPES ────────────────────────────────────── -->
+<!-- ── ALBUMS ────────────────────────────────────── -->
 <section class="section section-alt">
   <div class="section-header" data-reveal>
-    <h2 class="section-title">Mix<br>tapes</h2>
+    <h2 class="section-title">Albums</h2>
     <span class="section-count">4 Releases</span>
   </div>
   <div class="release-grid">
@@ -328,7 +441,7 @@
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b2735960fbc0c240acd788c6ae2c" alt="Angelic 7">
       </div>
-      <div class="release-type">Mixtape</div>
+      <div class="release-type">Album</div>
       <div class="card-title">Angelic 7</div>
       <div class="card-meta">January 10, 2020</div>
       <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="card-stream">Stream on Spotify ↗</a>
@@ -338,7 +451,7 @@
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me">
       </div>
-      <div class="release-type">Mixtape</div>
+      <div class="release-type">Album</div>
       <div class="card-title">After Me</div>
       <div class="card-meta">December 17, 2020</div>
       <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
@@ -348,7 +461,7 @@
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b2737ae48cc47bca5d26ea71f547" alt="War">
       </div>
-      <div class="release-type">Mixtape</div>
+      <div class="release-type">Album</div>
       <div class="card-title">War</div>
       <div class="card-meta">June 29, 2019</div>
       <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
@@ -358,7 +471,7 @@
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania">
       </div>
-      <div class="release-type">Mixtape · 19 Tracks</div>
+      <div class="release-type">Album · 19 Tracks</div>
       <div class="card-title">Mania</div>
       <div class="card-meta">November 21, 2025</div>
       <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
@@ -371,33 +484,13 @@
 <section class="section">
   <div class="section-header" data-reveal>
     <h2 class="section-title">EPs</h2>
-    <span class="section-count">6 Releases</span>
+    <span class="section-count">4 Releases</span>
   </div>
   <div class="release-grid">
 
     <div class="release-card" data-reveal>
-      <div class="release-cover fill-b">
-        <div class="release-cover-fill"></div>
-      </div>
-      <div class="release-type">EP</div>
-      <div class="card-title">We Are Aliens</div>
-      <div class="card-meta">2017</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
-    </div>
-
-    <div class="release-card" data-reveal style="transition-delay:0.05s">
-      <div class="release-cover fill-a">
-        <div class="release-cover-fill"></div>
-      </div>
-      <div class="release-type">EP</div>
-      <div class="card-title">Goonland</div>
-      <div class="card-meta">2017</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
-    </div>
-
-    <div class="release-card" data-reveal style="transition-delay:0.1s">
-      <div class="release-cover fill-c">
-        <div class="release-cover-fill"></div>
+      <div class="release-cover">
+        <img src="https://i.scdn.co/image/ab67616d0000b273cdd5a49fd68603b5413931e7" alt="B4Pink">
       </div>
       <div class="release-type">EP · Cactus Jack</div>
       <div class="card-title">B4Pink</div>
@@ -405,9 +498,9 @@
       <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.15s">
-      <div class="release-cover fill-h">
-        <div class="release-cover-fill"></div>
+    <div class="release-card" data-reveal style="transition-delay:0.05s">
+      <div class="release-cover">
+        <img src="https://i1.sndcdn.com/artworks-UGx3cEpG8Ks2tcXk-rsOvNQ-t500x500.jpg" alt="Babyjack">
       </div>
       <div class="release-type">EP · SoundCloud</div>
       <div class="card-title">Babyjack</div>
@@ -415,9 +508,9 @@
       <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.2s">
-      <div class="release-cover fill-f">
-        <div class="release-cover-fill"></div>
+    <div class="release-card" data-reveal style="transition-delay:0.1s">
+      <div class="release-cover">
+        <img src="https://i.scdn.co/image/ab67616d0000b273cde9e3ad8134941008b201d6" alt="GO+">
       </div>
       <div class="release-type">EP · Cactus Jack</div>
       <div class="card-title">GO+</div>
@@ -425,9 +518,9 @@
       <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify ↗</a>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.25s">
-      <div class="release-cover fill-d">
-        <div class="release-cover-fill"></div>
+    <div class="release-card" data-reveal style="transition-delay:0.15s">
+      <div class="release-cover">
+        <img src="https://i1.sndcdn.com/artworks-ZvG3wVlIbujz0iXD-pf41GA-t500x500.jpg" alt="Pressure">
       </div>
       <div class="release-type">EP · SoundCloud</div>
       <div class="card-title">Pressure</div>
