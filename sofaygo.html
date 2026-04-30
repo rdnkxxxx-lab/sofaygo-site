@@ -6,7 +6,7 @@
   <title>SoFaygo — Official</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600&family=Modak&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Modak&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
   <style>
     /* ── Design Tokens ─────────────────────────── */
     :root {
@@ -20,7 +20,7 @@
       --muted:      rgba(255,255,255,0.78);
       --border:     rgba(255,255,255,0.07);
       --font-disp:  'Bebas Neue', sans-serif;
-      --font-body:  'News Gothic MT Condensed', 'News Gothic Condensed', 'News Gothic MT', 'Barlow Condensed', sans-serif;
+      --font-body:  'Inter', sans-serif;
     }
 
     /* ── Reset ─────────────────────────────────── */
@@ -104,29 +104,14 @@
       -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--border);
     }
-    .nav-left, .nav-right {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
     .nav-right { justify-content: flex-end; }
     .nav-left a, .nav-right a {
-      font-size: 10.5px;
-      font-weight: 500;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.82);
-      transition: color 0.2s;
+      font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.65); transition: color 0.2s;
     }
     .nav-left a:hover, .nav-right a:hover { color: var(--pink); }
-    .nav-logo {
-      text-align: center;
-      font-family: 'Modak', cursive;
-      font-size: 40px;
-      letter-spacing: 0.04em;
-      color: var(--pink);
-      line-height: 1;
-    }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 36px; letter-spacing: 0.04em; color: var(--pink); line-height: 1; }
 
     /* ── HERO ──────────────────────────────────── */
     #hero {
