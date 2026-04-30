@@ -939,23 +939,25 @@
 </section>
 
 <!-- ── PLAYER ──────────────────────────────────────── -->
-<div id="player-section" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:300;">
-  <!-- controls strip -->
-  <div style="background:rgba(8,8,8,0.7); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-top:1px solid rgba(255,255,255,0.07); padding:7px 44px; display:flex; align-items:center; justify-content:space-between;">
-    <span style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.55);">Now Playing</span>
-    <button onclick="document.getElementById('player-section').style.display='none'; document.getElementById('spotify-player').src=''; document.querySelectorAll('.track-row.playing').forEach(function(r){r.classList.remove('playing');})"
-      style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; background:none; border:none; color:rgba(255,255,255,0.55); cursor:pointer; padding:0; transition:color 0.2s;"
-      onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Close ✕</button>
-  </div>
-  <!-- iframe bar -->
-  <div style="background:rgba(8,8,8,0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);">
-    <iframe id="spotify-player" src=""
-      style="width:100%; height:80px; border:none; display:block;"
-      scrolling="no" frameborder="0"
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-    </iframe>
+<div id="player-section" style="display:none; position:fixed; top:68px; right:44px; z-index:300; width:380px; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,0.12); box-shadow:0 10px 40px rgba(0,0,0,0.6);">
+  <!-- info row: cover left, text right -->
+  <div style="background:rgba(8,8,8,0.5); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); padding:12px; display:flex; align-items:center; gap:12px;">
+    <img id="player-cover" src="" alt="" style="width:80px; height:80px; border-radius:6px; object-fit:cover; flex-shrink:0; background:rgba(255,255,255,0.05);">
+    <div style="flex:1; min-width:0;">
+      <div style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:5px;">Now Playing</div>
+      <div id="player-title" style="font-family:var(--font-body); font-size:14px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:0.02em; margin-bottom:6px;"></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="font-family:var(--font-body); font-size:11px; color:rgba(255,255,255,0.45); letter-spacing:0.08em;">SoFaygo</div>
+        <button id="play-pause-btn" onclick="togglePlay()" style="width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">▶</button>
+      </div>
+    </div>
+    <button onclick="closePlayer()" style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; padding:0; align-self:flex-start; transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Close ✕</button>
   </div>
 </div>
+
+<!-- Spotify IFrame API container -->
+<div id="embed-iframe" style="position:fixed; width:1px; height:1px; overflow:hidden; pointer-events:none; opacity:0; bottom:0; right:0;"></div>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
 <!-- ── ANGELIC 7 ─────────────────────────────────── -->
 <div class="album-feat fill-a" id="angelic7">
@@ -1035,14 +1037,56 @@
 </footer>
 
 <script>
+  /* Spotify IFrame API */
+  var _embedController = null;
+  var _isPlaying = false;
+
+  window.onSpotifyIframeApiReady = function(IFrameAPI) {
+    IFrameAPI.createController(
+      document.getElementById('embed-iframe'),
+      { width: '1', height: '1', uri: 'spotify:track:6aHoPULNO7pSL2ZfUY0bU8' },
+      function(controller) {
+        _embedController = controller;
+        controller.addListener('playback_update', function(e) {
+          _isPlaying = !e.data.isPaused;
+          var btn = document.getElementById('play-pause-btn');
+          if (btn) btn.textContent = _isPlaying ? '⏸' : '▶';
+        });
+      }
+    );
+  };
+
+  function togglePlay() {
+    if (_embedController) _embedController.togglePlay();
+  }
+
   /* Track player */
   function playTrack(row, id) {
     document.querySelectorAll('.track-row.playing').forEach(function(r){ r.classList.remove('playing'); });
     row.classList.add('playing');
-    var section = document.getElementById('player-section');
-    var player = document.getElementById('spotify-player');
-    player.src = 'https://open.spotify.com/embed/track/' + id + '?utm_source=generator&theme=0&autoplay=1';
-    section.style.display = 'block';
+    document.getElementById('player-title').textContent = row.querySelector('.track-title').textContent.trim();
+    document.getElementById('player-section').style.display = 'block';
+    var btn = document.getElementById('play-pause-btn');
+    if (btn) btn.textContent = '⏸';
+    _isPlaying = true;
+    if (_embedController) {
+      _embedController.loadUri('spotify:track:' + id);
+      _embedController.play();
+    }
+    fetch('https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Ftrack%2F' + id)
+      .then(function(r){ return r.json(); })
+      .then(function(data){ document.getElementById('player-cover').src = data.thumbnail_url; })
+      .catch(function(){});
+  }
+
+  function closePlayer() {
+    document.getElementById('player-section').style.display = 'none';
+    document.getElementById('player-cover').src = '';
+    document.querySelectorAll('.track-row.playing').forEach(function(r){ r.classList.remove('playing'); });
+    if (_embedController) _embedController.pause();
+    _isPlaying = false;
+    var btn = document.getElementById('play-pause-btn');
+    if (btn) btn.textContent = '▶';
   }
 
   /* Intro animation */
