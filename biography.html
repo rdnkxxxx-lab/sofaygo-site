@@ -1040,6 +1040,130 @@
   document.getElementById('btn-black').addEventListener('click', () => setMode('black'));
   document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
   setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
+
+  /* Brush effect on bio hero title */
+  (function () {
+    var nameEl = document.querySelector('.bio-hero-title');
+    var copyEl = document.querySelector('.bio-hero-copy');
+    if (!nameEl || !copyEl) return;
+
+    copyEl.style.position = 'relative';
+
+    var cv = document.createElement('canvas');
+    cv.style.cssText = 'position:absolute;left:0;top:0;z-index:10;pointer-events:none;';
+    copyEl.appendChild(cv);
+    var ctx = cv.getContext('2d');
+
+    var maskCv = document.createElement('canvas');
+    var mctx   = maskCv.getContext('2d');
+    var tmpCv  = document.createElement('canvas');
+    var tctx   = tmpCv.getContext('2d');
+    var maskReady = false;
+
+    function buildMask() {
+      maskReady = false;
+      maskCv.width  = cv.width;  maskCv.height = cv.height;
+      tmpCv.width   = cv.width;  tmpCv.height  = cv.height;
+      mctx.clearRect(0, 0, maskCv.width, maskCv.height);
+
+      var cs   = window.getComputedStyle(nameEl);
+      var cr   = copyEl.getBoundingClientRect();
+      var size = parseFloat(cs.fontSize);
+
+      mctx.font         = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      mctx.fillStyle    = 'white';
+      mctx.textBaseline = 'top';
+      mctx.textAlign    = 'left';
+
+      var walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT, null, false);
+      var node;
+      while ((node = walker.nextNode())) {
+        var text = node.nodeValue;
+        if (!text.trim()) continue;
+        for (var k = 0; k < text.length; k++) {
+          var ch = text[k];
+          if (ch === ' ') continue;
+          var rng = document.createRange();
+          rng.setStart(node, k);
+          rng.setEnd(node, k + 1);
+          var r = rng.getBoundingClientRect();
+          if (r.width < 1) continue;
+          var halfLeading = (r.height - size) / 2;
+          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + halfLeading + 7);
+        }
+      }
+      maskReady = true;
+    }
+
+    function place() {
+      cv.width  = copyEl.offsetWidth;
+      cv.height = copyEl.offsetHeight;
+      buildMask();
+    }
+
+    /* bio-hero-copy has no reveal animation — build as soon as fonts are ready */
+    document.fonts.ready.then(place);
+    window.addEventListener('resize', place);
+
+    function col() {
+      return document.body.classList.contains('pink-mode') ? '#FFFFFF' : '#FF1493';
+    }
+
+    var prevX = null, prevY = null;
+    nameEl.style.cursor = 'crosshair';
+
+    copyEl.addEventListener('mousemove', function (e) {
+      if (!cv.width || !maskReady) return;
+      var r = copyEl.getBoundingClientRect();
+      var x = e.clientX - r.left;
+      var y = e.clientY - r.top;
+      var c = col();
+
+      var dx = prevX !== null ? x - prevX : 1;
+      var dy = prevY !== null ? y - prevY : 0;
+      prevX = x; prevY = y;
+      var speed = Math.sqrt(dx * dx + dy * dy) || 1;
+      var ax = dx / speed, ay = dy / speed;
+      var px = -ay, py = ax;
+
+      var brushHalf = 28, bristles = 22;
+      var strokeLen = Math.min(speed * 1.4 + 10, 30);
+
+      tctx.clearRect(0, 0, tmpCv.width, tmpCv.height);
+      tctx.lineCap = 'round';
+
+      for (var i = 0; i < bristles; i++) {
+        var t      = (i / (bristles - 1) - 0.5) * 2;
+        var spread = t * brushHalf + (Math.random() - 0.5) * 5;
+        var bx     = x + px * spread;
+        var by     = y + py * spread;
+        var half   = strokeLen * (Math.random() * 0.4 + 0.6) * 0.5;
+        tctx.globalAlpha = Math.random() * 0.45 + 0.5;
+        tctx.strokeStyle = c;
+        tctx.lineWidth   = Math.random() * 3 + 2;
+        tctx.beginPath();
+        tctx.moveTo(bx - ax * half, by - ay * half);
+        tctx.lineTo(bx + ax * half, by + ay * half);
+        tctx.stroke();
+      }
+
+      tctx.globalAlpha              = 1;
+      tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(maskCv, 0, 0);
+      tctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(tmpCv, 0, 0);
+    });
+
+    copyEl.addEventListener('mouseleave', function () { prevX = null; prevY = null; });
+
+    setInterval(function () {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = 0.010;
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 1;
+    }, 50);
+  })();
 </script>
 </body>
 </html>

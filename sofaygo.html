@@ -624,6 +624,44 @@
       box-shadow: 0 4px 18px rgba(255,20,147,0.16);
     }
 
+    /* ── Monthly Listeners ────────────────────────── */
+    .monthly-listeners {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: heroFadeUp 0.65s ease 1.72s forwards;
+    }
+    .ml-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #1DB954;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 0 rgba(29,185,84,0.6);
+      animation: mlPulse 2s ease-in-out infinite;
+    }
+    @keyframes mlPulse {
+      0%   { box-shadow: 0 0 0 0 rgba(29,185,84,0.6); }
+      70%  { box-shadow: 0 0 0 7px rgba(29,185,84,0); }
+      100% { box-shadow: 0 0 0 0 rgba(29,185,84,0); }
+    }
+    .ml-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+    }
+    .ml-count {
+      font-family: var(--font-disp);
+      font-size: 22px;
+      letter-spacing: 0.04em;
+      color: #1DB954;
+      line-height: 1;
+    }
+
     /* ── Intro Overlay ─────────────────────────────── */
     body.intro-active { overflow: hidden; }
     #intro-overlay {
@@ -769,26 +807,12 @@
       Known for his melodic style and introspective lyricism, he has become
       one of the most compelling voices in the new wave of Southern hip-hop.
     </p>
+    <div class="monthly-listeners" id="monthly-listeners-wrap">
+      <span class="ml-dot"></span>
+      <span class="ml-label">Monthly Listeners</span>
+      <span class="ml-count" id="ml-count">—</span>
+    </div>
     <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="btn-sm filled liquid-glass">Listen →</a>
-  </div>
-</section>
-
-<!-- ── GOOEY TEXT ───────────────────────────────── -->
-<section id="gooey-band">
-  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
-    <defs>
-      <filter id="gooey-threshold">
-        <feColorMatrix in="SourceGraphic" type="matrix"
-          values="1 0 0 0 0
-                  0 1 0 0 0
-                  0 0 1 0 0
-                  0 0 0 255 -140"/>
-      </filter>
-    </defs>
-  </svg>
-  <div id="gooey-container">
-    <span id="gooey-t1"></span>
-    <span id="gooey-t2"></span>
   </div>
 </section>
 
@@ -817,10 +841,29 @@
   </div>
 </section>
 
+<!-- ── GOOEY TEXT ───────────────────────────────── -->
+<section id="gooey-band">
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <filter id="gooey-threshold">
+        <feColorMatrix in="SourceGraphic" type="matrix"
+          values="1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 255 -140"/>
+      </filter>
+    </defs>
+  </svg>
+  <div id="gooey-container">
+    <span id="gooey-t1"></span>
+    <span id="gooey-t2"></span>
+  </div>
+</section>
+
 <!-- ── SONGS TO LISTEN ──────────────────────────── -->
 <section id="songs">
   <div class="songs-left fill-b">
-    <img src="https://i.pinimg.com/736x/bf/08/bd/bf08bde7e7f3a755c5ef2404ee042a55.jpg" alt="SoFaygo live">
+    <img src="https://i.pinimg.com/736x/e2/26/3e/e2263e2100b64d97260bd4ee4c1c7ab5.jpg" alt="SoFaygo">
   </div>
   <div class="songs-copy">
     <div class="songs-num">01</div>
@@ -883,11 +926,7 @@
     <button class="btn-sm liquid-glass" id="show-more-btn" onclick="(function(){var el=document.getElementById('extra-tracks');var btn=document.getElementById('show-more-btn');var open=el.style.display!=='none';el.style.display=open?'none':'block';btn.textContent=open?'Show More →':'Show Less →';})()" style="margin-top:16px;">Show More →</button>
   </div>
   <div class="songs-right fill-e" style="position:relative; overflow:hidden;">
-    <img src="https://i.scdn.co/image/ab67616d0000b273f5d35bf91a2b5f0009b010d4" alt="Pink Heartz album">
-    <div style="position:absolute; bottom:32px; left:32px;">
-      <span style="font-family:var(--font-disp); font-size:32px; color:var(--white); letter-spacing:0.04em;">Pink Heartz</span>
-      <div style="font-size:11px; color:var(--pink); letter-spacing:0.15em; text-transform:uppercase; margin-top:6px;">Album · 2022</div>
-    </div>
+    <img src="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg" alt="SoFaygo">
   </div>
 </section>
 
@@ -918,7 +957,6 @@
           Drift
         </div>
       </div>
-      <a href="#" class="btn btn-outline liquid-glass">Full Tracklist</a>
     </div>
   </div>
 </div>
@@ -1058,7 +1096,23 @@
   document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
   setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
 
-  /* Hero name spray */
+  /* Monthly listeners live counter */
+  (function () {
+    var base = 2400000;
+    var el = document.getElementById('ml-count');
+    function fmt(n) {
+      if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+      return Math.round(n).toLocaleString();
+    }
+    function tick() {
+      base += Math.floor((Math.random() - 0.48) * 120);
+      el.textContent = fmt(base);
+    }
+    tick();
+    setInterval(tick, 4000);
+  })();
+
+  /* Hero name brush */
   (function () {
     var nameEl = document.querySelector('.hero-name');
     var copyEl = document.querySelector('.hero-copy');
@@ -1066,13 +1120,12 @@
 
     copyEl.style.position = 'relative';
 
+    /* Canvas covers the entire copyEl so coordinates share one reference frame */
     var cv = document.createElement('canvas');
-    cv.style.cssText = 'position:absolute;z-index:10;cursor:crosshair;';
+    cv.style.cssText = 'position:absolute;left:0;top:0;z-index:10;pointer-events:none;';
     copyEl.appendChild(cv);
     var ctx = cv.getContext('2d');
 
-    /* Offscreen canvases: maskCv holds white letter-shaped pixels (pixel-accurate
-       glyph mask), tmpCv is a per-stroke scratch surface for destination-in clipping */
     var maskCv = document.createElement('canvas');
     var mctx   = maskCv.getContext('2d');
     var tmpCv  = document.createElement('canvas');
@@ -1087,90 +1140,113 @@
       tmpCv.height  = cv.height;
       mctx.clearRect(0, 0, maskCv.width, maskCv.height);
 
-      var cs = window.getComputedStyle(nameEl);
-      var nr = nameEl.getBoundingClientRect();
-      mctx.font      = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
-      mctx.fillStyle = 'white';
+      var cs   = window.getComputedStyle(nameEl);
+      var cr   = copyEl.getBoundingClientRect();
+      var size = parseFloat(cs.fontSize);
 
-      /* Measure font-level ascent/descent to compensate for CSS line-height
-         half-leading that sits above the actual glyph ink */
-      var fm       = mctx.measureText('M');
-      var fAscent  = fm.fontBoundingBoxAscent  || parseFloat(cs.fontSize) * 0.8;
-      var fDescent = fm.fontBoundingBoxDescent || parseFloat(cs.fontSize) * 0.2;
+      mctx.font         = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      mctx.fillStyle    = 'white';
+      mctx.textBaseline = 'top';
+      mctx.textAlign    = 'left';
 
       var walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT, null, false);
       var node;
       while ((node = walker.nextNode())) {
         var text = node.nodeValue;
         if (!text.trim()) continue;
-        /* One range covers the whole text node — gives correct line-box rect(s)
-           including x-position from the browser's own layout engine */
-        var rng = document.createRange();
-        rng.setStart(node, 0);
-        rng.setEnd(node, text.length);
-        var rs = rng.getClientRects();
-        for (var j = 0; j < rs.length; j++) {
-          if (rs[j].width < 1) continue;
-          /* Offset y by half-leading so the em box aligns with the glyph ink,
-             not the top of the larger CSS line box */
-          var halfLeading = Math.max(0, (rs[j].height - fAscent - fDescent) / 2);
-          mctx.textBaseline = 'top';
-          mctx.fillText(text, rs[j].left - nr.left, rs[j].top - nr.top + halfLeading);
+        /* One Range per character: the DOM tells us the exact left edge and
+           line-box top for each glyph, so we never accumulate metric drift */
+        for (var k = 0; k < text.length; k++) {
+          var ch = text[k];
+          if (ch === ' ') continue;
+          var rng = document.createRange();
+          rng.setStart(node, k);
+          rng.setEnd(node, k + 1);
+          var r = rng.getBoundingClientRect();
+          if (r.width < 1) continue;
+          /* halfLeading: CSS centres the em-square inside the line box.
+             With line-height < 1 this is negative (em top is above line-box top). */
+          var halfLeading = (r.height - size) / 2;
+          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + halfLeading + 4);
         }
       }
       maskReady = true;
     }
 
     function place() {
-      cv.style.left = nameEl.offsetLeft + 'px';
-      cv.style.top  = nameEl.offsetTop  + 'px';
-      cv.width      = nameEl.offsetWidth;
-      cv.height     = nameEl.offsetHeight;
+      cv.width  = copyEl.offsetWidth;
+      cv.height = copyEl.offsetHeight;
       buildMask();
     }
 
-    /* Wait for the web font before first placement so mask uses correct glyph
-       metrics, not the fallback font */
-    document.fonts.ready.then(place);
+    /* hero-name animation: 1.28 s delay + 0.75 s duration = 2.03 s.
+       Build the mask only after the translateY transform has settled,
+       otherwise getBoundingClientRect gives the mid-animation position. */
+    nameEl.addEventListener('animationend', function () {
+      document.fonts.ready.then(place);
+    }, { once: true });
+    /* Fallback: if fonts load after the animation already ran */
+    document.fonts.ready.then(function () { setTimeout(place, 2200); });
     window.addEventListener('resize', place);
 
     function col() {
       return document.body.classList.contains('pink-mode') ? '#FFFFFF' : '#FF1493';
     }
 
-    cv.addEventListener('mousemove', function (e) {
+    var prevX = null, prevY = null;
+
+    nameEl.style.cursor = 'crosshair';
+
+    /* Listen on copyEl; canvas is pointer-events:none so it doesn't block clicks */
+    copyEl.addEventListener('mousemove', function (e) {
       if (!cv.width || !maskReady) return;
-      var r = cv.getBoundingClientRect();
+      var r = copyEl.getBoundingClientRect();
       var x = e.clientX - r.left;
       var y = e.clientY - r.top;
       var c = col();
 
-      /* Spray particles onto the scratch canvas */
+      var dx = prevX !== null ? x - prevX : 1;
+      var dy = prevY !== null ? y - prevY : 0;
+      prevX = x; prevY = y;
+      var speed = Math.sqrt(dx * dx + dy * dy) || 1;
+      var ax = dx / speed, ay = dy / speed;
+      var px = -ay, py = ax;
+
+      var brushHalf = 28;
+      var bristles  = 22;
+      var strokeLen = Math.min(speed * 1.4 + 10, 30);
+
       tctx.clearRect(0, 0, tmpCv.width, tmpCv.height);
-      for (var i = 0; i < 60; i++) {
-        var a = Math.random() * Math.PI * 2;
-        var d = Math.pow(Math.random(), 0.5) * 55;
-        tctx.globalAlpha = Math.random() * 0.35 + 0.06;
-        tctx.fillStyle   = c;
+      tctx.lineCap = 'round';
+
+      for (var i = 0; i < bristles; i++) {
+        var t      = (i / (bristles - 1) - 0.5) * 2;
+        var spread = t * brushHalf + (Math.random() - 0.5) * 5;
+        var bx     = x + px * spread;
+        var by     = y + py * spread;
+        var half   = strokeLen * (Math.random() * 0.4 + 0.6) * 0.5;
+        tctx.globalAlpha = Math.random() * 0.45 + 0.5;
+        tctx.strokeStyle = c;
+        tctx.lineWidth   = Math.random() * 3 + 2;
         tctx.beginPath();
-        tctx.arc(x + d * Math.cos(a), y + d * Math.sin(a), Math.random() * 2.5 + 0.5, 0, Math.PI * 2);
-        tctx.fill();
+        tctx.moveTo(bx - ax * half, by - ay * half);
+        tctx.lineTo(bx + ax * half, by + ay * half);
+        tctx.stroke();
       }
 
-      /* Clip scratch canvas to glyph pixels — destination-in keeps only pixels
-         that overlap with the white letter shapes in maskCv */
       tctx.globalAlpha              = 1;
       tctx.globalCompositeOperation = 'destination-in';
       tctx.drawImage(maskCv, 0, 0);
       tctx.globalCompositeOperation = 'source-over';
 
-      /* Accumulate onto the persistent spray canvas */
       ctx.drawImage(tmpCv, 0, 0);
     });
 
+    copyEl.addEventListener('mouseleave', function () { prevX = null; prevY = null; });
+
     setInterval(function () {
       ctx.globalCompositeOperation = 'destination-out';
-      ctx.globalAlpha = 0.025;
+      ctx.globalAlpha = 0.010;
       ctx.fillRect(0, 0, cv.width, cv.height);
       ctx.globalCompositeOperation = 'source-over';
       ctx.globalAlpha = 1;
