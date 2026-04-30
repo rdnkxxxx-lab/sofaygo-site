@@ -1071,34 +1071,54 @@
     copyEl.appendChild(cv);
     var ctx = cv.getContext('2d');
 
-    /* Per-character clip rects derived from the browser's own rendering —
-       no font loading needed, always pixel-accurate */
-    var clipRects = [];
+    /* Offscreen canvases: maskCv holds white letter-shaped pixels (pixel-accurate
+       glyph mask), tmpCv is a per-stroke scratch surface for destination-in clipping */
+    var maskCv = document.createElement('canvas');
+    var mctx   = maskCv.getContext('2d');
+    var tmpCv  = document.createElement('canvas');
+    var tctx   = tmpCv.getContext('2d');
+    var maskReady = false;
 
-    function buildClip() {
-      clipRects = [];
+    function buildMask() {
+      maskReady = false;
+      maskCv.width  = cv.width;
+      maskCv.height = cv.height;
+      tmpCv.width   = cv.width;
+      tmpCv.height  = cv.height;
+      mctx.clearRect(0, 0, maskCv.width, maskCv.height);
+
+      var cs = window.getComputedStyle(nameEl);
       var nr = nameEl.getBoundingClientRect();
+      mctx.font      = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      mctx.fillStyle = 'white';
+
+      /* Measure font-level ascent/descent to compensate for CSS line-height
+         half-leading that sits above the actual glyph ink */
+      var fm       = mctx.measureText('M');
+      var fAscent  = fm.fontBoundingBoxAscent  || parseFloat(cs.fontSize) * 0.8;
+      var fDescent = fm.fontBoundingBoxDescent || parseFloat(cs.fontSize) * 0.2;
+
       var walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT, null, false);
       var node;
       while ((node = walker.nextNode())) {
         var text = node.nodeValue;
-        for (var i = 0; i < text.length; i++) {
-          var rng = document.createRange();
-          rng.setStart(node, i);
-          rng.setEnd(node, i + 1);
-          var rs = rng.getClientRects();
-          for (var j = 0; j < rs.length; j++) {
-            if (rs[j].width > 0) {
-              clipRects.push({
-                x: rs[j].left - nr.left,
-                y: rs[j].top  - nr.top,
-                w: rs[j].width,
-                h: rs[j].height
-              });
-            }
-          }
+        if (!text.trim()) continue;
+        /* One range covers the whole text node — gives correct line-box rect(s)
+           including x-position from the browser's own layout engine */
+        var rng = document.createRange();
+        rng.setStart(node, 0);
+        rng.setEnd(node, text.length);
+        var rs = rng.getClientRects();
+        for (var j = 0; j < rs.length; j++) {
+          if (rs[j].width < 1) continue;
+          /* Offset y by half-leading so the em box aligns with the glyph ink,
+             not the top of the larger CSS line box */
+          var halfLeading = Math.max(0, (rs[j].height - fAscent - fDescent) / 2);
+          mctx.textBaseline = 'top';
+          mctx.fillText(text, rs[j].left - nr.left, rs[j].top - nr.top + halfLeading);
         }
       }
+      maskReady = true;
     }
 
     function place() {
@@ -1106,10 +1126,12 @@
       cv.style.top  = nameEl.offsetTop  + 'px';
       cv.width      = nameEl.offsetWidth;
       cv.height     = nameEl.offsetHeight;
-      buildClip();
+      buildMask();
     }
 
-    place();
+    /* Wait for the web font before first placement so mask uses correct glyph
+       metrics, not the fallback font */
+    document.fonts.ready.then(place);
     window.addEventListener('resize', place);
 
     function col() {
@@ -1117,30 +1139,33 @@
     }
 
     cv.addEventListener('mousemove', function (e) {
-      if (!cv.width || !clipRects.length) return;
+      if (!cv.width || !maskReady) return;
       var r = cv.getBoundingClientRect();
       var x = e.clientX - r.left;
       var y = e.clientY - r.top;
       var c = col();
 
-      ctx.save();
-      ctx.beginPath();
-      for (var j = 0; j < clipRects.length; j++) {
-        ctx.rect(clipRects[j].x, clipRects[j].y, clipRects[j].w, clipRects[j].h);
-      }
-      ctx.clip();
-
+      /* Spray particles onto the scratch canvas */
+      tctx.clearRect(0, 0, tmpCv.width, tmpCv.height);
       for (var i = 0; i < 60; i++) {
         var a = Math.random() * Math.PI * 2;
         var d = Math.pow(Math.random(), 0.5) * 55;
-        ctx.globalAlpha = Math.random() * 0.35 + 0.06;
-        ctx.fillStyle   = c;
-        ctx.beginPath();
-        ctx.arc(x + d * Math.cos(a), y + d * Math.sin(a), Math.random() * 2.5 + 0.5, 0, Math.PI * 2);
-        ctx.fill();
+        tctx.globalAlpha = Math.random() * 0.35 + 0.06;
+        tctx.fillStyle   = c;
+        tctx.beginPath();
+        tctx.arc(x + d * Math.cos(a), y + d * Math.sin(a), Math.random() * 2.5 + 0.5, 0, Math.PI * 2);
+        tctx.fill();
       }
 
-      ctx.restore();
+      /* Clip scratch canvas to glyph pixels — destination-in keeps only pixels
+         that overlap with the white letter shapes in maskCv */
+      tctx.globalAlpha              = 1;
+      tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(maskCv, 0, 0);
+      tctx.globalCompositeOperation = 'source-over';
+
+      /* Accumulate onto the persistent spray canvas */
+      ctx.drawImage(tmpCv, 0, 0);
     });
 
     setInterval(function () {

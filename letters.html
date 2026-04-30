@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paint Letters</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #7B1040;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 52px;
+    padding: 32px;
+    font-family: system-ui, Arial, sans-serif;
+    user-select: none;
+  }
+
+  /* ── Controls ─────────────────────────────────── */
+  #controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  #wordInput {
+    background: #7B1040;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 7px 13px;
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border-radius: 5px;
+    width: 158px;
+    outline: none;
+    caret-color: #fff;
+  }
+
+  #wordInput::placeholder {
+    color: rgba(255,255,255,0.35);
+    font-weight: 400;
+  }
+
+  .ctrl-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  #brushSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100px;
+    height: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  #brushSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+  }
+
+  #brushSlider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  #clearBtn {
+    background: #7B1040;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 7px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  #clearBtn:hover { background: rgba(255,255,255,0.15); }
+
+  /* ── Letter row ───────────────────────────────── */
+  #letterRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .letter-wrap {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+  }
+
+  .letter-wrap canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  .paint-cv {
+    pointer-events: all;
+    cursor: crosshair;
+  }
+</style>
+</head>
+<body>
+
+<div id="controls">
+  <input type="text" id="wordInput" maxlength="8"
+         value="HOVER" placeholder="Word…"
+         autocomplete="off" spellcheck="false">
+  <div class="ctrl-group">
+    Brush
+    <input type="range" id="brushSlider" min="4" max="22" value="12">
+  </div>
+  <button id="clearBtn">Clear All</button>
+</div>
+
+<div id="letterRow"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  const CW = 90, CH = 90;
+  const letters = [];
+
+  /* Pick the largest font that keeps the glyph within the canvas width */
+  function computeFont(char, ctx) {
+    let size = 82;
+    const maxW = CW - 10;
+    while (size > 14) {
+      ctx.font = 'bold ' + size + 'px Georgia,"Times New Roman",serif';
+      if (ctx.measureText(char).width <= maxW) break;
+      size -= 2;
+    }
+    return ctx.font;
+  }
+
+  function makeLetter(char) {
+    const wrap = document.createElement('div');
+    wrap.className = 'letter-wrap';
+
+    /* Bottom layer: faint ghost outline */
+    const ghostCv = document.createElement('canvas');
+    ghostCv.width = CW; ghostCv.height = CH;
+
+    /* Top layer: accumulates white paint strokes */
+    const paintCv = document.createElement('canvas');
+    paintCv.width = CW; paintCv.height = CH;
+    paintCv.className = 'paint-cv';
+
+    /* Offscreen: full-opacity letter shape used as source-in stencil */
+    const maskCv = document.createElement('canvas');
+    maskCv.width = CW; maskCv.height = CH;
+
+    /* Offscreen: per-stroke compositing scratch surface */
+    const scratchCv = document.createElement('canvas');
+    scratchCv.width = CW; scratchCv.height = CH;
+
+    const gCtx = ghostCv.getContext('2d');
+    const pCtx = paintCv.getContext('2d');
+    const mCtx = maskCv.getContext('2d');
+    const sCtx = scratchCv.getContext('2d');
+
+    const font = computeFont(char, gCtx);
+    const cx = CW / 2, cy = CH / 2;
+
+    /* Ghost: white letter at 10% opacity */
+    gCtx.font = font;
+    gCtx.textAlign    = 'center';
+    gCtx.textBaseline = 'middle';
+    gCtx.globalAlpha  = 0.10;
+    gCtx.fillStyle    = '#ffffff';
+    gCtx.fillText(char, cx, cy);
+
+    /* Mask: fully opaque white letter — the clipping stencil */
+    mCtx.font = font;
+    mCtx.textAlign    = 'center';
+    mCtx.textBaseline = 'middle';
+    mCtx.fillStyle    = '#ffffff';
+    mCtx.fillText(char, cx, cy);
+
+    paintCv.addEventListener('mousemove', function (e) {
+      const r      = paintCv.getBoundingClientRect();
+      const x      = (e.clientX - r.left) * (CW / r.width);
+      const y      = (e.clientY - r.top)  * (CH / r.height);
+      const radius = +document.getElementById('brushSlider').value;
+
+      /*
+       * Step 1 — copy the letter stencil onto the scratch surface.
+       *           This becomes the destination for source-in.
+       */
+      sCtx.clearRect(0, 0, CW, CH);
+      sCtx.globalCompositeOperation = 'source-over';
+      sCtx.drawImage(maskCv, 0, 0);
+
+      /*
+       * Step 2 — draw the radial gradient using source-in.
+       *           source-in keeps only the source (gradient) pixels
+       *           that overlap the destination (letter stencil), so
+       *           the gradient is clipped to the exact glyph shape.
+       */
+      const grad = sCtx.createRadialGradient(x, y, 0, x, y, radius);
+      grad.addColorStop(0, 'rgba(255,255,255,1)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      sCtx.fillStyle = grad;
+      sCtx.globalCompositeOperation = 'source-in';
+      sCtx.fillRect(0, 0, CW, CH);
+
+      /*
+       * Step 3 — accumulate the clipped stroke onto the persistent
+       *           paint canvas. source-atop composites the new stroke
+       *           on top of whatever has already been painted.
+       */
+      pCtx.globalCompositeOperation = 'source-atop';
+      pCtx.drawImage(scratchCv, 0, 0);
+
+      /* Reset for next frame */
+      pCtx.globalCompositeOperation = 'source-over';
+    });
+
+    wrap.appendChild(ghostCv);
+    wrap.appendChild(paintCv);
+
+    return {
+      wrap,
+      clear() { pCtx.clearRect(0, 0, CW, CH); },
+    };
+  }
+
+  function buildRow(word) {
+    const row = document.getElementById('letterRow');
+    row.innerHTML = '';
+    letters.length = 0;
+
+    const chars = word.toUpperCase().slice(0, 8);
+    for (const ch of chars) {
+      const ltr = makeLetter(ch);
+      row.appendChild(ltr.wrap);
+      letters.push(ltr);
+    }
+  }
+
+  document.getElementById('wordInput').addEventListener('input', function () {
+    buildRow(this.value);
+  });
+
+  document.getElementById('clearBtn').addEventListener('click', function () {
+    letters.forEach(function (l) { l.clear(); });
+  });
+
+  buildRow('HOVER');
+}());
+</script>
+
+</body>
+</html>
