@@ -272,6 +272,10 @@
       letter-spacing: 0.06em;
     }
 
+    .track-row.playing { background: rgba(255,255,255,0.05); border-radius: 4px; }
+    .track-row.playing .track-title { color: var(--pink); }
+    .track-row.playing .track-idx { color: var(--pink); }
+
     /* ── ALBUM FEATURE ─────────────────────────── */
     .album-feat {
       position: relative;
@@ -800,6 +804,19 @@
   </div>
 </section>
 
+<!-- ── VIDEO ───────────────────────────────────────── -->
+<section style="padding: 120px 44px; display: flex; justify-content: center; background: var(--black); border-top: 1px solid var(--border);">
+  <div style="position: relative; display: inline-block;">
+    <video id="site-video" src="video.mp4" autoplay loop muted playsinline
+      style="height: 80vh; width: auto; border-radius: 12px; display: block;">
+    </video>
+    <button id="mute-btn" onclick="(function(){var v=document.getElementById('site-video');var b=document.getElementById('mute-btn');v.muted=!v.muted;b.textContent=v.muted?'🔇':'🔊';})()"
+      style="position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:50%;width:38px;height:38px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
+      🔇
+    </button>
+  </div>
+</section>
+
 <!-- ── RECOGNITION ──────────────────────────────── -->
 <section id="recognition">
   <div class="recog-copy" data-reveal>
@@ -853,57 +870,64 @@
     <div class="songs-num">01</div>
     <h2 class="songs-heading">Songs<br>to Listen</h2>
     <ul class="tracklist">
-      <li class="track-row">
+      <li class="track-row" onclick="playTrack(this,'6aHoPULNO7pSL2ZfUY0bU8')" style="cursor:pointer;">
         <div class="track-left">
           <span class="track-idx">01</span>
-          <span class="track-title">Pink Hearts</span>
-        </div>
-        <span class="track-dur">3:12</span>
-      </li>
-      <li class="track-row">
-        <div class="track-left">
-          <span class="track-idx">02</span>
           <span class="track-title">Knock Knock</span>
         </div>
-        <span class="track-dur">2:58</span>
+        <span class="track-dur">2:19</span>
       </li>
-      <li class="track-row">
+      <li class="track-row" onclick="playTrack(this,'3QHGfxhjexLaMKGHXagfRs')" style="cursor:pointer;">
+        <div class="track-left">
+          <span class="track-idx">02</span>
+          <span class="track-title">Hell Yeah <span class="track-feat">ft. Ken Carson</span></span>
+        </div>
+        <span class="track-dur">2:48</span>
+      </li>
+      <li class="track-row" onclick="playTrack(this,'6Mfh9o1FjAiA3gU5q21OD6')" style="cursor:pointer;">
         <div class="track-left">
           <span class="track-idx">03</span>
-          <span class="track-title">Turks (ft. Travis Scott)</span>
+          <span class="track-title">Everyday</span>
         </div>
-        <span class="track-dur">3:24</span>
+        <span class="track-dur">2:51</span>
       </li>
-      <li class="track-row">
+      <li class="track-row" onclick="playTrack(this,'6GNG0YQixWuLE0M5FtrRxY')" style="cursor:pointer;">
         <div class="track-left">
           <span class="track-idx">04</span>
-          <span class="track-title">Lost Boy</span>
+          <span class="track-title">Off The Map</span>
         </div>
-        <span class="track-dur">2:44</span>
+        <span class="track-dur">2:21</span>
       </li>
-      <li class="track-row">
+      <li class="track-row" onclick="playTrack(this,'6oJXKYRFGuUNDPZ4aiJpFk')" style="cursor:pointer;">
         <div class="track-left">
           <span class="track-idx">05</span>
-          <span class="track-title">Show U Off</span>
+          <span class="track-title">MM3</span>
         </div>
-        <span class="track-dur">3:01</span>
+        <span class="track-dur">2:54</span>
       </li>
     </ul>
     <div id="extra-tracks" style="display:none;">
       <ul class="tracklist">
-        <li class="track-row">
+        <li class="track-row" onclick="playTrack(this,'7ydu79RLStYQTOi1OM6Dvg')" style="cursor:pointer;">
           <div class="track-left">
             <span class="track-idx">06</span>
-            <span class="track-title">Paranoid</span>
+            <span class="track-title">CONTEST <span class="track-feat">ft. Travis Scott</span></span>
           </div>
-          <span class="track-dur">2:52</span>
+          <span class="track-dur">4:32</span>
         </li>
-        <li class="track-row">
+        <li class="track-row" onclick="playTrack(this,'10lBbp6kD52IDUWFrpkP00')" style="cursor:pointer;">
           <div class="track-left">
             <span class="track-idx">07</span>
-            <span class="track-title">On My Way</span>
+            <span class="track-title">Stay Awake <span class="track-feat">ft. Lil Uzi Vert</span></span>
           </div>
-          <span class="track-dur">3:18</span>
+          <span class="track-dur">3:33</span>
+        </li>
+        <li class="track-row" onclick="playTrack(this,'6SeGvoHuwwIyEPxUL3xc7O')" style="cursor:pointer;">
+          <div class="track-left">
+            <span class="track-idx">08</span>
+            <span class="track-title">Chrome</span>
+          </div>
+          <span class="track-dur">2:51</span>
         </li>
       </ul>
     </div>
@@ -913,6 +937,25 @@
     <img src="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg" alt="SoFaygo">
   </div>
 </section>
+
+<!-- ── PLAYER ──────────────────────────────────────── -->
+<div id="player-section" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:300;">
+  <!-- controls strip -->
+  <div style="background:rgba(8,8,8,0.7); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-top:1px solid rgba(255,255,255,0.07); padding:7px 44px; display:flex; align-items:center; justify-content:space-between;">
+    <span style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:rgba(255,255,255,0.55);">Now Playing</span>
+    <button onclick="document.getElementById('player-section').style.display='none'; document.getElementById('spotify-player').src=''; document.querySelectorAll('.track-row.playing').forEach(function(r){r.classList.remove('playing');})"
+      style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; background:none; border:none; color:rgba(255,255,255,0.55); cursor:pointer; padding:0; transition:color 0.2s;"
+      onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">Close ✕</button>
+  </div>
+  <!-- iframe bar -->
+  <div style="background:rgba(8,8,8,0.96); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);">
+    <iframe id="spotify-player" src=""
+      style="width:100%; height:80px; border:none; display:block;"
+      scrolling="no" frameborder="0"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+    </iframe>
+  </div>
+</div>
 
 <!-- ── ANGELIC 7 ─────────────────────────────────── -->
 <div class="album-feat fill-a" id="angelic7">
@@ -992,6 +1035,16 @@
 </footer>
 
 <script>
+  /* Track player */
+  function playTrack(row, id) {
+    document.querySelectorAll('.track-row.playing').forEach(function(r){ r.classList.remove('playing'); });
+    row.classList.add('playing');
+    var section = document.getElementById('player-section');
+    var player = document.getElementById('spotify-player');
+    player.src = 'https://open.spotify.com/embed/track/' + id + '?utm_source=generator&theme=0&autoplay=1';
+    section.style.display = 'block';
+  }
+
   /* Intro animation */
   (function () {
     document.body.classList.add('intro-active');
