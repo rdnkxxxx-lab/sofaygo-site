@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letter Paint</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #8B1A4A;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    #letters-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .letter-wrap {
+      position: relative;
+      width: 90px;
+      height: 112px;
+      cursor: crosshair;
+    }
+
+    .ghost-canvas,
+    .paint-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .ghost-canvas { z-index: 1; }
+    .paint-canvas  { z-index: 2; }
+
+    #controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.55);
+      color: white;
+      padding: 8px 14px;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      outline: none;
+      width: 130px;
+      caret-color: white;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus { border-color: white; }
+    input[type="text"]::placeholder { color: rgba(255,255,255,0.25); }
+
+    button {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.55);
+      color: rgba(255,255,255,0.8);
+      padding: 8px 22px;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    button:hover {
+      border-color: white;
+      color: white;
+      background: rgba(255,255,255,0.08);
+    }
+  </style>
+</head>
+<body>
+
+<div id="letters-row"></div>
+
+<div id="controls">
+  <input type="text" id="word-input" maxlength="8" value="HOVER" placeholder="HOVER" autocomplete="off" spellcheck="false">
+  <button id="clear-btn">Clear</button>
+</div>
+
+<script>
+  const CW   = 90;
+  const CH   = 112;
+  const FONT = `bold 84px Georgia, 'Times New Roman', serif`;
+
+  let entries = [];
+  const row      = document.getElementById('letters-row');
+  const input    = document.getElementById('word-input');
+  const clearBtn = document.getElementById('clear-btn');
+
+  /* Draw faint ghost letter */
+  function drawGhost(canvas, letter) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, CW, CH);
+    ctx.font         = FONT;
+    ctx.textAlign    = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle    = 'rgba(255,255,255,0.10)';
+    ctx.fillText(letter, CW / 2, CH / 2);
+  }
+
+  /* Apply paint stroke clipped inside the letter glyph */
+  function paintStroke(pc, letter, mx, my) {
+    const ctx = pc.getContext('2d');
+
+    const tmp    = document.createElement('canvas');
+    tmp.width    = CW;
+    tmp.height   = CH;
+    const tc     = tmp.getContext('2d');
+
+    /* 1 — draw letter as solid white mask */
+    tc.font         = FONT;
+    tc.textAlign    = 'center';
+    tc.textBaseline = 'middle';
+    tc.fillStyle    = 'white';
+    tc.fillText(letter, CW / 2, CH / 2);
+
+    /* 2 — source-in: keep only pixels inside the glyph */
+    tc.globalCompositeOperation = 'source-in';
+    const r    = 38;
+    const grad = tc.createRadialGradient(mx, my, 0, mx, my, r);
+    grad.addColorStop(0,    'rgba(255,255,255,1)');
+    grad.addColorStop(0.4,  'rgba(255,255,255,0.7)');
+    grad.addColorStop(0.75, 'rgba(255,255,255,0.2)');
+    grad.addColorStop(1,    'rgba(255,255,255,0)');
+    tc.fillStyle = grad;
+    tc.fillRect(0, 0, CW, CH);
+
+    /* 3 — composite clipped stroke onto accumulating paint canvas */
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(tmp, 0, 0);
+  }
+
+  /* Build letter set */
+  function build(word) {
+    row.innerHTML = '';
+    entries = [];
+
+    word.toUpperCase().split('').forEach(letter => {
+      const wrap = document.createElement('div');
+      wrap.className = 'letter-wrap';
+
+      const gc = document.createElement('canvas');
+      gc.className = 'ghost-canvas';
+      gc.width = CW; gc.height = CH;
+
+      const pc = document.createElement('canvas');
+      pc.className = 'paint-canvas';
+      pc.width = CW; pc.height = CH;
+
+      wrap.appendChild(gc);
+      wrap.appendChild(pc);
+      row.appendChild(wrap);
+
+      drawGhost(gc, letter);
+
+      pc.addEventListener('mousemove', function (e) {
+        const r  = pc.getBoundingClientRect();
+        const mx = (e.clientX - r.left) * (CW / r.width);
+        const my = (e.clientY - r.top)  * (CH / r.height);
+        paintStroke(pc, letter, mx, my);
+      });
+
+      entries.push({ gc, pc, letter });
+    });
+  }
+
+  input.addEventListener('input', () => build(input.value.trim() || 'HOVER'));
+  clearBtn.addEventListener('click', () =>
+    entries.forEach(({ pc }) => pc.getContext('2d').clearRect(0, 0, CW, CH))
+  );
+
+  build('HOVER');
+</script>
+
+</body>
+</html>
