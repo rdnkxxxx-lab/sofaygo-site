@@ -261,6 +261,64 @@
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
 
+    /* ── EXPANDED RELEASE CARDS (Albums / EPs) ──── */
+    .release-grid-exp {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;
+    }
+    @media (max-width: 1100px) { .release-grid-exp { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 700px)  { .release-grid-exp { grid-template-columns: 1fr; } }
+
+    .release-card-exp {
+      display: flex; flex-direction: column;
+      border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s;
+    }
+    .release-card-exp:hover { border-color: rgba(255,255,255,0.14); }
+    .release-card-exp .release-cover { aspect-ratio: 1; margin-bottom: 0; }
+    .release-card-body { padding: 20px 22px 22px; flex: 1; display: flex; flex-direction: column; }
+
+    /* ── RATING CHIPS ──────────────────────────── */
+    .rating-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .rating-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border: 1px solid rgba(255,255,255,0.1); border-radius: 2px;
+    }
+    .rc-src { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
+    .rc-val { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--pink); }
+
+    /* ── CARD TRACKLIST TOGGLE ─────────────────── */
+    .card-tl-toggle {
+      display: inline-flex; align-items: center; gap: 6px; padding: 0;
+      font-family: var(--font-body); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38); background: none; border: none; cursor: pointer;
+      transition: color 0.2s; margin: 8px 0 4px;
+    }
+    .card-tl-toggle:hover { color: var(--pink); }
+    .card-tl-toggle svg { transition: transform 0.3s; }
+    .card-tl-toggle.open svg { transform: rotate(180deg); }
+
+    /* ── CARD TRACKLIST ────────────────────────── */
+    .card-tracklist { display: none; overflow: hidden; }
+    .card-tracklist.open { display: block; }
+    .card-tracklist .track-row { padding: 7px 0; border-bottom-color: rgba(255,255,255,0.04); }
+    .card-tracklist .tl-note { font-size: 10px; color: rgba(255,255,255,0.22); padding: 6px 0 10px; }
+
+    /* ── PINK MODE: section-alt expanded card overrides */
+    body.pink-mode .section-alt .release-card-exp { border-color: rgba(0,0,0,0.08); background: rgba(0,0,0,0.02); }
+    body.pink-mode .section-alt .release-card-exp:hover { border-color: rgba(0,0,0,0.18); }
+    body.pink-mode .section-alt .card-tl-toggle { color: rgba(0,0,0,0.32); }
+    body.pink-mode .section-alt .card-tl-toggle:hover { color: var(--pink); }
+    body.pink-mode .section-alt .track-title { color: rgba(0,0,0,0.72); }
+    body.pink-mode .section-alt .track-idx,
+    body.pink-mode .section-alt .track-feat,
+    body.pink-mode .section-alt .track-dur { color: rgba(0,0,0,0.28); }
+    body.pink-mode .section-alt .track-row { border-bottom-color: rgba(0,0,0,0.05); }
+    body.pink-mode .section-alt .rating-chip { border-color: rgba(0,0,0,0.1); }
+    body.pink-mode .section-alt .rc-src { color: rgba(0,0,0,0.3); }
+    body.pink-mode .section-alt .rc-val { color: var(--pink); }
+    body.pink-mode .section-alt .card-tl-toggle:hover { color: var(--pink); }
+    body.pink-mode .section-alt .tl-note { color: rgba(0,0,0,0.22); }
+
     /* fill colors */
     .fill-a { background: #1a1228; }
     .fill-b { background: #0d1a1a; }
@@ -396,6 +454,10 @@
         Pink Heartz blends melodic trap with emotional vulnerability — a defining statement
         for one of Atlanta's most compelling voices.
       </p>
+      <div class="rating-row" style="margin-bottom:32px">
+        <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">61/100</span></div>
+        <div class="rating-chip"><span class="rc-src">KRUI</span><span class="rc-val" style="font-size:9px;letter-spacing:0.05em;text-transform:none;color:rgba(255,255,255,0.38)">"A mixed bag"</span></div>
+      </div>
       <span class="tracklist-label">Tracklist</span>
       <ul class="tracklist" style="margin-bottom:0">
         <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Transparency</span></div><span class="track-dur">1:44</span></li>
@@ -434,46 +496,109 @@
     <h2 class="section-title">Albums</h2>
     <span class="section-count">4 Releases</span>
   </div>
-  <div class="release-grid">
+  <div class="release-grid-exp">
 
-    <div class="release-card" data-reveal>
+    <!-- Angelic 7 -->
+    <div class="release-card-exp" data-reveal>
       <div class="release-cover">
         <img src="https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f6/51/fa/f651fa73-f439-230d-7285-bbd97eddad99/artwork.jpg/3000x3000bb.jpg" alt="Angelic 7">
       </div>
-      <div class="release-type">Album</div>
-      <div class="card-title">Angelic 7</div>
-      <div class="card-meta">January 10, 2020</div>
-      <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">Album</div>
+        <div class="card-title">Angelic 7</div>
+        <div class="card-meta">January 10, 2020 · 7 Tracks</div>
+        <div class="rating-row">
+          <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.2 / 5</span></div>
+        </div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-a7',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-a7">
+          <ul class="tracklist" style="margin-bottom:12px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Seven</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">On What I'm On</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Nonchalant</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Clash</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Let The Girls Slay</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Hearse</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Knock Knock</span></div></li>
+          </ul>
+        </div>
+        <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on Spotify →</a>
+      </div>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.05s">
+    <!-- After Me -->
+    <div class="release-card-exp" data-reveal style="transition-delay:0.05s">
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me">
       </div>
-      <div class="release-type">Album</div>
-      <div class="card-title">After Me</div>
-      <div class="card-meta">December 17, 2020</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">Album</div>
+        <div class="card-title">After Me</div>
+        <div class="card-meta">December 17, 2020 · 8 Tracks</div>
+        <div class="rating-row">
+          <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">72 / 100</span></div>
+          <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.3 / 5</span></div>
+        </div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-am',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-am">
+          <ul class="tracklist" style="margin-bottom:12px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Off The Map</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Chrome</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Up Off 1942</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Makz</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Hang With The Goats</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Matrix</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Everyday</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Blo It Down</span></div></li>
+          </ul>
+        </div>
+        <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on Spotify →</a>
+      </div>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.1s">
+    <!-- War -->
+    <div class="release-card-exp" data-reveal style="transition-delay:0.05s">
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b2737ae48cc47bca5d26ea71f547" alt="War">
       </div>
-      <div class="release-type">Album</div>
-      <div class="card-title">War</div>
-      <div class="card-meta">June 29, 2019</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">Album</div>
+        <div class="card-title">War</div>
+        <div class="card-meta">June 29, 2019 · 8 Tracks</div>
+        <div class="rating-row">
+          <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">71 / 100</span></div>
+        </div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-war',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-war">
+          <p class="tl-note">This project predates major streaming documentation. Full tracklist available on Spotify.</p>
+        </div>
+        <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on Spotify →</a>
+      </div>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.15s">
+    <!-- Mania -->
+    <div class="release-card-exp" data-reveal style="transition-delay:0.1s">
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania">
       </div>
-      <div class="release-type">Album · 19 Tracks</div>
-      <div class="card-title">Mania</div>
-      <div class="card-meta">November 21, 2025</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">Album</div>
+        <div class="card-title">Mania</div>
+        <div class="card-meta">November 21, 2025 · 19 Tracks</div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-mania',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-mania">
+          <ul class="tracklist" style="margin-bottom:8px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Open It Up<span class="track-feat">ft. Kaash Paige</span></span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Bankrolls</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Outside</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Back in the Mix</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Mayday</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Notice Me</span></div></li>
+          </ul>
+          <p class="tl-note">+ 13 more tracks. Full tracklist on Spotify.</p>
+        </div>
+        <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on Spotify →</a>
+      </div>
     </div>
 
   </div>
@@ -485,46 +610,115 @@
     <h2 class="section-title">EPs</h2>
     <span class="section-count">4 Releases</span>
   </div>
-  <div class="release-grid">
+  <div class="release-grid-exp">
 
-    <div class="release-card" data-reveal>
+    <!-- B4Pink -->
+    <div class="release-card-exp" data-reveal>
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b273cde9e3ad8134941008b201d6" alt="B4Pink">
       </div>
-      <div class="release-type">EP · Cactus Jack</div>
-      <div class="card-title">B4Pink</div>
-      <div class="card-meta">June 2022</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">EP · Cactus Jack</div>
+        <div class="card-title">B4Pink</div>
+        <div class="card-meta">June 14, 2022 · 5 Tracks</div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-b4pink',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-b4pink">
+          <ul class="tracklist" style="margin-bottom:12px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Long Way</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Count Me Out</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Good Day</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Fall</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Got Damn!</span></div></li>
+          </ul>
+        </div>
+        <a href="https://open.spotify.com/album/0wgrKGnsLCq4tM0jIOBmkP" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on Spotify →</a>
+      </div>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.05s">
+    <!-- Babyjack -->
+    <div class="release-card-exp" data-reveal style="transition-delay:0.05s">
       <div class="release-cover">
         <img src="https://i1.sndcdn.com/artworks-UGx3cEpG8Ks2tcXk-rsOvNQ-t500x500.jpg" alt="Babyjack">
       </div>
-      <div class="release-type">EP · SoundCloud</div>
-      <div class="card-title">Babyjack</div>
-      <div class="card-meta">July 15, 2022</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">EP · SoundCloud</div>
+        <div class="card-title">Babyjack</div>
+        <div class="card-meta">July 14, 2022 · 10 Tracks</div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-bj',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-bj">
+          <ul class="tracklist" style="margin-bottom:12px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">No Time</span></div><span class="track-dur">1:57</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Hate It</span></div><span class="track-dur">2:32</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Gnarly</span></div><span class="track-dur">1:38</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">2 Far</span></div><span class="track-dur">2:01</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Thinking Out Loud</span></div><span class="track-dur">3:01</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">So Gone</span></div><span class="track-dur">1:59</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Easy</span></div><span class="track-dur">3:06</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">3AM in Norway</span></div><span class="track-dur">2:48</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Cartier</span></div><span class="track-dur">2:04</span></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Remain the Same</span></div><span class="track-dur">2:15</span></li>
+          </ul>
+        </div>
+        <a href="https://soundcloud.com/imsofaygo" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on SoundCloud →</a>
+      </div>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.1s">
+    <!-- GO+ -->
+    <div class="release-card-exp" data-reveal style="transition-delay:0.1s">
       <div class="release-cover">
         <img src="https://i.scdn.co/image/ab67616d0000b273cdd5a49fd68603b5413931e7" alt="GO+">
       </div>
-      <div class="release-type">EP · Cactus Jack</div>
-      <div class="card-title">GO+</div>
-      <div class="card-meta">June 14, 2023</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">EP · Cactus Jack</div>
+        <div class="card-title">GO+</div>
+        <div class="card-meta">June 14, 2023 · 12 Tracks</div>
+        <div class="rating-row">
+          <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">68 / 100</span></div>
+          <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.0 / 5</span></div>
+        </div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-goplus',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-goplus">
+          <ul class="tracklist" style="margin-bottom:8px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Pure<span class="track-feat">ft. Yung Kayo</span></span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">4Sum+</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Fuck a Post</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">On the Moon</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Backseat</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Havoc</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Wish I Could Tell You<span class="track-feat">ft. DD Osama</span></span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Undercover</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">RC</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Beautiful Rockstar</span></div></li>
+          </ul>
+          <p class="tl-note">+ 2 more tracks. Full tracklist on Spotify.</p>
+        </div>
+        <a href="https://open.spotify.com/album/3bBREOGR2MXC5kNkxg3Lsw" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on Spotify →</a>
+      </div>
     </div>
 
-    <div class="release-card" data-reveal style="transition-delay:0.15s">
+    <!-- Pressure -->
+    <div class="release-card-exp" data-reveal style="transition-delay:0.15s">
       <div class="release-cover">
         <img src="https://i1.sndcdn.com/artworks-ZvG3wVlIbujz0iXD-pf41GA-t500x500.jpg" alt="Pressure">
       </div>
-      <div class="release-type">EP · SoundCloud</div>
-      <div class="card-title">Pressure</div>
-      <div class="card-meta">2024</div>
-      <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="card-stream">Stream on Spotify →</a>
+      <div class="release-card-body">
+        <div class="release-type">EP · SoundCloud</div>
+        <div class="card-title">Pressure</div>
+        <div class="card-meta">November 3, 2024 · 4 Tracks</div>
+        <div class="rating-row">
+          <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">68 / 100</span></div>
+        </div>
+        <button class="card-tl-toggle" onclick="toggleTL('tl-pressure',this)">Tracklist <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+        <div class="card-tracklist" id="tl-pressure">
+          <ul class="tracklist" style="margin-bottom:12px">
+            <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Big Body</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Road Rage</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Pointers / Act Up</span></div></li>
+            <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Minute Maid</span></div></li>
+          </ul>
+        </div>
+        <a href="https://soundcloud.com/imsofaygo" target="_blank" class="card-stream" style="margin-top:auto;padding-top:12px">Stream on SoundCloud →</a>
+      </div>
     </div>
 
   </div>
@@ -550,6 +744,14 @@
 </footer>
 
 <script>
+  /* Album/EP tracklist toggle */
+  function toggleTL(id, btn) {
+    var el = document.getElementById(id);
+    var open = el.classList.contains('open');
+    el.classList.toggle('open', !open);
+    btn.classList.toggle('open', !open);
+  }
+
   /* Scroll reveal */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
