@@ -917,9 +917,7 @@
     document.fonts.ready.then(function () { setTimeout(oncePlaced, 800); });
     window.addEventListener('resize', place);
 
-    function col() {
-      return document.body.classList.contains('pink-mode') ? '#FFFFFF' : '#FF1493';
-    }
+    function col() { return '#C8171E'; }
 
     var prevX = null, prevY = null;
     nameEl.style.cursor = 'crosshair';

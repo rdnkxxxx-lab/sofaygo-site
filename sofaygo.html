@@ -6,21 +6,24 @@
   <title>SoFaygo — Official</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Modak&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Modak&display=swap" rel="stylesheet">
   <style>
     /* ── Design Tokens ─────────────────────────── */
     :root {
-      --pink:       #FFFFFF;
-      --pink-dim:   #CCCCCC;
-      --black:      #080808;
-      --dark:       #101010;
-      --panel:      #141414;
-      --white:      #FFFFFF;
-      --off-white:  #0f0f0f;
-      --muted:      rgba(255,255,255,0.78);
-      --border:     rgba(255,255,255,0.07);
-      --font-disp:  'Bebas Neue', sans-serif;
-      --font-body:  'Inter', sans-serif;
+      --pink:        #C8171E;
+      --pink-dim:    #9E1218;
+      --black:       #080808;
+      --dark:        #0c0c0c;
+      --panel:       #161616;
+      --white:       #F8F8F6;
+      --off-white:   #111110;
+      --muted:       rgba(248,248,246,0.68);
+      --border:      rgba(255,255,255,0.07);
+      --border-mid:  rgba(255,255,255,0.13);
+      --font-disp:   'Bebas Neue', sans-serif;
+      --font-body:   'Inter', sans-serif;
+      --ease:        cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-snappy: cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* ── Reset ─────────────────────────────────── */
@@ -35,49 +38,84 @@
     a { text-decoration: none; color: inherit; }
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
+    /* ── Grain overlay ──────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9990;
+      pointer-events: none;
+      opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── Custom scrollbar ───────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.11); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── Selection ──────────────────────────────── */
+    ::selection { background: rgba(255,255,255,0.14); color: var(--white); }
+    body.pink-mode ::selection { background: rgba(255,20,147,0.22); }
+
     /* ── Utility ───────────────────────────────── */
     .label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 600;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.28em;
       text-transform: uppercase;
       color: var(--pink);
-      margin-bottom: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .label::before {
+      content: '';
       display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.45;
+      flex-shrink: 0;
     }
     .label-muted { color: rgba(255,255,255,0.35); }
-    .divider-pink { width: 36px; height: 2px; background: var(--pink); margin: 28px 0; }
+    .divider-pink { width: 36px; height: 1px; background: var(--pink); margin: 32px 0; opacity: 0.5; }
+
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 9px;
-      padding: 7px 14px;
+      padding: 9px 20px;
       font-family: var(--font-body);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
+      transition: transform 0.28s var(--ease), opacity 0.2s;
       border: none;
     }
     .btn-pink  { background: var(--pink); color: var(--black); }
-    .btn-pink:hover  { background: var(--pink-dim); transform: translateY(-2px); }
-    .btn-outline { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,0.25); }
-    .btn-outline:hover { border-color: var(--pink); color: var(--pink); }
+    .btn-pink:hover  { transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid var(--border-mid); }
+    .btn-outline:hover { border-color: var(--pink); color: var(--pink); transform: translateY(-2px); }
 
     .btn-sm {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 5px 12px; align-self: flex-start; width: fit-content;
-      font-family: var(--font-body); font-size: 12px; font-weight: 600;
-      letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.22); background: transparent;
-      color: var(--white); transition: border-color 0.2s, color 0.2s, background 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 16px; align-self: flex-start; width: fit-content;
+      font-family: var(--font-body); font-size: 11px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer;
+      border: 1px solid var(--border-mid); background: transparent;
+      color: var(--white);
+      transition: border-color 0.22s, color 0.22s, transform 0.28s var(--ease);
     }
-    .btn-sm:hover { border-color: var(--pink); color: var(--pink); }
+    .btn-sm:hover { border-color: var(--pink); color: var(--pink); transform: translateY(-2px); }
     .btn-sm.filled { background: var(--pink); color: var(--black); border-color: transparent; }
-    .btn-sm.filled:hover { background: var(--pink-dim); color: var(--black); }
-    body.pink-mode .btn-sm.filled { color: var(--white); }
+    .btn-sm.filled:hover { opacity: 0.84; transform: translateY(-2px); }
+    .btn-sm.filled { color: var(--white); }
 
     /* ── Placeholder Image Fills ───────────────── */
     .fill-a { background: #1a1228; }
@@ -97,26 +135,44 @@
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      padding: 0 44px;
+      padding: 0 48px;
       height: 64px;
-      background: rgba(8,8,8,0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(8,8,8,0.80);
+      backdrop-filter: blur(22px) saturate(1.5);
+      -webkit-backdrop-filter: blur(22px) saturate(1.5);
       border-bottom: 1px solid var(--border);
     }
-    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-left, .nav-right { display: flex; gap: 36px; list-style: none; align-items: center; }
     .nav-right { justify-content: flex-end; }
     .nav-left a, .nav-right a {
-      font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em;
-      text-transform: uppercase; color: rgba(255,255,255,0.65); transition: color 0.2s;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.48);
+      transition: color 0.22s;
+      position: relative;
     }
-    .nav-left a:hover, .nav-right a:hover { color: var(--pink); }
-    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 36px; letter-spacing: 0.04em; color: var(--pink); line-height: 1; }
+    .nav-left a::after, .nav-right a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--pink);
+      transition: width 0.32s var(--ease);
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--white); }
+    .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-logo {
+      text-align: center;
+      font-family: 'Modak', cursive;
+      font-size: 34px;
+      letter-spacing: 0.03em;
+      color: var(--pink);
+      line-height: 1;
+    }
 
     /* ── HERO ──────────────────────────────────── */
     #hero {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.12fr 0.88fr;
       min-height: 100dvh;
       padding-top: 64px;
     }
@@ -128,24 +184,30 @@
       position: absolute;
       inset: 0;
     }
+    .hero-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 55%, rgba(8,8,8,0.75) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
     .hero-copy {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 72px 64px;
+      padding: 80px 64px 76px;
       background: var(--black);
+      position: relative;
     }
     .hero-name {
       font-family: var(--font-disp);
-      font-size: clamp(52px, 5.5vw, 84px);
-      line-height: 0.92;
-      letter-spacing: 0.02em;
+      font-size: clamp(58px, 6.4vw, 98px);
+      line-height: 0.9;
+      letter-spacing: -0.01em;
       margin-bottom: 0;
-      color: var(--pink);
+      color: var(--white);
       transition: color 0.45s ease, text-shadow 0.45s ease;
-    }
-    body.pink-mode .hero-name {
-      text-shadow: 0 0 55px rgba(255,20,147,0.28), 0 0 120px rgba(255,20,147,0.1);
     }
 
     /* ── Hero Name Letter Spray ─────────────────────── */
@@ -155,131 +217,200 @@
       cursor: crosshair;
     }
     .hero-bio {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--muted);
-      max-width: 380px;
-      margin-bottom: 48px;
+      font-size: 13.5px;
+      line-height: 2;
+      color: rgba(248,248,246,0.58);
+      max-width: 360px;
+      margin-bottom: 44px;
+      font-weight: 300;
+      letter-spacing: 0.01em;
     }
     .hero-badges {
       display: flex;
-      gap: 8px;
-      margin-bottom: 40px;
+      gap: 6px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
     }
     .badge {
-      font-size: 10px;
-      letter-spacing: 0.15em;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       padding: 5px 12px;
-      border: 1px solid var(--border);
-      color: rgba(255,255,255,0.4);
+      border: 1px solid var(--border-mid);
+      color: rgba(255,255,255,0.32);
+      transition: color 0.2s, border-color 0.2s;
     }
+    .badge:hover { color: rgba(255,255,255,0.7); border-color: rgba(255,255,255,0.25); }
 
     /* ── RECOGNITION ───────────────────────────── */
     #recognition {
+      position: relative;
+      display: block;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .recog-photo {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+    .recog-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top,  rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.68) 28%, rgba(8,8,8,0.08) 55%, transparent 72%),
+        linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 20%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .recog-photo-inner { position: absolute; inset: 0; }
+    .recog-copy {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 2;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 72vh;
-    }
-    .recog-copy {
-      padding: 88px 64px;
-      background: var(--off-white);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      gap: 72px;
+      padding: 0 72px 72px;
+      background: transparent;
+      align-items: end;
     }
     .recog-title {
       font-family: var(--font-disp);
-      font-size: clamp(38px, 3.8vw, 58px);
-      line-height: 0.98;
+      font-size: clamp(62px, 8.5vw, 128px);
+      line-height: 0.88;
       color: var(--white);
       margin-bottom: 0;
+      letter-spacing: -0.01em;
     }
-    .recog-divider { width: 36px; height: 2px; background: var(--pink); margin: 28px 0; }
+    .recog-divider { width: 32px; height: 1px; background: var(--pink); margin: 28px 0; opacity: 0.5; }
     .recog-body {
-      font-size: 14px;
-      line-height: 1.85;
-      color: rgba(255,255,255,0.55);
+      font-size: 13.5px;
+      line-height: 1.95;
+      color: rgba(248,248,246,0.52);
       max-width: 420px;
+      font-weight: 300;
     }
-    .recog-photo {
-      position: relative;
-      overflow: hidden;
-    }
-    .recog-photo-inner { position: absolute; inset: 0; }
 
     /* ── SONGS ─────────────────────────────────── */
     #songs {
-      display: grid;
-      grid-template-columns: 1fr 1.15fr 1fr;
-      min-height: 68vh;
-    }
-    .songs-left, .songs-right {
       position: relative;
+      display: block;
+      min-height: 100vh;
       overflow: hidden;
+    }
+    .songs-left { display: none; }
+    .songs-right {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .songs-right img {
+      object-position: center center;
+    }
+    .songs-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(8,8,8,1) 0%, transparent 18%),
+        linear-gradient(to top, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.65) 28%, rgba(8,8,8,0.12) 55%, transparent 75%),
+        linear-gradient(to right, rgba(8,8,8,0.55) 0%, transparent 55%);
+      z-index: 1;
+      pointer-events: none;
     }
     .songs-left-inner, .songs-right-inner { position: absolute; inset: 0; }
     .songs-copy {
+      position: relative;
+      z-index: 2;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 64px 52px;
-      background: var(--dark);
+      justify-content: flex-end;
+      padding: 64px 72px 80px;
+      max-width: 560px;
+      min-height: 100vh;
+      background: transparent;
     }
-    .songs-num {
-      font-family: var(--font-disp);
-      font-size: 96px;
-      color: rgba(255,255,255,0.04);
-      line-height: 1;
-      margin-bottom: -24px;
-      user-select: none;
-    }
+    .songs-num { display: none; }
     .songs-heading {
       font-family: var(--font-disp);
-      font-size: 38px;
-      letter-spacing: 0.04em;
+      font-size: clamp(56px, 7.2vw, 108px);
+      line-height: 0.88;
+      letter-spacing: -0.01em;
       color: var(--pink);
-      margin-bottom: 36px;
+      margin-bottom: 44px;
     }
     .tracklist { list-style: none; }
     .track-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.055);
+      padding: 13px 8px 13px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.042);
       cursor: pointer;
-      transition: background 0.15s;
-      border-radius: 2px;
+      position: relative;
+      transition: padding-left 0.32s var(--ease), border-color 0.22s;
     }
+    .track-row::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 0;
+      background: rgba(255,255,255,0.028);
+      border-radius: 2px;
+      transition: width 0.38s var(--ease);
+      pointer-events: none;
+    }
+    .track-row:hover { padding-left: 8px; border-color: rgba(255,255,255,0.09); }
+    .track-row:hover::before { width: 100%; }
     .track-row:hover .track-title { color: var(--pink); }
-    .track-left { display: flex; align-items: center; gap: 14px; }
+    .track-row:hover .track-idx  { color: var(--pink); opacity: 1; }
+    .track-left { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
     .track-idx {
-      font-size: 11px;
-      color: rgba(255,255,255,0.25);
-      width: 18px;
+      font-size: 10px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.18);
+      width: 20px;
       flex-shrink: 0;
+      letter-spacing: 0.08em;
+      transition: color 0.22s;
+      font-variant-numeric: tabular-nums;
     }
     .track-title {
       font-size: 13px;
       font-weight: 400;
-      color: rgba(255,255,255,0.75);
-      transition: color 0.2s;
+      color: rgba(248,248,246,0.7);
+      transition: color 0.22s;
     }
-    .track-dur {
+    .track-feat {
       font-size: 11px;
       color: rgba(255,255,255,0.28);
-      letter-spacing: 0.06em;
+      font-weight: 300;
+      margin-left: 2px;
     }
-
-    .track-row.playing { background: rgba(255,255,255,0.05); border-radius: 4px; }
+    .track-dur {
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.24);
+      letter-spacing: 0.09em;
+      font-variant-numeric: tabular-nums;
+      position: relative;
+      z-index: 1;
+      font-weight: 300;
+    }
+    .track-row.playing { background: rgba(255,255,255,0.038); border-radius: 3px; padding-left: 8px; }
     .track-row.playing .track-title { color: var(--pink); }
-    .track-row.playing .track-idx { color: var(--pink); }
+    .track-row.playing .track-idx  { color: var(--pink); }
 
     /* ── ALBUM FEATURE ─────────────────────────── */
     .album-feat {
       position: relative;
-      min-height: 86vh;
+      min-height: 90vh;
       overflow: hidden;
       display: flex;
       align-items: flex-end;
@@ -288,119 +419,274 @@
     .album-feat-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 55%, transparent 100%);
+      background:
+        linear-gradient(to top,  rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.62) 35%, rgba(8,8,8,0.12) 62%, transparent 100%),
+        linear-gradient(to right, rgba(8,8,8,0.22) 0%, transparent 50%);
     }
     .album-feat-content {
       position: relative;
       z-index: 2;
-      padding: 64px;
+      padding: 72px 72px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 48px;
+      gap: 64px;
       width: 100%;
       align-items: end;
     }
     .album-ghost-num {
       position: absolute;
-      top: 32px;
-      right: 48px;
+      top: 28px;
+      right: 44px;
       font-family: var(--font-disp);
       font-size: clamp(140px, 18vw, 220px);
-      color: rgba(255,255,255,0.035);
+      color: rgba(255,255,255,0.022);
       line-height: 1;
       user-select: none;
       pointer-events: none;
+      letter-spacing: -0.02em;
     }
-    .album-year { color: var(--pink); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 16px; display: block; }
+    .album-year {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--pink);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .album-year::before {
+      content: '';
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
     .album-title {
       font-family: var(--font-disp);
-      font-size: clamp(60px, 8vw, 108px);
-      line-height: 0.9;
-      letter-spacing: 0.02em;
+      font-size: clamp(64px, 8.5vw, 116px);
+      line-height: 0.88;
+      letter-spacing: -0.01em;
     }
     .album-desc {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--muted);
-      max-width: 360px;
-      margin-bottom: 40px;
+      font-size: 13.5px;
+      line-height: 1.95;
+      color: rgba(248,248,246,0.58);
+      max-width: 340px;
+      margin-bottom: 44px;
+      font-weight: 300;
     }
+
+    /* ── Album tracklist right panel ───────────── */
+    .album-tracklist-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: flex-end;
+      gap: 0;
+    }
+    .album-tracklist-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.26);
+      margin-bottom: 22px;
+      align-self: flex-end;
+    }
+    .album-tracklist-item {
+      font-family: var(--font-disp);
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      color: rgba(248,248,246,0.5);
+      line-height: 1.55;
+      text-align: right;
+      transition: color 0.22s;
+      cursor: default;
+    }
+    .album-tracklist-item:hover { color: rgba(248,248,246,0.88); }
+    .album-tracklist-item.hl { color: var(--pink); }
 
     /* ── CACTUS JACK ───────────────────────────── */
     #cactus {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 72vh;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      min-height: 100vh;
+      overflow: hidden;
+      background: var(--black);
     }
-    .cj-photo { position: relative; overflow: hidden; }
+    .cj-photo {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .cj-photo::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.6) 30%, rgba(8,8,8,0.15) 55%, transparent 72%),
+        linear-gradient(to left, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.35) 35%, transparent 62%);
+      z-index: 1;
+      pointer-events: none;
+    }
     .cj-photo-inner { position: absolute; inset: 0; }
     .cj-copy {
-      padding: 88px 64px;
-      background: var(--black);
+      position: relative;
+      z-index: 2;
+      padding: 64px 72px 88px;
+      max-width: 520px;
+      background: transparent;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-end;
+      min-height: 100vh;
     }
     .cj-title {
       font-family: var(--font-disp);
-      font-size: clamp(42px, 4vw, 64px);
-      line-height: 0.98;
+      font-size: clamp(58px, 7.5vw, 116px);
+      line-height: 0.88;
+      letter-spacing: -0.01em;
       margin-bottom: 0;
     }
     .cj-body {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--muted);
-      max-width: 400px;
+      font-size: 13.5px;
+      line-height: 1.95;
+      color: rgba(248,248,246,0.58);
+      max-width: 380px;
+      font-weight: 300;
     }
 
     /* ── MERCH ─────────────────────────────────── */
     #merch {
-      padding: 96px 64px;
-      background: var(--off-white);
+      background: var(--black);
+      border-top: 1px solid var(--border);
     }
     .merch-header {
       display: flex;
-      align-items: baseline;
+      align-items: flex-end;
       justify-content: space-between;
-      margin-bottom: 56px;
+      padding: 72px 72px 40px;
     }
     .merch-hed {
       font-family: var(--font-disp);
-      font-size: clamp(64px, 8vw, 96px);
+      font-size: clamp(56px, 7.5vw, 104px);
       color: var(--white);
-      line-height: 1;
-      letter-spacing: 0.02em;
+      line-height: 0.9;
+      letter-spacing: -0.01em;
     }
     .merch-see-all {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--pink);
       transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding-bottom: 4px;
     }
-    .merch-see-all:hover { opacity: 0.7; }
+    .merch-see-all:hover { opacity: 0.65; }
     .merch-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: 1.42fr 1fr;
+      grid-template-rows: 46vh 46vh;
+      gap: 2px;
     }
-    .merch-card {}
-    .merch-card-img {
-      aspect-ratio: 3/4;
-      overflow: hidden;
-      margin-bottom: 16px;
+    .merch-card {
+      cursor: pointer;
       position: relative;
+      overflow: hidden;
+      background: #0e0e0e;
     }
-    .merch-card-img-inner { position: absolute; inset: 0; transition: transform 0.45s ease; }
-    .merch-card:hover .merch-card-img-inner { transform: scale(1.05); }
-    .merch-card-name { font-size: 14px; font-weight: 500; color: var(--white); margin-bottom: 4px; }
-    .merch-card-price { font-size: 13px; color: #888; }
+    .merch-card:first-child { grid-row: 1 / 3; }
+    .merch-card-img {
+      position: absolute;
+      inset: 0;
+      background: #0e0e0e;
+    }
+    .merch-card-img-inner {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .merch-card:hover .merch-card-img-inner,
+    .merch-card.flipped .merch-card-img-inner { transform: rotateY(180deg); }
+    .merch-card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: #0e0e0e;
+    }
+    .merch-card-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .merch-card-face-back { transform: rotateY(180deg); }
+    .merch-flip-hint {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 4;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(8,8,8,0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .merch-card:hover .merch-flip-hint { opacity: 0; }
+    .merch-card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 4;
+      padding: 56px 28px 24px;
+      background: linear-gradient(to top, rgba(8,8,8,0.94) 0%, rgba(8,8,8,0.42) 55%, transparent 100%);
+      pointer-events: none;
+    }
+    .merch-card-name {
+      font-family: var(--font-disp);
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 5px;
+      line-height: 1;
+    }
+    .merch-card:first-child .merch-card-name { font-size: 30px; }
+    .merch-card-price {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
 
     /* ── FOOTER ────────────────────────────────── */
     footer {
-      padding: 72px 64px 48px;
+      padding: 96px 72px 56px;
       background: var(--black);
       border-top: 1px solid var(--border);
     }
@@ -408,103 +694,88 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 28px;
+      gap: 24px;
     }
     .footer-wordmark {
       font-family: var(--font-disp);
-      font-size: 56px;
+      font-size: 80px;
       color: var(--pink);
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      opacity: 0.88;
     }
     .footer-tagline {
-      font-size: 10.5px;
-      letter-spacing: 0.22em;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.18);
+      margin-top: -6px;
     }
     .social-row {
       display: flex;
-      gap: 12px;
+      gap: 8px;
+      margin-top: 8px;
     }
     .social-btn {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 1px solid var(--border-mid);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       letter-spacing: 0.04em;
-      color: rgba(255,255,255,0.45);
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      color: rgba(255,255,255,0.38);
+      transition: border-color 0.25s, color 0.25s, background 0.25s, transform 0.28s var(--ease);
     }
     .social-btn:hover {
       border-color: var(--pink);
       color: var(--pink);
-      background: rgba(255,20,147,0.08);
+      background: rgba(255,255,255,0.04);
+      transform: translateY(-3px);
     }
     .footer-bottom {
       width: 100%;
-      padding-top: 28px;
+      padding-top: 32px;
       margin-top: 12px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
-      font-size: 10.5px;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.2);
-      text-transform: uppercase;
-    }
-
-    /* ── THEME SWITCHER ─────────────────────────── */
-    .mode-switcher {
-      display: flex;
-      align-items: center;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-    .mode-btn {
-      padding: 5px 10px;
-      background: transparent;
-      color: rgba(255,255,255,0.35);
-      border: none;
-      font-family: var(--font-body);
-      font-size: 9px;
-      font-weight: 700;
+      font-size: 10px;
       letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.16);
       text-transform: uppercase;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s, color 0.2s;
     }
-    .mode-btn.active            { background: var(--pink); color: var(--black); }
-    body.pink-mode .mode-btn.active { color: var(--white); }
-    .mode-btn:not(.active):hover    { color: rgba(255,255,255,0.7); }
 
-    /* ── PINK MODE OVERRIDES ────────────────────── */
-    body.pink-mode {
-      --pink:      #FF1493;
-      --pink-dim:  #c0106f;
-      --off-white: #F5F4F2;
-    }
-    body.pink-mode .btn-pink          { color: var(--white); }
-    body.pink-mode .recog-title       { color: var(--black); }
-    body.pink-mode .recog-body        { color: #4a4a4a; }
-    body.pink-mode .recog-copy .label { color: #c0106f; }
-    body.pink-mode .merch-hed         { color: var(--black); }
-    body.pink-mode .merch-card-name   { color: var(--black); }
+    /* ── MANIA RED accent — no theme switcher ──── */
 
     /* ── GOOEY TEXT ────────────────────────────── */
     #gooey-band {
       position: relative;
-      height: 220px;
+      height: 200px;
       background: var(--black);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
       overflow: hidden;
+    }
+    #gooey-band::before,
+    #gooey-band::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 64px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    #gooey-band::before {
+      top: 0;
+      background: linear-gradient(to bottom, var(--black), transparent);
+    }
+    #gooey-band::after {
+      bottom: 0;
+      background: linear-gradient(to top, var(--black), transparent);
     }
     #gooey-container {
       filter: url(#gooey-threshold);
@@ -528,8 +799,8 @@
     /* ── SCROLL REVEAL ─────────────────────────── */
     [data-reveal] {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      transform: translateY(22px);
+      transition: opacity 0.75s var(--ease), transform 0.75s var(--ease);
     }
     [data-reveal].visible {
       opacity: 1;
@@ -538,27 +809,39 @@
 
     /* ── RESPONSIVE ────────────────────────────── */
     @media (max-width: 1100px) {
-      #songs { grid-template-columns: 1fr; }
-      .songs-left, .songs-right { display: none; }
-      .songs-copy { min-height: 60vh; }
+      .songs-copy { max-width: 480px; }
     }
     @media (max-width: 900px) {
-      #hero, #recognition, #cactus { grid-template-columns: 1fr; }
+      #hero { grid-template-columns: 1fr; }
       .hero-photo { min-height: 55vh; }
-      .recog-photo { min-height: 50vh; order: -1; }
-      .cj-photo { min-height: 50vh; }
+      .hero-photo::after { display: none; }
+      .recog-copy { grid-template-columns: 1fr; gap: 36px; padding: 0 40px 56px; }
+      #cactus { min-height: 100vh; display: block; }
+      .cj-photo::before {
+        background: linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.6) 38%, rgba(8,8,8,0.1) 65%, transparent 85%);
+      }
+      .cj-copy { max-width: 100%; min-height: 100vh; padding: 56px 40px 72px; justify-content: flex-end; }
+      #songs { min-height: 100vh; }
+      .songs-right::after {
+        background: linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.7) 35%, rgba(8,8,8,0.2) 60%, transparent 80%);
+      }
+      .songs-copy { max-width: 100%; padding: 48px 28px 64px; }
       .album-feat-content { grid-template-columns: 1fr; }
-      .merch-grid { grid-template-columns: repeat(2, 1fr); }
+      .merch-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 52vw 52vw; }
+      .merch-card:first-child { grid-row: 1 / 3; grid-column: 1 / 3; }
     }
     @media (max-width: 640px) {
       nav { padding: 0 20px; }
       .nav-left, .nav-right { display: none; }
-      .hero-copy, .recog-copy, .cj-copy { padding: 56px 24px; }
-      .songs-copy { padding: 56px 24px; }
-      #merch { padding: 64px 24px; }
-      .merch-grid { grid-template-columns: 1fr; }
-      .album-feat-content { padding: 40px 24px; }
-      footer { padding: 56px 24px 36px; }
+      .hero-copy { padding: 56px 28px; }
+      .cj-copy { padding: 48px 24px 64px; }
+      .recog-copy { padding: 0 24px 48px; gap: 28px; }
+      .songs-copy { padding: 40px 24px 56px; }
+      .merch-header { padding: 48px 24px 28px; }
+      .merch-grid { grid-template-columns: 1fr; grid-template-rows: 72vw 56vw 56vw; }
+      .merch-card:first-child { grid-row: auto; grid-column: auto; }
+      .album-feat-content { padding: 44px 28px; }
+      footer { padding: 64px 28px 40px; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
 
@@ -567,13 +850,13 @@
       position: relative;
       overflow: hidden;
       border-radius: 9999px !important;
-      background: rgba(255,255,255,0.04) !important;
-      border: 1px solid rgba(255,255,255,0.22) !important;
-      color: rgba(255,255,255,0.9) !important;
+      background: rgba(200,23,30,0.14) !important;
+      border: 1px solid rgba(200,23,30,0.5) !important;
+      color: var(--white) !important;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.14);
-      transition: transform 0.3s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 2px 16px rgba(200,23,30,0.18);
+      transition: transform 0.3s var(--ease), border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
     }
     .liquid-glass::before {
       content: '';
@@ -582,73 +865,56 @@
       border-radius: inherit;
       pointer-events: none;
       box-shadow:
-        inset 1px 1px 1px -0.5px rgba(255,255,255,0.55),
-        inset -1px -1px 1px -0.5px rgba(255,255,255,0.5),
-        inset 0 0 8px 3px rgba(255,255,255,0.08),
-        inset 0 0 2px 1px rgba(255,255,255,0.05);
+        inset 1px 1px 1px -0.5px rgba(255,160,160,0.38),
+        inset -1px -1px 1px -0.5px rgba(255,120,120,0.28),
+        inset 0 0 8px 3px rgba(200,23,30,0.08),
+        inset 0 0 2px 1px rgba(200,23,30,0.05);
     }
     .liquid-glass:hover {
-      transform: scale(1.05);
-      background: rgba(255,255,255,0.08) !important;
-      border-color: rgba(255,255,255,0.4) !important;
-      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+      transform: scale(1.04) translateY(-2px);
+      background: rgba(200,23,30,0.26) !important;
+      border-color: rgba(200,23,30,0.75) !important;
+      box-shadow: 0 6px 28px rgba(200,23,30,0.3);
     }
     .liquid-glass:active { transform: scale(0.97); }
-    body.pink-mode .liquid-glass {
-      background: rgba(255,20,147,0.04) !important;
-      border-color: rgba(255,20,147,0.4) !important;
-      color: #FF1493 !important;
-      box-shadow: 0 2px 10px rgba(255,20,147,0.1);
-    }
-    body.pink-mode .liquid-glass::before {
-      box-shadow:
-        inset 1px 1px 1px -0.5px rgba(255,20,147,0.4),
-        inset -1px -1px 1px -0.5px rgba(255,20,147,0.38),
-        inset 0 0 8px 3px rgba(255,20,147,0.07),
-        inset 0 0 2px 1px rgba(255,20,147,0.04);
-    }
-    body.pink-mode .liquid-glass:hover {
-      background: rgba(255,20,147,0.08) !important;
-      border-color: rgba(255,20,147,0.68) !important;
-      box-shadow: 0 4px 18px rgba(255,20,147,0.16);
-    }
 
     /* ── Monthly Listeners ────────────────────────── */
     .monthly-listeners {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
       opacity: 0;
       animation: heroFadeUp 0.65s ease 1.72s forwards;
     }
     .ml-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #1DB954;
       flex-shrink: 0;
       box-shadow: 0 0 0 0 rgba(29,185,84,0.6);
-      animation: mlPulse 2s ease-in-out infinite;
+      animation: mlPulse 2.5s ease-in-out infinite;
     }
     @keyframes mlPulse {
       0%   { box-shadow: 0 0 0 0 rgba(29,185,84,0.6); }
-      70%  { box-shadow: 0 0 0 7px rgba(29,185,84,0); }
+      70%  { box-shadow: 0 0 0 8px rgba(29,185,84,0); }
       100% { box-shadow: 0 0 0 0 rgba(29,185,84,0); }
     }
     .ml-label {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 600;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.38);
+      color: rgba(255,255,255,0.28);
     }
     .ml-count {
       font-family: var(--font-disp);
-      font-size: 22px;
+      font-size: 20px;
       letter-spacing: 0.04em;
       color: #1DB954;
       line-height: 1;
+      font-variant-numeric: tabular-nums;
     }
 
     /* ── Intro Overlay ─────────────────────────────── */
@@ -665,7 +931,7 @@
       width: 100%;
       height: 50%;
       background: #080808;
-      transition: transform 0.88s cubic-bezier(0.76, 0, 0.24, 1);
+      transition: transform 0.92s cubic-bezier(0.76, 0, 0.24, 1);
     }
     .intro-panel-top  { top: 0; }
     .intro-panel-bottom { bottom: 0; }
@@ -676,7 +942,7 @@
       transform: translate(-50%, -50%);
       font-family: 'Modak', cursive;
       font-size: clamp(52px, 10vw, 112px);
-      color: #ffffff;
+      color: #F8F8F6;
       letter-spacing: 0.04em;
       white-space: nowrap;
       user-select: none;
@@ -688,19 +954,19 @@
 
     /* ── Hero Entrance ─────────────────────────────── */
     @keyframes heroFadeUp {
-      from { opacity: 0; transform: translateY(22px); }
+      from { opacity: 0; transform: translateY(20px); }
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes kenBurns {
-      from { transform: scale(1.07); }
+      from { transform: scale(1.08); }
       to   { transform: scale(1); }
     }
     @keyframes dividerGrow {
       from { width: 0; opacity: 0; }
-      to   { width: 36px; opacity: 1; }
+      to   { width: 36px; opacity: 0.5; }
     }
     .hero-photo img {
-      animation: kenBurns 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s both;
+      animation: kenBurns 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s both;
     }
     .hero-copy .label {
       opacity: 0;
@@ -708,12 +974,12 @@
     }
     .hero-name {
       opacity: 0;
-      animation: heroFadeUp 0.75s ease 1.28s forwards;
+      animation: heroFadeUp 0.8s ease 1.28s forwards;
     }
     .hero-copy .divider-pink {
       width: 0 !important;
       opacity: 0;
-      animation: dividerGrow 0.5s ease 1.52s forwards;
+      animation: dividerGrow 0.55s ease 1.52s forwards;
     }
     .hero-badges {
       opacity: 0;
@@ -767,22 +1033,16 @@
   <ul class="nav-right">
     <li><a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank">Stream</a></li>
     <li><a href="#cactus">Label</a></li>
-    <li>
-      <div class="mode-switcher">
-        <button class="mode-btn" id="btn-black">Go+</button>
-        <button class="mode-btn" id="btn-pink">Pink Heartz</button>
-      </div>
-    </li>
   </ul>
 </nav>
 
 <!-- ── HERO ────────────────────────────────────── -->
 <section id="hero">
   <div class="hero-photo fill-a">
-    <img src="https://i.pinimg.com/1200x/9c/38/5d/9c385d067fee70816700c4caa9a7479c.jpg" alt="SoFaygo">
+    <img src="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg" alt="SoFaygo">
   </div>
   <div class="hero-copy">
-    <span class="label">Atlanta, Georgia</span>
+    <span class="label" style="color:var(--white);">Atlanta, Georgia</span>
     <h1 class="hero-name">Andre<br>Dontrel<br>Burt Jr.</h1>
     <div class="divider-pink"></div>
     <div class="hero-badges">
@@ -804,41 +1064,33 @@
   </div>
 </section>
 
-<!-- ── VIDEO ───────────────────────────────────────── -->
-<section style="padding: 120px 44px; display: flex; justify-content: center; background: var(--black); border-top: 1px solid var(--border);">
-  <div style="position: relative; display: inline-block;">
-    <video id="site-video" src="video.mp4" autoplay loop muted playsinline
-      style="height: 80vh; width: auto; border-radius: 12px; display: block;">
-    </video>
-    <button id="mute-btn" onclick="(function(){var v=document.getElementById('site-video');var b=document.getElementById('mute-btn');v.muted=!v.muted;b.textContent=v.muted?'🔇':'🔊';})()"
-      style="position:absolute;bottom:16px;right:16px;background:rgba(0,0,0,0.55);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:50%;width:38px;height:38px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);">
-      🔇
-    </button>
-  </div>
-</section>
 
 <!-- ── RECOGNITION ──────────────────────────────── -->
 <section id="recognition">
-  <div class="recog-copy" data-reveal>
-    <span class="label" style="letter-spacing:0.2em;">Story</span>
-    <h2 class="recog-title">The First<br>Recognition</h2>
-    <div class="recog-divider"></div>
-    <p class="recog-body">
-      Breaking through with his debut project, SoFaygo captured the attention
-      of the industry with his unique blend of trap melodies and emotional
-      storytelling. His co-sign by Travis Scott's Cactus Jack label marked
-      a defining moment in his career.
-    </p>
-    <br>
-    <p class="recog-body">
-      His raw vulnerability and relentless artistry have earned him a devoted
-      fanbase that continues to grow with each release — cementing his place
-      as one of Atlanta's most promising voices.
-    </p>
-    <a href="biography.html" class="btn-sm liquid-glass" style="margin-top:32px;">Biography →</a>
-  </div>
   <div class="recog-photo fill-c">
-    <img src="https://i.pinimg.com/736x/f9/e7/f5/f9e7f526f3f33c072ea5cc07c353549d.jpg" alt="SoFaygo performing">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/SoFaygo_%28cropped%29.jpg" alt="SoFaygo performing live" style="object-position: center 10%;">
+  </div>
+  <div class="recog-copy" data-reveal>
+    <div class="recog-left">
+      <span class="label" style="letter-spacing:0.2em;">Story</span>
+      <h2 class="recog-title">The First<br>Recognition</h2>
+      <div class="recog-divider"></div>
+    </div>
+    <div class="recog-right">
+      <p class="recog-body">
+        Breaking through with his debut project, SoFaygo captured the attention
+        of the industry with his unique blend of trap melodies and emotional
+        storytelling. His co-sign by Travis Scott's Cactus Jack label marked
+        a defining moment in his career.
+      </p>
+      <br>
+      <p class="recog-body">
+        His raw vulnerability and relentless artistry have earned him a devoted
+        fanbase that continues to grow with each release, cementing his place
+        as one of Atlanta's most promising voices.
+      </p>
+      <a href="biography.html" class="btn-sm liquid-glass" style="margin-top:32px;">Biography →</a>
+    </div>
   </div>
 </section>
 
@@ -863,11 +1115,11 @@
 
 <!-- ── SONGS TO LISTEN ──────────────────────────── -->
 <section id="songs">
-  <div class="songs-left fill-b">
-    <img src="https://i.pinimg.com/736x/e2/26/3e/e2263e2100b64d97260bd4ee4c1c7ab5.jpg" alt="SoFaygo">
+  <div class="songs-right">
+    <img src="https://i0.wp.com/postconcertdepression.com/wp-content/uploads/2024/03/Lil-Tecca-Opener-SoFaygoEd-3-683x1024.jpg?w=1400" alt="SoFaygo performing live 2024">
   </div>
   <div class="songs-copy">
-    <div class="songs-num">01</div>
+    <span class="label">Playlist</span>
     <h2 class="songs-heading">Songs<br>to Listen</h2>
     <ul class="tracklist">
       <li class="track-row" onclick="playTrack(this,'6aHoPULNO7pSL2ZfUY0bU8')" style="cursor:pointer;">
@@ -931,10 +1183,7 @@
         </li>
       </ul>
     </div>
-    <button class="btn-sm liquid-glass" id="show-more-btn" onclick="(function(){var el=document.getElementById('extra-tracks');var btn=document.getElementById('show-more-btn');var open=el.style.display!=='none';el.style.display=open?'none':'block';btn.textContent=open?'Show More →':'Show Less →';})()" style="margin-top:16px;">Show More →</button>
-  </div>
-  <div class="songs-right fill-e" style="position:relative; overflow:hidden;">
-    <img src="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg" alt="SoFaygo">
+    <button class="btn-sm liquid-glass" id="show-more-btn" onclick="(function(){var el=document.getElementById('extra-tracks');var btn=document.getElementById('show-more-btn');var open=el.style.display!=='none';el.style.display=open?'none':'block';btn.textContent=open?'Show More →':'Show Less →';})()" style="margin-top:24px;">Show More →</button>
   </div>
 </section>
 
@@ -959,41 +1208,71 @@
 <div id="embed-iframe" style="position:fixed; width:1px; height:1px; overflow:hidden; pointer-events:none; opacity:0; bottom:0; right:0;"></div>
 <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 
-<!-- ── ANGELIC 7 ─────────────────────────────────── -->
-<div class="album-feat fill-a" id="angelic7">
-  <img class="album-feat-bg" src="https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f6/51/fa/f651fa73-f439-230d-7285-bbd97eddad99/artwork.jpg/3000x3000bb.jpg" alt="Angelic 7">
+<!-- ── MANIA ───────────────────────────────────────── -->
+<div class="album-feat" id="mania">
+  <img class="album-feat-bg" src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania" style="object-position: center 15%;">
   <div class="album-feat-overlay"></div>
-  <span class="album-ghost-num">7</span>
+  <span class="album-ghost-num">M</span>
   <div class="album-feat-content" data-reveal>
     <div>
-      <span class="album-year">Album · 2022</span>
-      <h2 class="album-title">Angelic<br>7</h2>
+      <span class="album-year">Album · 2025</span>
+      <h2 class="album-title">Mania</h2>
       <div class="divider-pink"></div>
       <p class="album-desc">
-        SoFaygo's most ambitious project — a collection of songs exploring
-        love, loss, and the relentless pursuit of greatness. His most personal
-        and introspective work to date.
+        SoFaygo's most fearless statement. 19 tracks built on raw energy,
+        unguarded honesty, and the full force of Atlanta's most distinctive
+        voice, this is the album that defines who he is.
       </p>
-      <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="btn btn-pink liquid-glass">Stream Album →</a>
+      <a href="https://open.spotify.com/album/3Ot1gTcCdtkhyce9yrc4Wj" target="_blank" class="btn btn-pink liquid-glass">Stream Album →</a>
     </div>
-    <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content:flex-end; gap:16px;">
-      <div style="text-align:right;">
-        <div style="font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:rgba(255,255,255,0.3); margin-bottom:8px;">Tracklist highlight</div>
-        <div style="font-size:22px; font-family:var(--font-disp); letter-spacing:0.04em; color:var(--white); line-height:1.4;">
-          Angelic Love<br>
-          Forever Faygo<br>
-          <span style="color:var(--pink);">On My Own</span><br>
-          Drift
-        </div>
-      </div>
+    <div class="album-tracklist-panel">
+      <div class="album-tracklist-label">Tracklist highlight</div>
+      <div class="album-tracklist-item">Open It Up</div>
+      <div class="album-tracklist-item hl">Bankrolls</div>
+      <div class="album-tracklist-item">Mayday</div>
+      <div class="album-tracklist-item">Monster</div>
     </div>
   </div>
 </div>
 
+<!-- ── VIDEO ───────────────────────────────────────── -->
+<section style="padding: 96px 44px; display: flex; justify-content: center; align-items: center; background: var(--black); border-top: 1px solid var(--border);">
+  <a href="https://youtu.be/zUdW0nlmeXw?si=hw30rNeaZxIt1d0V" target="_blank" rel="noopener"
+     id="yt-facade"
+     style="width:100%;max-width:1100px;position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 24px 80px rgba(0,0,0,0.7);cursor:pointer;display:block;">
+    <img src="https://img.youtube.com/vi/zUdW0nlmeXw/maxresdefault.jpg" alt="SoFaygo — Back in the Mix" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);" id="yt-thumb">
+    <div style="position:absolute;inset:0;background:rgba(8,8,8,0.25);transition:background 0.3s;" id="yt-overlay"></div>
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:rgba(200,23,30,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 10px rgba(200,23,30,0.2),0 8px 40px rgba(0,0,0,0.55);transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s;" id="yt-btn">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="margin-left:4px;"><path d="M8 5v14l11-7z"/></svg>
+    </div>
+    <div style="position:absolute;bottom:28px;left:32px;">
+      <div style="font-family:var(--font-disp);font-size:22px;letter-spacing:0.04em;color:var(--white);line-height:1;margin-bottom:6px;">Back in the Mix</div>
+      <div style="font-family:var(--font-body);font-size:10px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.45);">Watch on YouTube</div>
+    </div>
+  </a>
+</section>
+<script>
+  (function() {
+    var el = document.getElementById('yt-facade');
+    el.addEventListener('mouseover', function() {
+      document.getElementById('yt-thumb').style.transform = 'scale(1.03)';
+      document.getElementById('yt-overlay').style.background = 'rgba(8,8,8,0.1)';
+      document.getElementById('yt-btn').style.transform = 'translate(-50%,-50%) scale(1.1)';
+      document.getElementById('yt-btn').style.boxShadow = '0 0 0 14px rgba(200,23,30,0.18), 0 8px 40px rgba(0,0,0,0.55)';
+    });
+    el.addEventListener('mouseout', function() {
+      document.getElementById('yt-thumb').style.transform = 'scale(1)';
+      document.getElementById('yt-overlay').style.background = 'rgba(8,8,8,0.25)';
+      document.getElementById('yt-btn').style.transform = 'translate(-50%,-50%) scale(1)';
+      document.getElementById('yt-btn').style.boxShadow = '0 0 0 10px rgba(200,23,30,0.2), 0 8px 40px rgba(0,0,0,0.55)';
+    });
+  })();
+</script>
+
 <!-- ── CACTUS JACK ───────────────────────────────── -->
 <section id="cactus">
-  <div class="cj-photo fill-d">
-    <img src="https://i.pinimg.com/1200x/4a/a8/13/4aa813d49fa9c23daa3577b05be2aaa9.jpg" alt="Cactus Jack">
+  <div class="cj-photo">
+    <img src="https://img.youtube.com/vi/R-P2B5CXGuk/maxresdefault.jpg" alt="SoFaygo & Travis Scott — Cactus Jack at Summer Smash 2024" style="object-position: center center;">
   </div>
   <div class="cj-copy" data-reveal>
     <span class="label">Label</span>
@@ -1013,6 +1292,67 @@
     </p>
     <div style="margin-top: 40px;">
       <a href="discography.html" class="btn btn-outline liquid-glass">Discography →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── MERCH ───────────────────────────────────────── -->
+<section id="merch">
+  <div class="merch-header">
+    <h2 class="merch-hed">Merch</h2>
+    <a href="https://imsofaygo.com" target="_blank" class="merch-see-all">Shop All</a>
+  </div>
+  <div class="merch-grid">
+    <div class="merch-card">
+      <div class="merch-card-img">
+        <div class="merch-flip-hint">↺</div>
+        <div class="merch-card-img-inner">
+          <div class="merch-card-face merch-card-face-front">
+            <img src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Front">
+          </div>
+          <div class="merch-card-face merch-card-face-back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Back">
+          </div>
+        </div>
+      </div>
+      <div class="merch-card-info">
+        <div class="merch-card-name">Mania Skull Hoodie</div>
+        <div class="merch-card-price">$75.00 · Sold Out</div>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-card-img">
+        <div class="merch-flip-hint">↺</div>
+        <div class="merch-card-img-inner">
+          <div class="merch-card-face merch-card-face-front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912" alt="Mania Gothic Tee — Front">
+          </div>
+          <div class="merch-card-face merch-card-face-back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915" alt="Mania Gothic Tee — Back">
+          </div>
+        </div>
+      </div>
+      <div class="merch-card-info">
+        <div class="merch-card-name">Mania Gothic Tee</div>
+        <div class="merch-card-price">$35.00 · Sold Out</div>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-card-img">
+        <div class="merch-flip-hint">↺</div>
+        <div class="merch-card-img-inner">
+          <div class="merch-card-face merch-card-face-front">
+            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Front">
+          </div>
+          <div class="merch-card-face merch-card-face-back">
+            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Back">
+          </div>
+        </div>
+      </div>
+      <div class="merch-card-info">
+        <div class="merch-card-name">Hardcore Sweatpants</div>
+        <div class="merch-card-price">$75.00 · Sold Out</div>
+      </div>
     </div>
   </div>
 </section>
@@ -1166,16 +1506,6 @@
     })();
   })();
 
-  /* Theme switcher */
-  function setMode(mode) {
-    document.body.classList.toggle('pink-mode', mode === 'pink');
-    localStorage.setItem('colorMode', mode);
-    document.getElementById('btn-black').classList.toggle('active', mode !== 'pink');
-    document.getElementById('btn-pink').classList.toggle('active', mode === 'pink');
-  }
-  document.getElementById('btn-black').addEventListener('click', () => setMode('black'));
-  document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
-  setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
 
   /* Monthly listeners live counter */
   (function () {
@@ -1270,9 +1600,7 @@
     document.fonts.ready.then(function () { setTimeout(place, 2200); });
     window.addEventListener('resize', place);
 
-    function col() {
-      return document.body.classList.contains('pink-mode') ? '#FFFFFF' : '#FF1493';
-    }
+    function col() { return '#C8171E'; }
 
     var prevX = null, prevY = null;
 
@@ -1333,6 +1661,13 @@
       ctx.globalAlpha = 1;
     }, 50);
   })();
+
+  /* Merch card flip — touch support */
+  document.querySelectorAll('.merch-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      this.classList.toggle('flipped');
+    });
+  });
 </script>
 
 </body>
