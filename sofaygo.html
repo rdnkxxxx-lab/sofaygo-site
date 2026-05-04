@@ -320,7 +320,7 @@
       inset: 0;
       background:
         linear-gradient(to bottom, rgba(8,8,8,1) 0%, transparent 18%),
-        linear-gradient(to top, rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.65) 28%, rgba(8,8,8,0.12) 55%, transparent 75%),
+        linear-gradient(to top, rgba(8,8,8,1) 0%, rgba(8,8,8,0.65) 28%, rgba(8,8,8,0.12) 55%, transparent 75%),
         linear-gradient(to right, rgba(8,8,8,0.55) 0%, transparent 55%);
       z-index: 1;
       pointer-events: none;
@@ -420,7 +420,8 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to top,  rgba(8,8,8,0.96) 0%, rgba(8,8,8,0.62) 35%, rgba(8,8,8,0.12) 62%, transparent 100%),
+        linear-gradient(to bottom, rgba(8,8,8,1) 0%, transparent 20%),
+        linear-gradient(to top, rgba(8,8,8,1) 0%, rgba(8,8,8,0.62) 35%, rgba(8,8,8,0.12) 62%, transparent 100%),
         linear-gradient(to right, rgba(8,8,8,0.22) 0%, transparent 50%);
     }
     .album-feat-content {
@@ -510,6 +511,25 @@
     .album-tracklist-item:hover { color: rgba(248,248,246,0.88); }
     .album-tracklist-item.hl { color: var(--pink); }
 
+    /* ── VIDEO SECTION FADES ────────────────────── */
+    .vid-section::before,
+    .vid-section::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 120px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .vid-section::before {
+      top: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,1), transparent);
+    }
+    .vid-section::after {
+      bottom: 0;
+      background: linear-gradient(to top, rgba(8,8,8,1), transparent);
+    }
+
     /* ── CACTUS JACK ───────────────────────────── */
     #cactus {
       position: relative;
@@ -530,6 +550,7 @@
       position: absolute;
       inset: 0;
       background:
+        linear-gradient(to bottom, rgba(8,8,8,1) 0%, transparent 22%),
         linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.6) 30%, rgba(8,8,8,0.15) 55%, transparent 72%),
         linear-gradient(to left, rgba(8,8,8,0.88) 0%, rgba(8,8,8,0.35) 35%, transparent 62%);
       z-index: 1;
@@ -565,52 +586,91 @@
     /* ── MERCH ─────────────────────────────────── */
     #merch {
       background: var(--black);
-      border-top: 1px solid var(--border);
     }
     .merch-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 72px 72px 40px;
+      padding: 64px 64px 0;
+      position: relative;
     }
-    .merch-hed {
-      font-family: var(--font-disp);
-      font-size: clamp(56px, 7.5vw, 104px);
-      color: var(--white);
-      line-height: 0.9;
-      letter-spacing: -0.01em;
+    .merch-eyebrow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .merch-index {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--pink);
     }
     .merch-see-all {
       font-size: 10px;
-      font-weight: 600;
+      font-weight: 500;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--pink);
-      transition: opacity 0.2s;
+      color: rgba(248,248,246,0.42);
+      transition: color 0.22s;
       display: flex;
       align-items: center;
-      gap: 6px;
-      padding-bottom: 4px;
+      gap: 8px;
     }
-    .merch-see-all:hover { opacity: 0.65; }
+    .merch-see-all:hover { color: var(--white); }
+    .merch-see-all::after {
+      content: '→';
+      transition: transform 0.22s;
+    }
+    .merch-see-all:hover::after { transform: translateX(4px); }
+    .merch-hed-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .merch-hed {
+      font-family: var(--font-disp);
+      font-size: clamp(72px, 9vw, 128px);
+      color: var(--white);
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+      flex-shrink: 0;
+    }
+    .merch-tagline {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(248,248,246,0.3);
+      letter-spacing: 0.04em;
+      line-height: 1.6;
+      max-width: 200px;
+      text-align: right;
+      padding-bottom: 6px;
+    }
     .merch-grid {
       display: grid;
       grid-template-columns: 1.42fr 1fr;
       grid-template-rows: 46vh 46vh;
       gap: 2px;
+      margin-top: 2px;
     }
     .merch-card {
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      background: #0e0e0e;
+      background: #0d0d0d;
     }
     .merch-card:first-child { grid-row: 1 / 3; }
     .merch-card-img {
       position: absolute;
       inset: 0;
-      background: #0e0e0e;
+      background: #0d0d0d;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
+    .merch-card:hover .merch-card-img { transform: scale(1.03); }
     .merch-card-img-inner {
       position: absolute;
       inset: 0;
@@ -628,7 +688,7 @@
       align-items: center;
       justify-content: center;
       padding: 18px;
-      background: #0e0e0e;
+      background: #0d0d0d;
     }
     .merch-card-face img {
       width: 100%;
@@ -638,50 +698,220 @@
     .merch-card-face-back { transform: rotateY(180deg); }
     .merch-flip-hint {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      bottom: 18px;
+      right: 20px;
       z-index: 4;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(8,8,8,0.55);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      color: rgba(255,255,255,0.3);
+      font-family: var(--font-body);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
       pointer-events: none;
-      transition: opacity 0.25s;
+      transition: opacity 0.3s;
     }
     .merch-card:hover .merch-flip-hint { opacity: 0; }
+    .merch-sold-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 5;
+      font-family: var(--font-body);
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--pink);
+      border: 1px solid rgba(200,23,30,0.35);
+      padding: 4px 8px;
+      pointer-events: none;
+    }
     .merch-card-info {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       z-index: 4;
-      padding: 56px 28px 24px;
-      background: linear-gradient(to top, rgba(8,8,8,0.94) 0%, rgba(8,8,8,0.42) 55%, transparent 100%);
+      padding: 64px 24px 22px;
+      background: linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.5) 50%, transparent 100%);
       pointer-events: none;
+    }
+    .merch-card-idx {
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      color: var(--pink);
+      margin-bottom: 6px;
+      display: block;
     }
     .merch-card-name {
       font-family: var(--font-disp);
-      font-size: 22px;
-      letter-spacing: 0.05em;
+      font-size: 20px;
+      letter-spacing: 0.06em;
       color: var(--white);
-      margin-bottom: 5px;
+      margin-bottom: 6px;
       line-height: 1;
     }
-    .merch-card:first-child .merch-card-name { font-size: 30px; }
+    .merch-card:first-child .merch-card-name { font-size: 28px; }
     .merch-card-price {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 500;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.4);
+      color: rgba(248,248,246,0.28);
+    }
+
+    /* ── NAV TICKET BUTTON ──────────────────────── */
+    .nav-ticket-btn {
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.18em !important;
+      text-transform: uppercase;
+      color: var(--black) !important;
+      background: var(--pink);
+      padding: 6px 14px;
+      transition: opacity 0.22s, transform 0.22s !important;
+      white-space: nowrap;
+    }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
+
+    /* ── TICKETS / LIVE ─────────────────────────── */
+    #tickets {
+      background: var(--black);
+      padding: 96px 72px 80px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+    .tickets-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      margin-bottom: 0;
+      gap: 24px;
+    }
+    .tickets-hed-group { display: flex; align-items: flex-end; gap: 24px; }
+    .tickets-hed {
+      font-family: var(--font-disp);
+      font-size: clamp(72px, 9vw, 128px);
+      color: var(--white);
+      line-height: 0.88;
+      letter-spacing: -0.02em;
+    }
+    .tickets-label {
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--pink);
+      padding-bottom: 10px;
+    }
+    .tickets-note {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(248,248,246,0.25);
+      letter-spacing: 0.04em;
+      padding-bottom: 8px;
+      text-align: right;
+    }
+    .tickets-list { width: 100%; }
+    .ticket-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 120px 130px;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.22s;
+    }
+    .ticket-row:hover { background: rgba(255,255,255,0.02); }
+    .ticket-row:hover .ticket-city { color: var(--white); }
+    .ticket-date {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--pink);
+    }
+    .ticket-city {
+      font-family: var(--font-disp);
+      font-size: clamp(20px, 2.4vw, 30px);
+      color: rgba(248,248,246,0.82);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      transition: color 0.22s;
+    }
+    .ticket-venue {
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: rgba(248,248,246,0.28);
+      margin-top: 5px;
+    }
+    .ticket-status {
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.25);
+      text-align: center;
+    }
+    .ticket-status.on-sale { color: rgba(248,248,246,0.55); }
+    .ticket-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 9px 18px;
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      transition: border-color 0.22s, color 0.22s, background 0.22s;
+      white-space: nowrap;
+    }
+    .ticket-btn:hover {
+      border-color: var(--pink);
+      color: var(--pink);
+    }
+    .ticket-btn.sold {
+      color: rgba(248,248,246,0.2);
+      border-color: rgba(255,255,255,0.06);
+      pointer-events: none;
+    }
+    .tickets-footer-note {
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 400;
+      font-style: italic;
+      color: rgba(248,248,246,0.2);
+      letter-spacing: 0.08em;
+      margin-top: 32px;
+      text-align: center;
+    }
+    @media (max-width: 900px) {
+      #tickets { padding: 64px 28px 56px; }
+      .ticket-row { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 10px 16px; padding: 18px 0; }
+      .ticket-date { grid-column: 1; grid-row: 1; }
+      .ticket-city-wrap { grid-column: 1 / 3; grid-row: 2; }
+      .ticket-status { display: none; }
+      .ticket-btn { grid-column: 2; grid-row: 1; justify-self: end; }
+      .tickets-hed { font-size: clamp(56px, 12vw, 96px); }
+    }
+    @media (max-width: 600px) {
+      .tickets-note { display: none; }
     }
 
     /* ── FOOTER ────────────────────────────────── */
@@ -837,7 +1067,8 @@
       .cj-copy { padding: 48px 24px 64px; }
       .recog-copy { padding: 0 24px 48px; gap: 28px; }
       .songs-copy { padding: 40px 24px 56px; }
-      .merch-header { padding: 48px 24px 28px; }
+      .merch-header { padding: 40px 20px 0; }
+      .merch-tagline { display: none; }
       .merch-grid { grid-template-columns: 1fr; grid-template-rows: 72vw 56vw 56vw; }
       .merch-card:first-child { grid-row: auto; grid-column: auto; }
       .album-feat-content { padding: 44px 28px; }
@@ -1004,6 +1235,18 @@
     }
     .hero-copy .btn-sm:hover { animation-play-state: paused; }
   </style>
+  <style>
+    .fade-section {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .fade-section.fs-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
 <svg id="liquid-glass-svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
@@ -1033,6 +1276,7 @@
   <ul class="nav-right">
     <li><a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank">Stream</a></li>
     <li><a href="#cactus">Label</a></li>
+    <li><a href="#tickets" class="nav-ticket-btn">Tickets</a></li>
   </ul>
 </nav>
 
@@ -1236,7 +1480,7 @@
 </div>
 
 <!-- ── VIDEO ───────────────────────────────────────── -->
-<section style="padding: 96px 44px; display: flex; justify-content: center; align-items: center; background: var(--black); border-top: 1px solid var(--border);">
+<section class="vid-section" style="padding: 96px 44px; display: flex; justify-content: center; align-items: center; background: var(--black); position: relative;">
   <a href="https://youtu.be/zUdW0nlmeXw?si=hw30rNeaZxIt1d0V" target="_blank" rel="noopener"
      id="yt-facade"
      style="width:100%;max-width:1100px;position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 24px 80px rgba(0,0,0,0.7);cursor:pointer;display:block;">
@@ -1299,13 +1543,19 @@
 <!-- ── MERCH ───────────────────────────────────────── -->
 <section id="merch">
   <div class="merch-header">
-    <h2 class="merch-hed">Merch</h2>
-    <a href="https://imsofaygo.com" target="_blank" class="merch-see-all">Shop All</a>
+    <div class="merch-eyebrow">
+      <span class="merch-index">Mania Collection</span>
+      <a href="https://imsofaygo.com" target="_blank" class="merch-see-all">Shop All</a>
+    </div>
+    <div class="merch-hed-row">
+      <h2 class="merch-hed">Merch</h2>
+      <p class="merch-tagline">Hover each piece to see the reverse. Tap on mobile.</p>
+    </div>
   </div>
   <div class="merch-grid">
     <div class="merch-card">
       <div class="merch-card-img">
-        <div class="merch-flip-hint">↺</div>
+        <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
           <div class="merch-card-face merch-card-face-front">
             <img src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Front">
@@ -1314,15 +1564,17 @@
             <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Back">
           </div>
         </div>
+        <div class="merch-flip-hint">Flip</div>
       </div>
       <div class="merch-card-info">
+        <span class="merch-card-idx">01</span>
         <div class="merch-card-name">Mania Skull Hoodie</div>
         <div class="merch-card-price">$75.00 · Sold Out</div>
       </div>
     </div>
     <div class="merch-card">
       <div class="merch-card-img">
-        <div class="merch-flip-hint">↺</div>
+        <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
           <div class="merch-card-face merch-card-face-front">
             <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912" alt="Mania Gothic Tee — Front">
@@ -1331,15 +1583,17 @@
             <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915" alt="Mania Gothic Tee — Back">
           </div>
         </div>
+        <div class="merch-flip-hint">Flip</div>
       </div>
       <div class="merch-card-info">
+        <span class="merch-card-idx">02</span>
         <div class="merch-card-name">Mania Gothic Tee</div>
         <div class="merch-card-price">$35.00 · Sold Out</div>
       </div>
     </div>
     <div class="merch-card">
       <div class="merch-card-img">
-        <div class="merch-flip-hint">↺</div>
+        <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
           <div class="merch-card-face merch-card-face-front">
             <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Front">
@@ -1348,13 +1602,101 @@
             <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Back">
           </div>
         </div>
+        <div class="merch-flip-hint">Flip</div>
       </div>
       <div class="merch-card-info">
+        <span class="merch-card-idx">03</span>
         <div class="merch-card-name">Hardcore Sweatpants</div>
         <div class="merch-card-price">$75.00 · Sold Out</div>
       </div>
     </div>
   </div>
+</section>
+
+<!-- ── TICKETS ───────────────────────────────────── -->
+<section id="tickets">
+  <div class="tickets-header">
+    <div class="tickets-hed-group">
+      <h2 class="tickets-hed">Live</h2>
+      <span class="tickets-label">2025 Tour Dates</span>
+    </div>
+    <p class="tickets-note">All times local. Subject to change.</p>
+  </div>
+  <div class="tickets-list">
+    <div class="ticket-row">
+      <span class="ticket-date">Jun 07</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">Atlanta, GA</span>
+        <span class="ticket-venue">Coca-Cola Roxy</span>
+      </div>
+      <span class="ticket-status on-sale">On Sale</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=33.749,-84.388" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Jun 14</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">Miami, FL</span>
+        <span class="ticket-venue">Rolling Loud Miami</span>
+      </div>
+      <span class="ticket-status on-sale">On Sale</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=25.774,-80.19" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Jun 28</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">Los Angeles, CA</span>
+        <span class="ticket-venue">The Novo</span>
+      </div>
+      <span class="ticket-status on-sale">On Sale</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=34.052,-118.243" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Jul 12</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">Houston, TX</span>
+        <span class="ticket-venue">House of Blues</span>
+      </div>
+      <span class="ticket-status on-sale">On Sale</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=29.76,-95.369" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Jul 26</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">New York, NY</span>
+        <span class="ticket-venue">Brooklyn Mirage</span>
+      </div>
+      <span class="ticket-status on-sale">On Sale</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=40.712,-74.006" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Aug 09</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">Chicago, IL</span>
+        <span class="ticket-venue">Concord Music Hall</span>
+      </div>
+      <span class="ticket-status">Few Left</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=41.878,-87.629" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Aug 23</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">Dallas, TX</span>
+        <span class="ticket-venue">South Side Ballroom</span>
+      </div>
+      <span class="ticket-status">Few Left</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?radius=25&userlatlong=32.776,-96.796" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+    <div class="ticket-row">
+      <span class="ticket-date">Sep 06</span>
+      <div class="ticket-city-wrap">
+        <span class="ticket-city">London, UK</span>
+        <span class="ticket-venue">O2 Forum Kentish Town</span>
+      </div>
+      <span class="ticket-status on-sale">On Sale</span>
+      <a href="https://www.ticketmaster.com/sofaygo-tickets/artist/2791891?global=true&radius=25&userlatlong=51.507,-0.127" target="_blank" rel="noopener" class="ticket-btn">Get Tickets</a>
+    </div>
+  </div>
+  <p class="tickets-footer-note">More dates to be announced. Follow for updates.</p>
 </section>
 
 <!-- ── FOOTER ─────────────────────────────────────── -->
@@ -1670,5 +2012,32 @@
   });
 </script>
 
+<script>
+(function () {
+  var targets = [
+    document.getElementById('recognition'),
+    document.getElementById('gooey-band'),
+    document.getElementById('songs'),
+    document.getElementById('mania'),
+    document.getElementById('cactus'),
+    document.getElementById('merch'),
+    document.querySelector('footer'),
+    document.querySelector('section[style*="96px 44px"]')
+  ].filter(Boolean);
+
+  targets.forEach(function (el) { el.classList.add('fade-section'); });
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fs-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  targets.forEach(function (el) { io.observe(el); });
+})();
+</script>
 </body>
 </html>
