@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoFaygo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #080808;
+      color: #fff;
+      height: 100%;
+    }
+
+    section {
+      scroll-snap-align: start;
+      height: 100vh;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ── SECTION 1: HERO ── */
+    #hero { background: #080808; flex-direction: column; }
+
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      animation: grain 0.5s steps(1) infinite;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.06;
+    }
+
+    @keyframes grain {
+      0%   { background-position: 0 0; }
+      10%  { background-position: -5% -10%; }
+      20%  { background-position: -15% 5%; }
+      30%  { background-position: 7% -25%; }
+      40%  { background-position: -5% 25%; }
+      50%  { background-position: -15% 10%; }
+      60%  { background-position: 15% 0%; }
+      70%  { background-position: 0% 15%; }
+      80%  { background-position: 3% 35%; }
+      90%  { background-position: -18% 10%; }
+      100% { background-position: 0 0; }
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 18vw, 220px);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      user-select: none;
+      animation: glitch-base 4s infinite;
+    }
+
+    .hero-name::before,
+    .hero-name::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .hero-name::before {
+      color: #C8171E;
+      animation: glitch-r 4s infinite;
+      clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    }
+    .hero-name::after {
+      color: rgba(255,255,255,0.6);
+      animation: glitch-l 4s infinite;
+      clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+    }
+
+    @keyframes glitch-base {
+      0%, 88%, 100% { transform: none; }
+      89% { transform: skewX(-1deg) translateX(2px); }
+      90% { transform: skewX(0.5deg) translateX(-2px); }
+      91% { transform: none; }
+      92% { transform: translateX(-3px); }
+      93% { transform: translateX(3px); }
+      94% { transform: none; }
+    }
+
+    @keyframes glitch-r {
+      0%, 87%, 100% { opacity: 0; transform: none; }
+      88% { opacity: 0.8; transform: translateX(-4px); }
+      89% { opacity: 0.8; transform: translateX(4px); }
+      90% { opacity: 0; }
+      92% { opacity: 0.6; transform: translateX(-2px); }
+      93% { opacity: 0; }
+    }
+
+    @keyframes glitch-l {
+      0%, 86%, 100% { opacity: 0; transform: none; }
+      87% { opacity: 0.7; transform: translateX(4px); }
+      88.5% { opacity: 0.7; transform: translateX(-4px); }
+      90% { opacity: 0; }
+    }
+
+    .hero-sub {
+      font-size: clamp(11px, 1.8vw, 15px);
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-top: 18px;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      animation: fade-up 0.8s ease 1.3s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fade-up 0.8s ease 2s forwards;
+    }
+    .scroll-hint span { font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.2); }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.15), transparent);
+      animation: scroll-pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes scroll-pulse { 0%, 100% { opacity: 0.4; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(0.6); } }
+
+    @keyframes fade-up {
+      to { opacity: 1; }
+    }
+
+    /* ── SECTION 2: BIO ── */
+    #bio { background: #090909; }
+
+    .blobs {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      animation: blob-drift 14s ease-in-out infinite;
+    }
+    .blob-1 { width: 480px; height: 480px; background: rgba(100,15,15,0.7); top: -120px; left: -80px; animation-delay: 0s; }
+    .blob-2 { width: 360px; height: 360px; background: rgba(60,10,10,0.6); bottom: -80px; right: -60px; animation-delay: -5s; }
+    .blob-3 { width: 280px; height: 280px; background: rgba(130,20,20,0.4); top: 40%; left: 40%; animation-delay: -9s; }
+
+    @keyframes blob-drift {
+      0%, 100% { transform: translate(0,0) scale(1); }
+      33%       { transform: translate(24px,-36px) scale(1.08); }
+      66%       { transform: translate(-18px,28px) scale(0.94); }
+    }
+
+    .bio-content {
+      position: relative;
+      z-index: 2;
+      max-width: 680px;
+      padding: 0 40px;
+      text-align: center;
+    }
+    .bio-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: #C8171E;
+      margin-bottom: 28px;
+      display: block;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .bio-eyebrow.in { opacity: 1; transform: none; }
+
+    .bio-text {
+      font-size: clamp(16px, 2.2vw, 21px);
+      line-height: 1.8;
+      color: rgba(255,255,255,0.75);
+    }
+    .w {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+    .w.in { opacity: 1; transform: none; }
+
+    /* ── SECTION 3: DISCOGRAPHY ── */
+    #discography {
+      background: #070707;
+      flex-direction: column;
+      gap: 44px;
+      padding: 0 24px;
+    }
+
+    .section-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 7vw, 80px);
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.88);
+      text-align: center;
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .card-wrap {
+      width: 148px;
+      height: 196px;
+      perspective: 800px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .card-wrap.in { opacity: 1; transform: none; }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transform: rotateY(-80deg);
+      transition: transform 0.75s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .card-wrap.in .card-inner { transform: rotateY(0deg); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(20,20,20,0.8);
+      backdrop-filter: blur(6px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 12px;
+    }
+    .card-face img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.55;
+    }
+    .card-face::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 55%);
+    }
+    .card-title {
+      position: relative;
+      z-index: 1;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 17px;
+      letter-spacing: 0.06em;
+      color: #fff;
+    }
+    .card-yr {
+      position: relative;
+      z-index: 1;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-top: 3px;
+    }
+    /* border glow */
+    .card-face::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 6px;
+      border: 1px solid rgba(200,23,30,0.18);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ── SECTION 4: SOUND ── */
+    #sound {
+      background: #060606;
+      flex-direction: column;
+      gap: 52px;
+    }
+
+    .eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      height: 72px;
+    }
+    .eq-bar {
+      width: 9px;
+      border-radius: 3px 3px 0 0;
+      background: linear-gradient(to top, #9b0e14, #C8171E, #e84c52);
+      transform-origin: bottom;
+      animation: pulse-bar 1s ease-in-out infinite;
+    }
+    @keyframes pulse-bar {
+      0%, 100% { transform: scaleY(0.15); }
+      50%       { transform: scaleY(1); }
+    }
+
+    .sound-body { max-width: 540px; text-align: center; padding: 0 24px; }
+    .sound-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(32px, 5vw, 58px); letter-spacing: 0.1em; margin-bottom: 20px; }
+    .sound-copy { font-size: clamp(13px, 1.8vw, 16px); line-height: 1.9; color: rgba(255,255,255,0.48); }
+
+    /* ── SECTION 5: LYRICS ── */
+    #lyrics {
+      background: #000;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .spotlight {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(200,23,30,0.05) 0%, transparent 70%);
+    }
+
+    .lyric-eyebrow {
+      font-size: 9px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.2);
+      position: relative;
+      z-index: 2;
+    }
+
+    .lyric-stage {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 640px;
+      padding: 0 24px;
+      min-height: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .lyric-line {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(26px, 5vw, 52px);
+      letter-spacing: 0.05em;
+      color: rgba(255,255,255,0.88);
+      line-height: 1.2;
+      min-height: 1.2em;
+    }
+    .lyric-attr {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.18);
+      text-transform: uppercase;
+      margin-top: 16px;
+      min-height: 14px;
+    }
+    .caret {
+      display: inline-block;
+      width: 2px;
+      height: 0.85em;
+      background: #C8171E;
+      vertical-align: bottom;
+      animation: caret-blink 0.65s step-end infinite;
+      margin-left: 1px;
+    }
+    @keyframes caret-blink { 50% { opacity: 0; } }
+
+    /* ── SECTION 6: TIMELINE ── */
+    #timeline {
+      background: #080808;
+      align-items: flex-start;
+      overflow-y: auto;
+      scroll-snap-align: start;
+    }
+
+    .tl-inner {
+      width: 100%;
+      max-width: 760px;
+      padding: 64px 24px;
+      margin: 0 auto;
+    }
+    .tl-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 6vw, 68px);
+      letter-spacing: 0.1em;
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    .tl-list { list-style: none; position: relative; }
+    .tl-list::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: rgba(255,255,255,0.05);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: calc(50% + 26px);
+      margin-bottom: 36px;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-36px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .tl-item.right {
+      justify-content: flex-start;
+      padding-right: 0;
+      padding-left: calc(50% + 26px);
+      transform: translateX(36px);
+    }
+    .tl-item.in { opacity: 1; transform: none; }
+
+    .tl-dot {
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: #C8171E;
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px rgba(200,23,30,0.5);
+    }
+
+    .tl-card {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.055);
+      border-radius: 3px;
+      padding: 14px 16px;
+      max-width: 260px;
+    }
+    .tl-year {
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      color: #C8171E;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .tl-copy { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.55; }
+    .tl-copy em { font-style: italic; color: rgba(255,255,255,0.85); }
+
+    /* ── SECTION 7: CLOSING ── */
+    #closing {
+      background: #040404;
+      flex-direction: column;
+      gap: 44px;
+    }
+
+    #p-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .closing-body {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .closing-h {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(44px, 9vw, 108px);
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: rgba(255,255,255,0.88);
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .closing-h.in { opacity: 1; transform: none; }
+
+    .stream-btn {
+      position: relative;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 38px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 2px;
+      text-decoration: none;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s, border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .stream-btn.in { opacity: 1; transform: none; }
+    .stream-btn:hover { border-color: #1DB954; color: #1DB954; background: rgba(29,185,84,0.06); }
+    .stream-btn svg { flex-shrink: 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .tl-list::before { left: 14px; transform: none; }
+      .tl-item,
+      .tl-item.right { padding-right: 0; padding-left: 38px; justify-content: flex-start; }
+      .tl-item { transform: translateX(-24px); }
+      .tl-item.right { transform: translateX(-24px); }
+      .tl-dot { left: 14px; transform: none; }
+      .card-wrap { width: 120px; height: 160px; }
+      .cards { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── 1: HERO ── -->
+<section id="hero">
+  <div class="hero-name" data-text="SOFAYGO">SOFAYGO</div>
+  <div class="hero-sub">born in chaos</div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── 2: BIO ── -->
+<section id="bio">
+  <div class="blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="bio-content">
+    <span class="bio-eyebrow" id="bio-eyebrow">Who is SoFaygo</span>
+    <p class="bio-text" id="bio-text"></p>
+  </div>
+</section>
+
+<!-- ── 3: DISCOGRAPHY ── -->
+<section id="discography">
+  <div class="section-heading">Discography</div>
+  <div class="cards" id="cards">
+    <div class="card-wrap">
+      <div class="card-inner">
+        <div class="card-face">
+          <img src="https://i.scdn.co/image/ab67616d0000b273f5d35bf91a2b5f0009b010d4" alt="Pink Heartz">
+          <div class="card-title">Pink Heartz</div>
+          <div class="card-yr">2022</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-wrap">
+      <div class="card-inner">
+        <div class="card-face">
+          <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania">
+          <div class="card-title">Mania</div>
+          <div class="card-yr">2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-wrap">
+      <div class="card-inner">
+        <div class="card-face">
+          <img src="https://i.scdn.co/image/ab67616d0000b273cdd5a49fd68603b5413931e7" alt="GO+">
+          <div class="card-title">GO+</div>
+          <div class="card-yr">2023</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-wrap">
+      <div class="card-inner">
+        <div class="card-face">
+          <img src="https://i.scdn.co/image/ab67616d0000b273cde9e3ad8134941008b201d6" alt="B4Pink">
+          <div class="card-title">B4Pink</div>
+          <div class="card-yr">2022</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-wrap">
+      <div class="card-inner">
+        <div class="card-face">
+          <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me">
+          <div class="card-title">After Me</div>
+          <div class="card-yr">2020</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 4: SOUND ── -->
+<section id="sound">
+  <div class="eq" id="eq"></div>
+  <div class="sound-body">
+    <div class="sound-title">His Sound</div>
+    <p class="sound-copy">Melodic vocals draped over dark 808s. Emotional rawness that cuts through. SoFaygo bends Atlanta trap into something deeply personal — vulnerability as aggression, softness as a weapon. Signed to Travis Scott's Cactus Jack, he carries that cinematic weight in every bar.</p>
+  </div>
+</section>
+
+<!-- ── 5: LYRICS ── -->
+<section id="lyrics">
+  <div class="spotlight"></div>
+  <div class="lyric-eyebrow">Lyrics Spotlight</div>
+  <div class="lyric-stage">
+    <div class="lyric-line" id="lyric-line"></div>
+    <div class="lyric-attr" id="lyric-attr"></div>
+  </div>
+</section>
+
+<!-- ── 6: TIMELINE ── -->
+<section id="timeline">
+  <div class="tl-inner">
+    <div class="tl-heading">The Timeline</div>
+    <ul class="tl-list">
+      <li class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card"><div class="tl-year">2019</div><div class="tl-copy">Drops <em>War</em> — raw early tape, building his voice out of Atlanta streets</div></div>
+      </li>
+      <li class="tl-item right">
+        <div class="tl-dot"></div>
+        <div class="tl-card"><div class="tl-year">2020</div><div class="tl-copy">Releases <em>Angelic 7</em> then <em>After Me</em> — his most acclaimed independent run</div></div>
+      </li>
+      <li class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card"><div class="tl-year">2021</div><div class="tl-copy">Gains viral momentum. Travis Scott and Cactus Jack take notice</div></div>
+      </li>
+      <li class="tl-item right">
+        <div class="tl-dot"></div>
+        <div class="tl-card"><div class="tl-year">2022</div><div class="tl-copy">Signs to Cactus Jack / Epic. Drops <em>B4Pink</em> EP, then debut album <em>Pink Heartz</em></div></div>
+      </li>
+      <li class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-card"><div class="tl-year">2023</div><div class="tl-copy">Returns with <em>GO+</em> — 12 tracks, features from Yung Kayo and DD Osama</div></div>
+      </li>
+      <li class="tl-item right">
+        <div class="tl-dot"></div>
+        <div class="tl-card"><div class="tl-year">2025</div><div class="tl-copy">Drops <em>Mania</em> — 19-track statement. His most ambitious chapter yet</div></div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 7: CLOSING ── -->
+<section id="closing">
+  <canvas id="p-canvas"></canvas>
+  <div class="closing-body">
+    <div class="closing-h" id="closing-h">The story<br>is not over</div>
+  </div>
+  <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="stream-btn" id="stream-btn">
+    <svg width="15" height="15" viewBox="0 0 496 512" fill="currentColor"><path d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+    Stream SoFaygo
+  </a>
+</section>
+
+<script>
+// ── BIO words ──
+const bioSrc = "Andre Dontrel Burt Jr. Born in Atlanta, Georgia. Signed to Travis Scott's Cactus Jack Records. Known for melodic trap with emotional depth — raw vulnerability over cinematic 808s. One of Atlanta's most compelling voices of his generation.";
+const bioEl = document.getElementById('bio-text');
+bioSrc.split(' ').forEach((word, i) => {
+  const s = document.createElement('span');
+  s.className = 'w';
+  s.textContent = word + ' ';
+  s.style.transitionDelay = (i * 0.038) + 's';
+  bioEl.appendChild(s);
+});
+
+// ── EQ bars ──
+const eqEl = document.getElementById('eq');
+[55,70,80,45,65,80,40,75,60,80,50,70,65,80,45,60,75,50,65,70].forEach((h, i) => {
+  const b = document.createElement('div');
+  b.className = 'eq-bar';
+  b.style.cssText = `height:${h}px;animation-delay:${i*0.07}s;animation-duration:${(0.85+Math.random()*0.55).toFixed(2)}s`;
+  eqEl.appendChild(b);
+});
+
+// ── LYRICS typewriter ──
+const verses = [
+  { text: "I can't sleep, I got too much on my mind", attr: "SoFaygo" },
+  { text: "Yeah they doubted me, now look at what I find", attr: "SoFaygo" },
+  { text: "Every night I pray I make it through the grind", attr: "SoFaygo" },
+];
+let lyricsRunning = false;
+let vIdx = 0;
+
+function typeVerse(verse, cb) {
+  const lineEl = document.getElementById('lyric-line');
+  const attrEl = document.getElementById('lyric-attr');
+  lineEl.textContent = '';
+  attrEl.textContent = '';
+
+  const caret = document.createElement('span');
+  caret.className = 'caret';
+  lineEl.appendChild(caret);
+
+  let i = 0;
+  const iv = setInterval(() => {
+    if (i < verse.text.length) {
+      caret.before(document.createTextNode(verse.text[i++]));
+    } else {
+      clearInterval(iv);
+      caret.remove();
+      attrEl.textContent = '— ' + verse.attr;
+      setTimeout(cb, 2400);
+    }
+  }, 38);
+}
+
+function nextVerse() {
+  if (!lyricsRunning) return;
+  typeVerse(verses[vIdx % verses.length], () => { vIdx++; nextVerse(); });
+}
+
+// ── PARTICLES ──
+(function particles() {
+  const canvas = document.getElementById('p-canvas');
+  const ctx = canvas.getContext('2d');
+  let pts = [];
+
+  function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+  window.addEventListener('resize', resize);
+  resize();
+
+  for (let i = 0; i < 55; i++) {
+    pts.push({ x: Math.random(), y: Math.random(), r: Math.random()*1.4+0.3, spd: Math.random()*0.3+0.08, op: Math.random()*0.35+0.08 });
+  }
+
+  (function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pts.forEach(p => {
+      p.y -= p.spd / canvas.height;
+      if (p.y < 0) { p.y = 1; p.x = Math.random(); }
+      ctx.beginPath();
+      ctx.arc(p.x * canvas.width, p.y * canvas.height, p.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${p.op})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(loop);
+  })();
+})();
+
+// ── INTERSECTION OBSERVER ──
+const io = new IntersectionObserver(entries => {
+  entries.forEach(({ target, isIntersecting }) => {
+    if (!isIntersecting) return;
+    const id = target.id;
+
+    if (id === 'bio') {
+      document.getElementById('bio-eyebrow').classList.add('in');
+      document.querySelectorAll('.w').forEach((w, i) =>
+        setTimeout(() => w.classList.add('in'), i * 38));
+    }
+
+    if (id === 'discography') {
+      document.querySelectorAll('.card-wrap').forEach((c, i) =>
+        setTimeout(() => c.classList.add('in'), i * 110));
+    }
+
+    if (id === 'lyrics' && !lyricsRunning) {
+      lyricsRunning = true;
+      nextVerse();
+    }
+
+    if (id === 'timeline') {
+      document.querySelectorAll('.tl-item').forEach((item, i) =>
+        setTimeout(() => item.classList.add('in'), i * 140));
+    }
+
+    if (id === 'closing') {
+      setTimeout(() => document.getElementById('closing-h').classList.add('in'), 150);
+      setTimeout(() => document.getElementById('stream-btn').classList.add('in'), 500);
+    }
+  });
+}, { threshold: 0.25 });
+
+['bio','discography','lyrics','timeline','closing'].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) io.observe(el);
+});
+</script>
+
+</body>
+</html>
