@@ -52,18 +52,27 @@
     nav {
       position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-      padding: 0 44px; height: 64px;
-      background: rgba(8,8,8,0.88); backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--border);
+      padding: 0 48px; height: 64px;
+      background: rgba(8,8,8,0.80);
+      backdrop-filter: blur(22px) saturate(1.5);
+      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      border-bottom: 1px solid var(--border);
     }
-    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-left, .nav-right { display: flex; gap: 36px; list-style: none; align-items: center; }
     .nav-right { justify-content: flex-end; }
     .nav-left a, .nav-right a {
-      font-size: 10.5px; font-weight: 500; letter-spacing: 0.18em;
-      text-transform: uppercase; color: rgba(255,255,255,0.65); transition: color 0.2s;
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.48);
+      transition: color 0.22s; position: relative;
     }
-    .nav-left a:hover, .nav-right a:hover { color: var(--pink); }
-    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 36px; letter-spacing: 0.04em; color: #C8171E; line-height: 1; }
+    .nav-left a::after, .nav-right a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: #C8171E;
+      transition: width 0.32s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--white); }
+    .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: #C8171E; line-height: 1; }
     .mode-switcher { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
     .mode-btn {
       padding: 5px 10px; background: transparent; color: rgba(255,255,255,0.35);
@@ -234,8 +243,47 @@
     .influences-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 16px; display: block; }
     .influences-title { font-family: var(--font-disp); font-size: clamp(48px, 6vw, 80px); line-height: 0.92; margin-bottom: 52px; }
     .influences-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; }
-    .influence-name { font-family: var(--font-disp); font-size: 19px; letter-spacing: 0.04em; color: rgba(255,255,255,0.45); padding: 18px 0; border-top: 1px solid var(--border); transition: color 0.2s; cursor: default; }
+    .influence-name { font-family: var(--font-disp); font-size: 19px; letter-spacing: 0.04em; color: rgba(255,255,255,0.45); padding: 18px 0; border-top: 1px solid var(--border); transition: color 0.2s; cursor: pointer; position: relative; }
     .influence-name:hover { color: var(--pink); }
+
+    /* ── INFLUENCE POPUP ──────────────────────────── */
+    #influence-popup {
+      position: fixed; z-index: 9999; pointer-events: none;
+      opacity: 0; transform: translateY(10px) scale(0.96);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      width: 300px;
+    }
+    #influence-popup.visible { opacity: 1; transform: translateY(0) scale(1); }
+    .inf-popup-inner {
+      background: #161616; border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 14px; overflow: hidden;
+      box-shadow: 0 28px 72px rgba(0,0,0,0.75), 0 4px 18px rgba(0,0,0,0.45);
+    }
+    .inf-popup-photo {
+      width: 100%; height: 210px; object-fit: cover; object-position: center top;
+      display: block; background: #222;
+    }
+    .inf-popup-photo-placeholder {
+      width: 100%; height: 210px; background: linear-gradient(160deg,#1e1e1e 0%,#111 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .inf-popup-photo-placeholder svg { opacity: 0.15; }
+    .inf-popup-body { padding: 16px 18px 20px; }
+    .inf-popup-name { font-family: var(--font-disp); font-size: 26px; letter-spacing: 0.04em; color: #fff; margin-bottom: 4px; }
+    .inf-popup-genre {
+      font-size: 9.5px; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--pink); margin-bottom: 12px;
+      opacity: 0.85;
+    }
+    .inf-popup-meta { display: flex; flex-direction: column; gap: 6px; }
+    .inf-popup-row { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.45; }
+    .inf-popup-row strong { color: rgba(255,255,255,0.65); font-weight: 500; margin-right: 4px; }
+    body.pink-mode .inf-popup-inner { background: #f5f4f2; border-color: rgba(0,0,0,0.1); }
+    body.pink-mode .inf-popup-name { color: #111; }
+    body.pink-mode .inf-popup-genre { opacity: 1; }
+    body.pink-mode .inf-popup-row { color: rgba(0,0,0,0.4); }
+    body.pink-mode .inf-popup-row strong { color: rgba(0,0,0,0.65); }
+    body.pink-mode .inf-popup-photo-placeholder { background: linear-gradient(160deg,#e8e6e3 0%,#d8d5d0 100%); }
 
     /* ── FOOTER ──────────────────────────────── */
     footer { padding: 72px 64px 48px; background: var(--black); border-top: 1px solid var(--border); }
@@ -954,18 +1002,39 @@
   <span class="influences-label">Artistry</span>
   <h2 class="influences-title">Influences</h2>
   <div class="influences-grid">
-    <div class="influence-name">Drake</div>
-    <div class="influence-name">Travis Scott</div>
-    <div class="influence-name">Chief Keef</div>
-    <div class="influence-name">Lil Wayne</div>
-    <div class="influence-name">Chris Brown</div>
-    <div class="influence-name">Playboi Carti</div>
-    <div class="influence-name">Lil Uzi Vert</div>
-    <div class="influence-name">Lil Tecca</div>
-    <div class="influence-name">Don Toliver</div>
-    <div class="influence-name">Young Thug</div>
-    <div class="influence-name">The Ramones</div>
-    <div class="influence-name">Blondie</div>
+    <div class="influence-name" data-artist="Drake">Drake</div>
+    <div class="influence-name" data-artist="Travis Scott">Travis Scott</div>
+    <div class="influence-name" data-artist="Chief Keef">Chief Keef</div>
+    <div class="influence-name" data-artist="Lil Wayne">Lil Wayne</div>
+    <div class="influence-name" data-artist="Chris Brown">Chris Brown</div>
+    <div class="influence-name" data-artist="Playboi Carti">Playboi Carti</div>
+    <div class="influence-name" data-artist="Lil Uzi Vert">Lil Uzi Vert</div>
+    <div class="influence-name" data-artist="Lil Tecca">Lil Tecca</div>
+    <div class="influence-name" data-artist="Don Toliver">Don Toliver</div>
+    <div class="influence-name" data-artist="Young Thug">Young Thug</div>
+    <div class="influence-name" data-artist="The Ramones">The Ramones</div>
+    <div class="influence-name" data-artist="Blondie">Blondie</div>
+  </div>
+</div>
+
+<!-- ── INFLUENCE POPUP ───────────────────────────── -->
+<div id="influence-popup" role="tooltip" aria-hidden="true">
+  <div class="inf-popup-inner">
+    <div class="inf-popup-photo-placeholder" id="inf-placeholder">
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="18" r="8" stroke="white" stroke-width="2"/>
+        <path d="M6 40c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <img class="inf-popup-photo" id="inf-photo" src="" alt="" style="display:none">
+    <div class="inf-popup-body">
+      <div class="inf-popup-name" id="inf-name"></div>
+      <div class="inf-popup-genre" id="inf-genre"></div>
+      <div class="inf-popup-meta">
+        <div class="inf-popup-row"><strong>Origin</strong><span id="inf-origin"></span></div>
+        <div class="inf-popup-row"><strong>Known for</strong><span id="inf-known"></span></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1160,6 +1229,112 @@
       ctx.globalCompositeOperation = 'source-over';
       ctx.globalAlpha = 1;
     }, 50);
+  })();
+
+  /* Influence artist popups */
+  (function () {
+    var artistData = {
+      'Drake':        { origin: 'Toronto, Canada',      genre: 'Hip-hop · R&B · Pop rap',          known: 'Views · Take Care · Certified Lover Boy', wiki: 'Drake_(musician)' },
+      'Travis Scott': { origin: 'Houston, TX',           genre: 'Psychedelic trap · Hip-hop',        known: 'Astroworld · UTOPIA · Rodeo',              wiki: 'Travis_Scott' },
+      'Chief Keef':   { origin: 'Chicago, IL',           genre: 'Drill · Trap',                      known: 'Finally Rich · Almighty So',               wiki: 'Chief_Keef' },
+      'Lil Wayne':    { origin: 'New Orleans, LA',       genre: 'Hip-hop · Rap',                     known: 'Tha Carter series · No Ceilings',           wiki: 'Lil_Wayne' },
+      'Chris Brown':  { origin: 'Tappahannock, VA',      genre: 'R&B · Pop · Hip-hop',               known: 'Fortune · X · Indigo',                     wiki: 'Chris_Brown' },
+      'Playboi Carti':{ origin: 'Atlanta, GA',           genre: 'Mumble rap · Trap',                 known: 'Die Lit · Whole Lotta Red',                 wiki: 'Playboi_Carti' },
+      'Lil Uzi Vert': { origin: 'Philadelphia, PA',      genre: 'Alt-trap · Emo rap',                known: 'Luv Is Rage 2 · Eternal Atake · Pink Tape', wiki: 'Lil_Uzi_Vert' },
+      'Lil Tecca':    { origin: 'Queens, NY',            genre: 'Melodic trap · Hip-hop',            known: 'We Love You Tecca · 8 ✕ 10',               wiki: 'Lil_Tecca' },
+      'Don Toliver':  { origin: 'Houston, TX',           genre: 'R&B · Psychedelic soul · Trap',     known: 'Heaven or Hell · Life of a DON · Hardstone Psycho', wiki: 'Don_Toliver' },
+      'Young Thug':   { origin: 'Atlanta, GA',           genre: 'Trap · Melodic rap',                known: 'Slime Season · JEFFERY · PUNK',             wiki: 'Young_Thug' },
+      'The Ramones':  { origin: 'Queens, NY',            genre: 'Punk rock · Proto-punk',            known: 'Ramones · Rocket to Russia · Road to Ruin', wiki: 'Ramones' },
+      'Blondie':      { origin: 'New York, NY',          genre: 'New wave · Punk · Pop',             known: 'Parallel Lines · Heart of Glass · Call Me',  wiki: 'Blondie_(band)' }
+    };
+
+    var popup      = document.getElementById('influence-popup');
+    var photoEl    = document.getElementById('inf-photo');
+    var placeholder= document.getElementById('inf-placeholder');
+    var nameEl2    = document.getElementById('inf-name');
+    var genreEl    = document.getElementById('inf-genre');
+    var originEl   = document.getElementById('inf-origin');
+    var knownEl    = document.getElementById('inf-known');
+
+    var cache = {};
+    var hideTimer = null;
+    var currentArtist = null;
+
+    function positionPopup(clientX, clientY) {
+      var margin = 16;
+      var pw = popup.offsetWidth || 300;
+      var ph = popup.offsetHeight || 350;
+      var x = clientX + 24;
+      var y = clientY - ph / 2;
+      if (x + pw > window.innerWidth - margin) x = clientX - pw - 24;
+      if (y < margin) y = margin;
+      if (y + ph > window.innerHeight - margin) y = window.innerHeight - ph - margin;
+      popup.style.left = x + 'px';
+      popup.style.top  = y + 'px';
+    }
+
+    function showPhoto(src) {
+      if (!src) return;
+      photoEl.src = src;
+      photoEl.style.display = 'block';
+      placeholder.style.display = 'none';
+    }
+
+    function fetchPhoto(wikiKey, artist) {
+      if (cache[wikiKey] !== undefined) {
+        if (currentArtist === artist) showPhoto(cache[wikiKey]);
+        return;
+      }
+      cache[wikiKey] = null; /* mark in-flight so we don't double-fetch */
+      var url = 'https://en.wikipedia.org/w/api.php?action=query&titles='
+        + encodeURIComponent(wikiKey)
+        + '&prop=pageimages&format=json&pithumbsize=600&origin=*';
+      fetch(url)
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          var pages = j.query && j.query.pages;
+          if (!pages) return;
+          var page = pages[Object.keys(pages)[0]];
+          cache[wikiKey] = (page && page.thumbnail && page.thumbnail.source) ? page.thumbnail.source : null;
+          if (currentArtist === artist) showPhoto(cache[wikiKey]);
+        })
+        .catch(function () { /* cache[wikiKey] stays null */ });
+    }
+
+    document.querySelectorAll('.influence-name[data-artist]').forEach(function (el) {
+      el.addEventListener('mouseenter', function (e) {
+        clearTimeout(hideTimer);
+        var artist = el.dataset.artist;
+        var info   = artistData[artist];
+        if (!info) return;
+
+        currentArtist = artist;
+        nameEl2.textContent  = artist;
+        genreEl.textContent  = info.genre;
+        originEl.textContent = info.origin;
+        knownEl.textContent  = info.known;
+
+        photoEl.style.display = 'none';
+        photoEl.src = '';
+        placeholder.style.display = 'flex';
+
+        positionPopup(e.clientX, e.clientY);
+        popup.classList.add('visible');
+
+        fetchPhoto(info.wiki, artist);
+      });
+
+      el.addEventListener('mousemove', function (e) {
+        positionPopup(e.clientX, e.clientY);
+      });
+
+      el.addEventListener('mouseleave', function () {
+        hideTimer = setTimeout(function () {
+          popup.classList.remove('visible');
+          currentArtist = null;
+        }, 120);
+      });
+    });
   })();
 </script>
 </body>
