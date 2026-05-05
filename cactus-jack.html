@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cactus Jack Records — Label</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Modak&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red:    #C8171E;
+      --black:  #080808;
+      --dark:   #0d0d0d;
+      --panel:  #111111;
+      --white:  #f2f1ef;
+      --muted:  rgba(242,241,239,0.55);
+      --dim:    rgba(242,241,239,0.28);
+      --border: rgba(242,241,239,0.07);
+      --font-disp: 'Bebas Neue', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: 0 48px; height: 64px;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-right { justify-content: flex-end; }
+    .nav-left a, .nav-right a {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--dim);
+      transition: color 0.2s; position: relative;
+    }
+    .nav-left a::after, .nav-right a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--red);
+      transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--white); }
+    .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: var(--red); line-height: 1; }
+    .nav-ticket-btn {
+      font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important;
+      text-transform: uppercase; color: #fff !important; background: var(--red);
+      padding: 6px 14px; transition: opacity 0.22s, transform 0.22s !important; white-space: nowrap;
+    }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
+
+    /* ── HERO ── */
+    .hero {
+      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      min-height: 100dvh; padding-top: 64px;
+    }
+    .hero-copy {
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 80px 64px 76px; background: var(--black); position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.26em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: block;
+    }
+    .hero-title {
+      font-family: var(--font-disp);
+      font-size: clamp(62px, 9.5vw, 128px);
+      line-height: 0.88; letter-spacing: 0.02em; margin-bottom: 30px;
+      color: var(--white); position: relative;
+    }
+    .hero-sub {
+      font-size: 15px; line-height: 1.82; color: var(--muted);
+      max-width: 440px; margin-bottom: 44px;
+    }
+    .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
+    .hero-stat-val { font-family: var(--font-disp); font-size: 38px; color: var(--red); line-height: 1; }
+    .hero-stat-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-top: 4px; }
+    .hero-photo { position: relative; overflow: hidden; }
+    .hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .hero-photo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to left, transparent 50%, rgba(8,8,8,0.7) 100%);
+      pointer-events: none; z-index: 1;
+    }
+
+    /* ── INTRO BAND ── */
+    .intro-band {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .intro-item {
+      padding: 40px 48px; border-right: 1px solid var(--border);
+    }
+    .intro-item:last-child { border-right: none; }
+    .intro-item-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 10px; display: block;
+    }
+    .intro-item-val { font-family: var(--font-disp); font-size: 22px; letter-spacing: 0.04em; line-height: 1.15; }
+    .intro-item-sub { font-size: 12.5px; color: var(--muted); margin-top: 6px; line-height: 1.55; }
+
+    /* ── SECTION HEADER ── */
+    .sec-header {
+      padding: 80px 64px 52px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 24px;
+    }
+    .sec-header-left {}
+    .sec-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--red); margin-bottom: 16px; display: block;
+    }
+    .sec-title {
+      font-family: var(--font-disp);
+      font-size: clamp(48px, 6.5vw, 88px);
+      line-height: 0.9; letter-spacing: 0.02em;
+    }
+    .sec-count {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim);
+      white-space: nowrap; padding-bottom: 4px;
+    }
+
+    /* ── FOUNDER STRIP ── */
+    .founder-strip {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .founder-photo { position: relative; overflow: hidden; min-height: 420px; }
+    .founder-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 15%; }
+    .founder-copy {
+      padding: 72px 64px; background: var(--panel);
+      display: flex; flex-direction: column; justify-content: center; gap: 24px;
+    }
+    .founder-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--red);
+    }
+    .founder-name { font-family: var(--font-disp); font-size: clamp(52px, 7vw, 88px); line-height: 0.88; letter-spacing: 0.03em; }
+    .founder-role { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
+    .founder-body { font-size: 14.5px; line-height: 1.84; color: var(--muted); max-width: 460px; }
+    .founder-body strong { color: var(--white); font-weight: 600; }
+    .quote-block { border-left: 2px solid var(--red); padding: 4px 0 4px 22px; }
+    .quote-text { font-size: 15px; line-height: 1.75; color: var(--muted); font-style: italic; }
+    .quote-source { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(242,241,239,0.3); margin-top: 10px; display: block; }
+
+    /* ── ROSTER GRID ── */
+    .roster-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--border);
+    }
+    .artist-card {
+      padding: 48px 40px 44px; border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      cursor: pointer; transition: background 0.3s;
+    }
+    .artist-card:nth-child(3n) { border-right: none; }
+    .artist-card:hover { background: rgba(200,23,30,0.03); }
+    .artist-card-num {
+      font-family: var(--font-disp); font-size: 11px; letter-spacing: 0.22em;
+      color: var(--red); display: block; margin-bottom: 22px;
+    }
+    .artist-card-name {
+      font-family: var(--font-disp);
+      font-size: clamp(34px, 3.5vw, 50px);
+      letter-spacing: 0.03em; line-height: 0.92;
+      margin-bottom: 16px; color: var(--white);
+      transition: color 0.2s;
+    }
+    .artist-card:hover .artist-card-name { color: var(--red); }
+    .artist-card-status {
+      display: inline-block; font-size: 8.5px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 3px 10px; margin-bottom: 16px;
+      border: 1px solid var(--red); color: var(--red);
+    }
+    .artist-card-status.former {
+      border-color: rgba(242,241,239,0.15); color: var(--dim);
+    }
+    .artist-card-meta { font-size: 12px; color: var(--muted); line-height: 1.65; }
+    .artist-card-meta strong { color: var(--white); font-weight: 500; }
+    .artist-card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+    .artist-tag {
+      font-size: 8.5px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase;
+      padding: 4px 10px; border: 1px solid var(--border); color: var(--dim);
+    }
+    .artist-card-ghost {
+      position: absolute; bottom: -16px; right: -8px;
+      font-family: var(--font-disp); font-size: 120px;
+      color: rgba(242,241,239,0.02); line-height: 1;
+      pointer-events: none; user-select: none; letter-spacing: -0.04em;
+    }
+
+    /* ── ARTIST POPUP ── */
+    #artist-popup {
+      position: fixed; z-index: 9999; pointer-events: none;
+      opacity: 0; transform: translateY(10px) scale(0.96);
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      width: 300px;
+    }
+    #artist-popup.visible { opacity: 1; transform: translateY(0) scale(1); }
+    .ap-inner {
+      background: #161616; border: 1px solid rgba(242,241,239,0.11);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 28px 72px rgba(0,0,0,0.8), 0 4px 18px rgba(0,0,0,0.5);
+    }
+    .ap-photo-wrap { width: 100%; height: 200px; background: #1a1a1a; position: relative; overflow: hidden; }
+    .ap-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+    .ap-placeholder {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(160deg,#1e1e1e 0%,#111 100%);
+    }
+    .ap-body { padding: 16px 18px 20px; }
+    .ap-name { font-family: var(--font-disp); font-size: 26px; letter-spacing: 0.04em; color: #fff; margin-bottom: 2px; }
+    .ap-genre { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+    .ap-row { font-size: 11px; color: rgba(242,241,239,0.42); line-height: 1.5; margin-bottom: 4px; }
+    .ap-row strong { color: rgba(242,241,239,0.68); font-weight: 500; margin-right: 4px; }
+
+    /* ── JACKBOYS SECTION ── */
+    .jb-section { background: var(--dark); }
+    .jb-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); }
+    .jb-card {
+      padding: 64px; border-right: 1px solid var(--border); position: relative; overflow: hidden;
+      transition: background 0.3s;
+    }
+    .jb-card:last-child { border-right: none; }
+    .jb-card:hover { background: rgba(200,23,30,0.025); }
+    .jb-num {
+      font-family: var(--font-disp); font-size: 11px; letter-spacing: 0.22em; color: var(--red);
+      display: block; margin-bottom: 28px;
+    }
+    .jb-cover { width: 180px; height: 180px; object-fit: cover; margin-bottom: 28px; }
+    .jb-type { font-size: 9px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--red); display: block; margin-bottom: 10px; }
+    .jb-title { font-family: var(--font-disp); font-size: clamp(48px, 6vw, 78px); line-height: 0.86; letter-spacing: 0.02em; margin-bottom: 14px; }
+    .jb-date { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 18px; }
+    .jb-desc { font-size: 13.5px; line-height: 1.82; color: var(--muted); max-width: 420px; margin-bottom: 20px; }
+    .jb-peaks { display: flex; gap: 12px; flex-wrap: wrap; }
+    .jb-peak { border: 1px solid var(--border); padding: 10px 16px; }
+    .jb-peak-val { font-family: var(--font-disp); font-size: 22px; color: var(--red); line-height: 1; }
+    .jb-peak-label { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); margin-top: 3px; }
+    .jb-ghost {
+      position: absolute; bottom: -24px; right: -12px;
+      font-family: var(--font-disp); font-size: clamp(160px, 20vw, 240px);
+      color: rgba(242,241,239,0.022); line-height: 1;
+      pointer-events: none; user-select: none; letter-spacing: -0.04em;
+    }
+
+    /* ── DISCOGRAPHY TABLE ── */
+    .disco-table { width: 100%; border-collapse: collapse; }
+    .disco-table th {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--dim); padding: 14px 24px; border-bottom: 1px solid var(--border);
+      text-align: left; background: var(--dark);
+    }
+    .disco-table td {
+      padding: 16px 24px; border-bottom: 1px solid var(--border);
+      font-size: 12.5px; color: var(--muted); line-height: 1.5;
+      transition: background 0.2s;
+    }
+    .disco-table tr:hover td { background: rgba(200,23,30,0.018); }
+    .disco-table td:first-child { font-family: var(--font-disp); font-size: 15px; color: var(--white); }
+    .disco-table .td-chart { font-family: var(--font-disp); font-size: 18px; color: var(--red); }
+    .disco-table .td-cert { font-size: 11px; color: var(--red); letter-spacing: 0.06em; }
+    .disco-section { border-top: 1px solid var(--border); overflow-x: auto; }
+
+    /* ── BRAND GRID ── */
+    .brand-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); }
+    .brand-card {
+      padding: 44px 48px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden; transition: background 0.25s;
+    }
+    .brand-card:nth-child(3n) { border-right: none; }
+    .brand-card:hover { background: rgba(200,23,30,0.025); }
+    .brand-card-year { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--red); display: block; margin-bottom: 14px; }
+    .brand-card-name { font-family: var(--font-disp); font-size: 32px; letter-spacing: 0.04em; line-height: 1; margin-bottom: 12px; }
+    .brand-card-desc { font-size: 12.5px; color: var(--muted); line-height: 1.68; }
+
+    /* ── FORMER SECTION ── */
+    .former-grid { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--border); }
+    .former-card {
+      padding: 44px 56px; border-right: 1px solid var(--border);
+      opacity: 0.6; transition: opacity 0.25s, background 0.25s;
+    }
+    .former-card:last-child { border-right: none; }
+    .former-card:hover { opacity: 0.9; background: rgba(242,241,239,0.015); }
+    .former-label { font-size: 9px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); display: block; margin-bottom: 14px; }
+    .former-name { font-family: var(--font-disp); font-size: clamp(32px, 4vw, 52px); letter-spacing: 0.04em; margin-bottom: 10px; }
+    .former-desc { font-size: 12.5px; color: var(--muted); line-height: 1.65; }
+
+    /* ── FOOTER ── */
+    footer { padding: 72px 64px 48px; background: var(--black); border-top: 2px solid var(--red); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+    .footer-wordmark { font-family: 'Modak', cursive; font-size: 54px; color: var(--red); letter-spacing: 0.05em; }
+    .footer-tagline { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--red); }
+    .footer-bottom {
+      width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between;
+      font-size: 10px; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase;
+    }
+
+    /* ── REVEAL ── */
+    [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    [data-reveal].visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1100px) {
+      .roster-grid { grid-template-columns: repeat(2, 1fr); }
+      .artist-card:nth-child(3n) { border-right: 1px solid var(--border); }
+      .artist-card:nth-child(2n) { border-right: none; }
+      .brand-grid { grid-template-columns: repeat(2, 1fr); }
+      .brand-card:nth-child(3n) { border-right: 1px solid var(--border); }
+      .brand-card:nth-child(2n) { border-right: none; }
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-photo { min-height: 56vw; order: -1; }
+      .intro-band { grid-template-columns: repeat(2, 1fr); }
+      .intro-item { border-bottom: 1px solid var(--border); }
+      .founder-strip { grid-template-columns: 1fr; }
+      .founder-photo { min-height: 60vw; }
+      .jb-grid { grid-template-columns: 1fr; }
+      .jb-card:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .sec-header { padding: 56px 40px 36px; }
+    }
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-left, .nav-right { display: none; }
+      .hero-copy { padding: 48px 24px 44px; }
+      .intro-band { grid-template-columns: 1fr 1fr; }
+      .intro-item { padding: 28px 24px; }
+      .roster-grid { grid-template-columns: 1fr; }
+      .artist-card { border-right: none; }
+      .jb-card { padding: 40px 24px; }
+      .brand-grid { grid-template-columns: 1fr; }
+      .brand-card { border-right: none; }
+      .former-grid { grid-template-columns: 1fr; }
+      .former-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .sec-header { padding: 56px 24px 36px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .disco-table th, .disco-table td { padding: 12px 16px; }
+      footer { padding: 56px 24px 36px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <ul class="nav-left">
+    <li><a href="sofaygo.html">Home</a></li>
+    <li><a href="discography.html">Discography</a></li>
+  </ul>
+  <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="biography.html">About</a></li>
+    <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-copy">
+    <span class="hero-eyebrow">Est. January 10, 2017</span>
+    <h1 class="hero-title" id="hero-title">CACTUS<br>JACK<br>RECORDS</h1>
+    <p class="hero-sub">
+      Travis Scott's independent imprint, distributed through <strong style="color:var(--white)">Epic Records / Sony Music</strong>.
+      Built in Houston to launch new artists without the bullshit — six signees, two Billboard #1 compilations,
+      and a cultural footprint that extends far beyond music.
+    </p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">2017</div>
+        <div class="hero-stat-label">Founded</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">6</div>
+        <div class="hero-stat-label">Active Artists</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">2×</div>
+        <div class="hero-stat-label">Billboard #1</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">HTX</div>
+        <div class="hero-stat-label">Houston, TX</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Travis_Scott_-_Openair_Frauenfeld_2018_14.jpg/800px-Travis_Scott_-_Openair_Frauenfeld_2018_14.jpg"
+      alt="Travis Scott — Cactus Jack Records"
+      onerror="this.src='https://i.scdn.co/image/ab6761610000e5eb19c2790744c792d05570bb71';this.onerror=null;"
+    >
+  </div>
+</div>
+
+<!-- ── INTRO BAND ── -->
+<div class="intro-band" data-reveal>
+  <div class="intro-item">
+    <span class="intro-item-label">Founded</span>
+    <div class="intro-item-val">Jan 10, 2017</div>
+    <div class="intro-item-sub">Houston, TX<br>Travis Scott, founder</div>
+  </div>
+  <div class="intro-item">
+    <span class="intro-item-label">Distribution</span>
+    <div class="intro-item-val">Epic Records</div>
+    <div class="intro-item-sub">Sony Music Entertainment<br>Major distribution deal</div>
+  </div>
+  <div class="intro-item">
+    <span class="intro-item-label">Collective</span>
+    <div class="intro-item-val">JackBoys</div>
+    <div class="intro-item-sub">2× #1 compilations<br>2019 &amp; 2025</div>
+  </div>
+  <div class="intro-item">
+    <span class="intro-item-label">Publishing</span>
+    <div class="intro-item-val">CJ Publishing</div>
+    <div class="intro-item-sub">Cactus Jack Publishing<br>WondaGurl · Dougie F</div>
+  </div>
+</div>
+
+<!-- ── FOUNDER ── -->
+<div class="founder-strip" data-reveal>
+  <div class="founder-photo">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Travis_Scott_%28Utopia_Tour%29.jpg/600px-Travis_Scott_%28Utopia_Tour%29.jpg"
+      alt="Travis Scott"
+      onerror="this.src='https://i.scdn.co/image/ab6761610000e5eb19c2790744c792d05570bb71';this.onerror=null;"
+    >
+  </div>
+  <div class="founder-copy">
+    <span class="founder-label">Founder &amp; Creative Director</span>
+    <div class="founder-name">Travis<br>Scott</div>
+    <div class="founder-role">Jacques Berman Webster II · Houston, TX</div>
+    <p class="founder-body">
+      Born April 30, 1991 in Houston, Texas — <strong>Travis Scott</strong> launched Cactus Jack Records
+      on January 10, 2017, backed by a deal with Epic Records and prior relationships with
+      T.I.'s Grand Hustle and Kanye West's GOOD Music as a producer.
+    </p>
+    <p class="founder-body">
+      His mission was explicit: sign artists without the industry lies about budgets, release dates,
+      or creative control. Every decision at Cactus Jack reflects Houston's independent spirit
+      and Scott's obsession with full creative ownership.
+    </p>
+    <div class="quote-block">
+      <p class="quote-text">"I'm not doing it to have financial control over my music. I want first and foremost to help other artists, launch new names, to provide opportunities."</p>
+      <span class="quote-source">Travis Scott — Numéro Magazine</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── CURRENT ROSTER ── -->
+<div class="sec-header" data-reveal>
+  <div class="sec-header-left">
+    <span class="sec-label">Active Signees</span>
+    <h2 class="sec-title">Current<br>Roster</h2>
+  </div>
+  <span class="sec-count">6 Artists · 2017–Present</span>
+</div>
+
+<div class="roster-grid">
+
+  <!-- Travis Scott -->
+  <div class="artist-card" data-artist="Travis Scott" data-wiki="Travis_Scott" data-origin="Houston, TX" data-genre="Psychedelic Trap · Hip-Hop" data-role="Founder" data-signed="2017" data-key="Astroworld · Utopia · Rodeo">
+    <span class="artist-card-num">01</span>
+    <div class="artist-card-name">Travis Scott</div>
+    <span class="artist-card-status">Founder</span>
+    <p class="artist-card-meta">
+      <strong>Origin:</strong> Houston, TX<br>
+      <strong>Signed:</strong> 2017 (Founder)<br>
+      <strong>Key Release:</strong> Astroworld (2018), Utopia (2023)<br>
+      <strong>Chart Peak:</strong> #1 Billboard 200
+    </p>
+    <div class="artist-card-tags">
+      <span class="artist-tag">Psychedelic Trap</span>
+      <span class="artist-tag">Hip-Hop</span>
+      <span class="artist-tag">Houston</span>
+    </div>
+    <div class="artist-card-ghost">01</div>
+  </div>
+
+  <!-- Don Toliver -->
+  <div class="artist-card" data-artist="Don Toliver" data-wiki="Don_Toliver" data-origin="Houston, TX" data-genre="R&B · Psychedelic Soul · Trap" data-role="Artist" data-signed="2018" data-key="Heaven or Hell · Hardstone Psycho">
+    <span class="artist-card-num">02</span>
+    <div class="artist-card-name">Don Toliver</div>
+    <span class="artist-card-status">Current · Since 2018</span>
+    <p class="artist-card-meta">
+      <strong>Origin:</strong> Houston, TX<br>
+      <strong>Signed:</strong> 2018 · Atlantic Records joint deal<br>
+      <strong>Key Release:</strong> Hardstone Psycho (2024, #3)<br>
+      <strong>Latest:</strong> OCTANE (2026, #1)
+    </p>
+    <div class="artist-card-tags">
+      <span class="artist-tag">R&amp;B</span>
+      <span class="artist-tag">Psychedelic Soul</span>
+      <span class="artist-tag">Trap</span>
+    </div>
+    <div class="artist-card-ghost">02</div>
+  </div>
+
+  <!-- Sheck Wes -->
+  <div class="artist-card" data-artist="Sheck Wes" data-wiki="Sheck_Wes" data-origin="Harlem, NY" data-genre="Trap · Rap · Punk" data-role="Artist" data-signed="2018" data-key="Mo Bamba · Mudboy">
+    <span class="artist-card-num">03</span>
+    <div class="artist-card-name">Sheck Wes</div>
+    <span class="artist-card-status">Current · Since 2018</span>
+    <p class="artist-card-meta">
+      <strong>Origin:</strong> Harlem, NY<br>
+      <strong>Signed:</strong> 2018 · CJ / G.O.O.D. / Interscope<br>
+      <strong>Key Release:</strong> Mudboy (2018, #17 · Gold)<br>
+      <strong>Hit Single:</strong> Mo Bamba (#6 Hot 100, 3× Platinum)
+    </p>
+    <div class="artist-card-tags">
+      <span class="artist-tag">Trap</span>
+      <span class="artist-tag">Rap</span>
+      <span class="artist-tag">Harlem</span>
+    </div>
+    <div class="artist-card-ghost">03</div>
+  </div>
+
+  <!-- Chase B -->
+  <div class="artist-card" data-artist="Chase B" data-wiki="Chase_B" data-origin="Houston, TX" data-genre="DJ · Producer · Electronic" data-role="DJ / Producer" data-signed="2019" data-key="Be Very Afraid (2026)">
+    <span class="artist-card-num">04</span>
+    <div class="artist-card-name">Chase B</div>
+    <span class="artist-card-status">Current · Since 2019</span>
+    <p class="artist-card-meta">
+      <strong>Origin:</strong> Houston, TX<br>
+      <strong>Signed:</strong> 2019 · Columbia partnership<br>
+      <strong>Role:</strong> Travis Scott's touring DJ &amp; collaborator<br>
+      <strong>Latest:</strong> Be Very Afraid (2026)
+    </p>
+    <div class="artist-card-tags">
+      <span class="artist-tag">DJ</span>
+      <span class="artist-tag">Producer</span>
+      <span class="artist-tag">Houston</span>
+    </div>
+    <div class="artist-card-ghost">04</div>
+  </div>
+
+  <!-- SoFaygo -->
+  <div class="artist-card" data-artist="SoFaygo" data-wiki="SoFaygo" data-origin="Atlanta, GA" data-genre="Melodic Trap · Plugg · Rage" data-role="Artist" data-signed="2021" data-key="Pink Heartz · MANIA">
+    <span class="artist-card-num">05</span>
+    <div class="artist-card-name">SoFaygo</div>
+    <span class="artist-card-status">Current · Since 2021</span>
+    <p class="artist-card-meta">
+      <strong>Origin:</strong> Atlanta, GA (Cobb County)<br>
+      <strong>Signed:</strong> February 2021<br>
+      <strong>Key Release:</strong> Pink Heartz (2022) · MANIA (2025)<br>
+      <strong>Hit Single:</strong> Knock Knock (Platinum RIAA)
+    </p>
+    <div class="artist-card-tags">
+      <span class="artist-tag">Melodic Trap</span>
+      <span class="artist-tag">Plugg</span>
+      <span class="artist-tag">Atlanta</span>
+    </div>
+    <div class="artist-card-ghost">05</div>
+  </div>
+
+  <!-- Wallie the Sensei -->
+  <div class="artist-card" data-artist="Wallie the Sensei" data-wiki="Wallie_the_Sensei" data-origin="Compton, CA" data-genre="West Coast Rap · Street · R&B" data-role="Artist" data-signed="2025" data-key="JackBoys 2 (2025)">
+    <span class="artist-card-num">06</span>
+    <div class="artist-card-name">Wallie the Sensei</div>
+    <span class="artist-card-status">Current · Since 2025</span>
+    <p class="artist-card-meta">
+      <strong>Origin:</strong> Compton, CA<br>
+      <strong>Signed:</strong> April 2025 (newest signee)<br>
+      <strong>Co-sign:</strong> Kendrick Lamar (GNX, "Dodger Blue")<br>
+      <strong>Debut:</strong> JackBoys 2 (2025)
+    </p>
+    <div class="artist-card-tags">
+      <span class="artist-tag">West Coast</span>
+      <span class="artist-tag">Street Rap</span>
+      <span class="artist-tag">Compton</span>
+    </div>
+    <div class="artist-card-ghost">06</div>
+  </div>
+
+</div><!-- /.roster-grid -->
+
+<!-- ── ARTIST POPUP ── -->
+<div id="artist-popup" role="tooltip" aria-hidden="true">
+  <div class="ap-inner">
+    <div class="ap-photo-wrap">
+      <div class="ap-placeholder" id="ap-placeholder">
+        <svg width="44" height="44" viewBox="0 0 48 48" fill="none">
+          <circle cx="24" cy="18" r="8" stroke="rgba(242,241,239,0.2)" stroke-width="2"/>
+          <path d="M6 40c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="rgba(242,241,239,0.2)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <img class="ap-photo" id="ap-photo" src="" alt="" style="display:none">
+    </div>
+    <div class="ap-body">
+      <div class="ap-name" id="ap-name"></div>
+      <div class="ap-genre" id="ap-genre"></div>
+      <div class="ap-row"><strong>Origin</strong><span id="ap-origin"></span></div>
+      <div class="ap-row"><strong>Signed</strong><span id="ap-signed"></span></div>
+      <div class="ap-row"><strong>Known for</strong><span id="ap-key"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LUXURY TAX 50 NOTE ── -->
+<div style="padding: 24px 64px; background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <p style="font-size: 12px; color: var(--dim); letter-spacing: 0.04em;">
+    <strong style="color: rgba(242,241,239,0.5); font-size: 13px; font-family: var(--font-disp); letter-spacing: 0.08em;">Luxury Tax 50</strong>
+    &nbsp;—&nbsp; Also signed since 2019. Featured on the original JackBoys compilation ("GANG GANG"). Limited independent output; operating quietly within the collective framework.
+  </p>
+</div>
+
+<!-- ── JACKBOYS COMPILATIONS ── -->
+<div class="jb-section">
+  <div class="sec-header" data-reveal>
+    <div class="sec-header-left">
+      <span class="sec-label">The Collective</span>
+      <h2 class="sec-title">JackBoys</h2>
+    </div>
+    <span class="sec-count">2 Compilations · Both #1</span>
+  </div>
+  <div class="jb-grid">
+    <div class="jb-card" data-reveal>
+      <span class="jb-num">Vol. 01</span>
+      <img
+        src="https://i.scdn.co/image/ab67616d0000b273e52e18e9c61523c03e2d1ae8"
+        alt="JackBoys"
+        class="jb-cover"
+        onerror="this.style.background='#1a1a1a';this.style.display='block';"
+      >
+      <span class="jb-type">Compilation Album</span>
+      <h3 class="jb-title">JackBoys</h3>
+      <div class="jb-date">December 27, 2019 · Surprise Release</div>
+      <p class="jb-desc">
+        A surprise Christmas release featuring Travis Scott, Don Toliver, Sheck Wes, Chase B, and Luxury Tax 50.
+        Included "GANG GANG," "Had Enough," and the "HIGHEST IN THE ROOM Remix." First look at the full collective as a cohesive unit.
+      </p>
+      <div class="jb-peaks">
+        <div class="jb-peak"><div class="jb-peak-val">#1</div><div class="jb-peak-label">Billboard 200</div></div>
+        <div class="jb-peak"><div class="jb-peak-val">2019</div><div class="jb-peak-label">Released</div></div>
+      </div>
+      <div class="jb-ghost">01</div>
+    </div>
+    <div class="jb-card" data-reveal>
+      <span class="jb-num">Vol. 02</span>
+      <img
+        src="https://i.scdn.co/image/ab67616d0000b27321a7c6d6c5e9b44c0b9c5b4a"
+        alt="JackBoys 2"
+        class="jb-cover"
+        onerror="this.style.background='#1a1a1a';this.style.display='block';"
+      >
+      <span class="jb-type">Compilation Album</span>
+      <h3 class="jb-title">JackBoys 2</h3>
+      <div class="jb-date">July 13, 2025 · 17 Tracks</div>
+      <p class="jb-desc">
+        The long-awaited sequel. All label members represented — Travis, Don Toliver, Sheck Wes, SoFaygo, Wallie the Sensei.
+        Guests: 21 Savage, Playboi Carti, Future, GloRilla, Vybz Kartel, Tyla, and more.
+        Hosted by Houston legend Bun B throughout.
+      </p>
+      <div class="jb-peaks">
+        <div class="jb-peak"><div class="jb-peak-val">#1</div><div class="jb-peak-label">Billboard 200</div></div>
+        <div class="jb-peak"><div class="jb-peak-val">232K</div><div class="jb-peak-label">Week One Units</div></div>
+        <div class="jb-peak"><div class="jb-peak-val">2025</div><div class="jb-peak-label">Released</div></div>
+      </div>
+      <div class="jb-ghost">02</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── KEY DISCOGRAPHY ── -->
+<div class="sec-header" data-reveal>
+  <div class="sec-header-left">
+    <span class="sec-label">Label Output</span>
+    <h2 class="sec-title">Key<br>Releases</h2>
+  </div>
+  <span class="sec-count">13 Studio Albums Total</span>
+</div>
+<div class="disco-section" data-reveal>
+  <table class="disco-table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Artist</th>
+        <th>Year</th>
+        <th>Chart Peak</th>
+        <th>Certification</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Astroworld</td><td>Travis Scott</td><td>2018</td><td class="td-chart">#1</td><td class="td-cert">6× Platinum</td></tr>
+      <tr><td>Mudboy</td><td>Sheck Wes</td><td>2018</td><td class="td-chart">#17</td><td class="td-cert">Gold</td></tr>
+      <tr><td>JackBoys</td><td>JackBoys</td><td>2019</td><td class="td-chart">#1</td><td class="td-cert">—</td></tr>
+      <tr><td>Heaven or Hell</td><td>Don Toliver</td><td>2020</td><td class="td-chart">#7</td><td class="td-cert">Platinum</td></tr>
+      <tr><td>Life of a Don</td><td>Don Toliver</td><td>2021</td><td class="td-chart">#2</td><td class="td-cert">—</td></tr>
+      <tr><td>Pink Heartz</td><td>SoFaygo</td><td>2022</td><td class="td-chart">—</td><td class="td-cert">—</td></tr>
+      <tr><td>Love Sick</td><td>Don Toliver</td><td>2023</td><td class="td-chart">#8</td><td class="td-cert">Gold</td></tr>
+      <tr><td>Utopia</td><td>Travis Scott</td><td>2023</td><td class="td-chart">#1</td><td class="td-cert">2× Platinum</td></tr>
+      <tr><td>Hardstone Psycho</td><td>Don Toliver</td><td>2024</td><td class="td-chart">#3</td><td class="td-cert">Gold</td></tr>
+      <tr><td>MANIA</td><td>SoFaygo</td><td>2025</td><td class="td-chart">—</td><td class="td-cert">—</td></tr>
+      <tr><td>JackBoys 2</td><td>JackBoys</td><td>2025</td><td class="td-chart">#1</td><td class="td-cert">—</td></tr>
+      <tr><td>OCTANE</td><td>Don Toliver</td><td>2026</td><td class="td-chart">#1</td><td class="td-cert">—</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── BRAND EMPIRE ── -->
+<div class="sec-header" data-reveal>
+  <div class="sec-header-left">
+    <span class="sec-label">Cactus Jack Beyond Music</span>
+    <h2 class="sec-title">Brand<br>Empire</h2>
+  </div>
+  <span class="sec-count">6 Major Partnerships</span>
+</div>
+<div class="brand-grid" data-reveal>
+  <div class="brand-card">
+    <span class="brand-card-year">2017 — Ongoing</span>
+    <div class="brand-card-name">Nike / Jordan Brand</div>
+    <p class="brand-card-desc">The most coveted sneaker partnership in streetwear. Scott received his own signature Jordan silhouette — the Jumpman Jack — launching on his birthday, April 30, 2024. Multiple sold-out Air Jordan, Air Max, and Dunk collaborations over eight years.</p>
+  </div>
+  <div class="brand-card">
+    <span class="brand-card-year">2020</span>
+    <div class="brand-card-name">McDonald's</div>
+    <p class="brand-card-desc">The Travis Scott Meal — the first celebrity meal deal at McDonald's since Michael Jordan in 1992. A cultural phenomenon that sold out Quarter Pounders across the U.S. and crashed the McDonald's app.</p>
+  </div>
+  <div class="brand-card">
+    <span class="brand-card-year">2021</span>
+    <div class="brand-card-name">Christian Dior</div>
+    <p class="brand-card-desc">Debuted at Paris Men's Fashion Week, June 2021. The first time Dior partnered with a musician on a full menswear collection — and the first time the Dior logo was permitted to be altered. A landmark in fashion history.</p>
+  </div>
+  <div class="brand-card">
+    <span class="brand-card-year">2021</span>
+    <div class="brand-card-name">Cactus Farm</div>
+    <p class="brand-card-desc">A licensed cannabis cultivation venture launched under the Cactus Jack brand — Scott extending his creative identity into wellness and lifestyle verticals.</p>
+  </div>
+  <div class="brand-card">
+    <span class="brand-card-year">2023</span>
+    <div class="brand-card-name">A24 Films</div>
+    <p class="brand-card-desc">Partnership with prestige studio A24 to release <em>Circus Maximus</em>, a visual companion film to the Utopia album era — Travis bringing his cinematic vision into feature-length form.</p>
+  </div>
+  <div class="brand-card">
+    <span class="brand-card-year">2024</span>
+    <div class="brand-card-name">Jordan Jumpman Jack</div>
+    <p class="brand-card-desc">Travis Scott's first fully owned signature sneaker silhouette — the Jumpman Jack TR. Launched April 30, 2024, on his 33rd birthday. A milestone marking his transition from collaborator to signature athlete.</p>
+  </div>
+</div>
+
+<!-- ── FORMER ARTISTS ── -->
+<div class="sec-header" data-reveal style="background: var(--dark);">
+  <div class="sec-header-left">
+    <span class="sec-label">Past Signees</span>
+    <h2 class="sec-title" style="opacity:0.55">Former<br>Roster</h2>
+  </div>
+  <span class="sec-count">2 Departed Artists</span>
+</div>
+<div class="former-grid" style="background: var(--dark);" data-reveal>
+  <div class="former-card">
+    <span class="former-label">Former · 2017–2019</span>
+    <div class="former-name">Smokepurpp</div>
+    <p class="former-desc">
+      Florida rapper and early Cactus Jack signee. His departure in 2019 was self-directed — Smokepurpp publicly clarified that Travis Scott did not drop him; he chose to pursue opportunities through Interscope and Alamo Records. Creative direction differences were reported as the catalyst.
+    </p>
+  </div>
+  <div class="former-card">
+    <span class="former-label">Former · Brief 2021</span>
+    <div class="former-name">Malu Trevejo</div>
+    <p class="former-desc">
+      Cuban singer and social media personality who announced a signing, then departed within weeks. The exit was surrounded by public controversy and allegations that the deal had been "staged" — claims she denied. She later cited personal life changes, maintained a positive relationship with Scott, and moved on.
+    </p>
+  </div>
+</div>
+
+<!-- ── PUBLISHING ── -->
+<div style="padding: 64px; background: var(--panel); border-top: 1px solid var(--border);" data-reveal>
+  <span class="sec-label">In-House</span>
+  <h3 style="font-family: var(--font-disp); font-size: clamp(36px,4vw,54px); letter-spacing: 0.03em; margin-bottom: 36px; line-height: 0.92;">Cactus Jack Publishing</h3>
+  <div style="display: grid; grid-template-columns: repeat(2,1fr); gap: 32px; max-width: 700px;">
+    <div>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:10px;">Producer</span>
+      <div style="font-family:var(--font-disp);font-size:26px;letter-spacing:0.04em;margin-bottom:6px;">WondaGurl</div>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.6;">Canadian producer (Ebony Oshunrinde). Sony Music Publishing joint deal (2020). Credits: Jay-Z, Drake, Rihanna, Travis Scott.</p>
+    </div>
+    <div>
+      <span style="font-size:9px;font-weight:700;letter-spacing:0.22em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:10px;">Songwriter</span>
+      <div style="font-family:var(--font-disp);font-size:26px;letter-spacing:0.04em;margin-bottom:6px;">Dougie F</div>
+      <p style="font-size:12.5px;color:var(--muted);line-height:1.6;">In-house songwriter. Warner Chappell / STRAGG joint deal (2020). Core contributor to the Cactus Jack sound.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Cactus Jack Records · Est. 2017 · Houston, TX</div>
+    <div class="footer-links">
+      <a href="sofaygo.html">Home</a>
+      <a href="biography.html">Biography</a>
+      <a href="discography.html">Discography</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records · Epic Records · Sony Music</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Scroll reveal ── */
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.07 }
+  );
+  document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+  /* ── Paint-brush on hero title ── */
+  (function () {
+    var nameEl = document.getElementById('hero-title');
+    var copyEl = document.querySelector('.hero-copy');
+    if (!nameEl || !copyEl) return;
+    copyEl.style.position = 'relative';
+    var cv = document.createElement('canvas');
+    cv.style.cssText = 'position:absolute;left:0;top:0;z-index:10;pointer-events:none;';
+    copyEl.appendChild(cv);
+    var ctx = cv.getContext('2d');
+    var maskCv = document.createElement('canvas'), mctx = maskCv.getContext('2d');
+    var tmpCv  = document.createElement('canvas'), tctx = tmpCv.getContext('2d');
+    var maskReady = false;
+
+    function buildMask() {
+      maskReady = false;
+      maskCv.width = cv.width; maskCv.height = cv.height;
+      tmpCv.width  = cv.width; tmpCv.height  = cv.height;
+      mctx.clearRect(0, 0, maskCv.width, maskCv.height);
+      var cs = window.getComputedStyle(nameEl);
+      var cr = copyEl.getBoundingClientRect();
+      var size = parseFloat(cs.fontSize);
+      mctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      mctx.fillStyle = 'white'; mctx.textBaseline = 'top'; mctx.textAlign = 'left';
+      var walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT, null, false), node;
+      while ((node = walker.nextNode())) {
+        var text = node.nodeValue;
+        if (!text.trim()) continue;
+        for (var k = 0; k < text.length; k++) {
+          var ch = text[k]; if (ch === ' ') continue;
+          var rng = document.createRange();
+          rng.setStart(node, k); rng.setEnd(node, k + 1);
+          var r = rng.getBoundingClientRect();
+          if (r.width < 1) continue;
+          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + (r.height - size) / 2 + 7);
+        }
+      }
+      maskReady = true;
+    }
+
+    function place() { cv.width = copyEl.offsetWidth; cv.height = copyEl.offsetHeight; buildMask(); }
+    document.fonts.ready.then(function () { setTimeout(place, 200); });
+    window.addEventListener('resize', place);
+
+    var prevX = null, prevY = null;
+    nameEl.style.cursor = 'crosshair';
+    copyEl.addEventListener('mousemove', function (e) {
+      if (!cv.width || !maskReady) return;
+      var rect = copyEl.getBoundingClientRect();
+      var x = e.clientX - rect.left, y = e.clientY - rect.top;
+      var dx = prevX !== null ? x - prevX : 1, dy = prevY !== null ? y - prevY : 0;
+      prevX = x; prevY = y;
+      var speed = Math.sqrt(dx * dx + dy * dy) || 1;
+      var ax = dx / speed, ay = dy / speed, px = -ay, py = ax;
+      var brushHalf = 28, bristles = 22, strokeLen = Math.min(speed * 1.4 + 10, 30);
+      tctx.clearRect(0, 0, tmpCv.width, tmpCv.height); tctx.lineCap = 'round';
+      for (var i = 0; i < bristles; i++) {
+        var t = (i / (bristles - 1) - 0.5) * 2;
+        var spread = t * brushHalf + (Math.random() - 0.5) * 5;
+        var bx = x + px * spread, by = y + py * spread;
+        var half = strokeLen * (Math.random() * 0.4 + 0.6) * 0.5;
+        tctx.globalAlpha = Math.random() * 0.45 + 0.5;
+        tctx.strokeStyle = '#C8171E'; tctx.lineWidth = Math.random() * 3 + 2;
+        tctx.beginPath(); tctx.moveTo(bx - ax * half, by - ay * half);
+        tctx.lineTo(bx + ax * half, by + ay * half); tctx.stroke();
+      }
+      tctx.globalAlpha = 1; tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(maskCv, 0, 0); tctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(tmpCv, 0, 0);
+    });
+    copyEl.addEventListener('mouseleave', function () { prevX = null; prevY = null; });
+    setInterval(function () {
+      ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 0.010;
+      ctx.fillRect(0, 0, cv.width, cv.height);
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
+    }, 50);
+  })();
+
+  /* ── Artist card hover popups ── */
+  (function () {
+    var popup    = document.getElementById('artist-popup');
+    var photoEl  = document.getElementById('ap-photo');
+    var pholder  = document.getElementById('ap-placeholder');
+    var nameEl   = document.getElementById('ap-name');
+    var genreEl  = document.getElementById('ap-genre');
+    var originEl = document.getElementById('ap-origin');
+    var signedEl = document.getElementById('ap-signed');
+    var keyEl    = document.getElementById('ap-key');
+
+    var cache = {}, hideTimer = null, currentArtist = null;
+
+    function pos(cx, cy) {
+      var margin = 16, pw = popup.offsetWidth || 300, ph = popup.offsetHeight || 340;
+      var x = cx + 24, y = cy - ph / 2;
+      if (x + pw > window.innerWidth - margin) x = cx - pw - 24;
+      if (y < margin) y = margin;
+      if (y + ph > window.innerHeight - margin) y = window.innerHeight - ph - margin;
+      popup.style.left = x + 'px'; popup.style.top = y + 'px';
+    }
+
+    function showPhoto(src) {
+      if (!src) return;
+      photoEl.src = src;
+      photoEl.style.display = 'block';
+      pholder.style.display = 'none';
+    }
+
+    function fetchPhoto(wikiKey, artist) {
+      if (cache[wikiKey] !== undefined) {
+        if (currentArtist === artist) showPhoto(cache[wikiKey]);
+        return;
+      }
+      cache[wikiKey] = null;
+      fetch('https://en.wikipedia.org/w/api.php?action=query&titles=' + encodeURIComponent(wikiKey) + '&prop=pageimages&format=json&pithumbsize=600&origin=*')
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          var pages = j.query && j.query.pages;
+          if (!pages) return;
+          var page = pages[Object.keys(pages)[0]];
+          cache[wikiKey] = (page && page.thumbnail && page.thumbnail.source) ? page.thumbnail.source : null;
+          if (currentArtist === artist) showPhoto(cache[wikiKey]);
+        })
+        .catch(function () {});
+    }
+
+    document.querySelectorAll('.artist-card[data-artist]').forEach(function (card) {
+      card.addEventListener('mouseenter', function (e) {
+        clearTimeout(hideTimer);
+        currentArtist = card.dataset.artist;
+        nameEl.textContent   = card.dataset.artist;
+        genreEl.textContent  = card.dataset.genre;
+        originEl.textContent = card.dataset.origin;
+        signedEl.textContent = card.dataset.signed;
+        keyEl.textContent    = card.dataset.key;
+        photoEl.style.display = 'none'; photoEl.src = '';
+        pholder.style.display = 'flex';
+        pos(e.clientX, e.clientY);
+        popup.classList.add('visible');
+        if (card.dataset.wiki) fetchPhoto(card.dataset.wiki, currentArtist);
+      });
+      card.addEventListener('mousemove', function (e) { pos(e.clientX, e.clientY); });
+      card.addEventListener('mouseleave', function () {
+        hideTimer = setTimeout(function () { popup.classList.remove('visible'); currentArtist = null; }, 120);
+      });
+    });
+  })();
+</script>
+</body>
+</html>
