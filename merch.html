@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoFaygo — Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Modak&display=swap" rel="stylesheet">
+  <style>
+    /* ── Design Tokens ─────────────────────────── */
+    :root {
+      --pink:       #C8171E;
+      --pink-dim:   #9E1218;
+      --black:      #080808;
+      --dark:       #0c0c0c;
+      --panel:      #161616;
+      --white:      #F8F8F6;
+      --muted:      rgba(248,248,246,0.68);
+      --border:     rgba(255,255,255,0.07);
+      --border-mid: rgba(255,255,255,0.13);
+      --font-disp:  'Bebas Neue', sans-serif;
+      --font-body:  'Inter', sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ── Reset ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+
+    /* ── Grain overlay ──────────────────────────── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9990;
+      pointer-events: none;
+      opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* ── Custom scrollbar ───────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.11); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── Selection ──────────────────────────────── */
+    ::selection { background: rgba(255,255,255,0.14); color: var(--white); }
+
+    /* ── NAV ───────────────────────────────────── */
+    nav {
+      position: fixed;
+      inset-block-start: 0;
+      inset-inline: 0;
+      z-index: 200;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(8,8,8,0.80);
+      backdrop-filter: blur(22px) saturate(1.5);
+      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-right { justify-content: flex-end; }
+    .nav-left a, .nav-right a {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.48);
+      transition: color 0.22s;
+      position: relative;
+    }
+    .nav-left a::after, .nav-right a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--pink);
+      transition: width 0.32s var(--ease);
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--white); }
+    .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-logo {
+      text-align: center;
+      font-family: 'Modak', cursive;
+      font-size: 34px;
+      letter-spacing: 0.03em;
+      color: var(--pink);
+      line-height: 1;
+    }
+    .nav-ticket-btn {
+      font-size: 10px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.18em !important;
+      text-transform: uppercase;
+      color: #fff !important;
+      background: var(--pink);
+      padding: 6px 14px;
+      transition: opacity 0.22s, transform 0.22s !important;
+      white-space: nowrap;
+    }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
+
+    /* ── HERO ──────────────────────────────────── */
+    .store-hero {
+      display: grid;
+      grid-template-columns: 1.12fr 0.88fr;
+      min-height: 100dvh;
+      padding-top: 64px;
+    }
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 80px 64px 76px;
+      background: var(--black);
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.45;
+      flex-shrink: 0;
+    }
+    .hero-title {
+      font-family: var(--font-disp);
+      font-size: clamp(80px, 11vw, 148px);
+      line-height: 0.88;
+      letter-spacing: -0.01em;
+      color: var(--white);
+    }
+    .hero-sub {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.3);
+      margin-top: 18px;
+      margin-bottom: 32px;
+    }
+    .hero-divider {
+      width: 36px;
+      height: 1px;
+      background: var(--pink);
+      margin-bottom: 32px;
+      opacity: 0.55;
+    }
+    .hero-tagline {
+      font-size: 13px;
+      line-height: 1.95;
+      color: rgba(248,248,246,0.48);
+      max-width: 340px;
+      font-weight: 300;
+      margin-bottom: 48px;
+      letter-spacing: 0.01em;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 22px;
+      font-family: var(--font-body);
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.28s var(--ease), opacity 0.2s;
+    }
+    .btn-pink { background: var(--pink); color: var(--white); }
+    .btn-pink:hover { transform: translateY(-2px); opacity: 0.88; }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border-mid);
+    }
+    .btn-outline:hover {
+      border-color: var(--pink);
+      color: var(--pink);
+      transform: translateY(-2px);
+    }
+    .hero-photo {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 60% 15%;
+    }
+    .hero-photo::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(8,8,8,0.65) 0%, transparent 55%),
+        linear-gradient(to top, rgba(8,8,8,0.55) 0%, transparent 35%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-stat {
+      position: absolute;
+      bottom: 40px;
+      right: 36px;
+      z-index: 2;
+      text-align: right;
+    }
+    .hero-stat-number {
+      font-family: var(--font-disp);
+      font-size: 52px;
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: 0.04em;
+    }
+    .hero-stat-label {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.35);
+      margin-top: 5px;
+    }
+
+    /* ── FILTER BAR ─────────────────────────────── */
+    .filter-bar {
+      position: sticky;
+      top: 64px;
+      z-index: 100;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 64px;
+      height: 52px;
+      gap: 24px;
+    }
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .filter-pill {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border: 1px solid var(--border-mid);
+      background: transparent;
+      color: rgba(248,248,246,0.38);
+      cursor: pointer;
+      font-family: var(--font-body);
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .filter-pill:hover {
+      color: var(--white);
+      border-color: rgba(255,255,255,0.25);
+    }
+    .filter-pill.active {
+      background: var(--pink);
+      color: var(--white);
+      border-color: var(--pink);
+    }
+    .sort-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: transparent;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(248,248,246,0.3)' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      border: 1px solid var(--border-mid);
+      color: rgba(248,248,246,0.38);
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 5px 28px 5px 12px;
+      cursor: pointer;
+      transition: color 0.18s, border-color 0.18s;
+    }
+    .sort-select:hover { color: var(--white); border-color: rgba(255,255,255,0.25); }
+    .sort-select:focus { outline: none; color: var(--white); }
+    .sort-select option { background: #161616; color: var(--white); }
+
+    /* ── COLLECTION ─────────────────────────────── */
+    #collection {
+      padding: 80px 64px 0;
+    }
+    .collection-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 44px;
+    }
+    .collection-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--pink);
+      white-space: nowrap;
+    }
+    .collection-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border-mid);
+    }
+    .collection-count {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.25);
+      white-space: nowrap;
+    }
+
+    /* ── PRODUCT GRID ───────────────────────────── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      grid-template-rows: 58vh 44vh;
+      gap: 2px;
+    }
+
+    .product-card {
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .product-card--featured { grid-row: 1 / 3; }
+    .product-card[style*="display: none"] { display: none !important; }
+
+    /* 3D flip scene */
+    .card-scene {
+      position: absolute;
+      inset: 0;
+      perspective: 1200px;
+      transition: transform 0.65s var(--ease);
+    }
+    .product-card:hover .card-scene { transform: scale(1.025); }
+
+    .card-flipper {
+      position: absolute;
+      inset: 0;
+      transform-style: preserve-3d;
+      transition: transform 0.72s var(--ease);
+    }
+    .product-card:hover .card-flipper,
+    .product-card.tapped .card-flipper { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: var(--dark);
+    }
+    .card-face img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .card-face--back { transform: rotateY(180deg); }
+
+    .card-badge {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      z-index: 5;
+      font-size: 7.5px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--pink);
+      border: 1px solid rgba(200,23,30,0.35);
+      padding: 4px 9px;
+      pointer-events: none;
+    }
+    .card-flip-hint {
+      position: absolute;
+      bottom: 92px;
+      right: 20px;
+      z-index: 5;
+      font-size: 7.5px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.18);
+      pointer-events: none;
+      transition: opacity 0.28s;
+    }
+    .product-card:hover .card-flip-hint { opacity: 0; }
+
+    .card-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 4;
+      padding: 72px 24px 24px;
+      background: linear-gradient(to top, rgba(8,8,8,0.97) 0%, rgba(8,8,8,0.52) 52%, transparent 100%);
+      pointer-events: none;
+    }
+    .card-idx {
+      font-size: 8.5px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      color: var(--pink);
+      display: block;
+      margin-bottom: 7px;
+    }
+    .card-name {
+      font-family: var(--font-disp);
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+    .product-card--featured .card-name { font-size: 32px; }
+    .card-price {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.28);
+    }
+
+    /* ── COMING SOON ────────────────────────────── */
+    #coming-soon {
+      margin-top: 2px;
+      position: relative;
+      background: var(--dark);
+      padding: 96px 64px;
+      overflow: hidden;
+    }
+    #coming-soon::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(255,255,255,0.013) 3px,
+        rgba(255,255,255,0.013) 4px
+      );
+      z-index: 0;
+    }
+    .coming-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .coming-eyebrow {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .coming-eyebrow::before {
+      content: '';
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.45;
+      flex-shrink: 0;
+    }
+    .coming-title {
+      font-family: var(--font-disp);
+      font-size: clamp(64px, 8vw, 112px);
+      line-height: 0.88;
+      color: var(--white);
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+    .coming-note {
+      font-size: 11.5px;
+      line-height: 1.85;
+      color: rgba(248,248,246,0.34);
+      letter-spacing: 0.04em;
+      font-style: italic;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-bottom: 40px;
+    }
+    .countdown-unit {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      padding: 24px 12px 18px;
+      text-align: center;
+    }
+    .countdown-number {
+      font-family: var(--font-disp);
+      font-size: clamp(38px, 4vw, 58px);
+      line-height: 1;
+      color: var(--white);
+      letter-spacing: 0.03em;
+      display: block;
+    }
+    .countdown-label {
+      font-size: 7.5px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.28);
+      display: block;
+      margin-top: 8px;
+    }
+
+    .notify-form {
+      display: flex;
+    }
+    .notify-input {
+      flex: 1;
+      min-width: 0;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-mid);
+      border-right: none;
+      color: var(--white);
+      font-family: var(--font-body);
+      font-size: 11px;
+      padding: 11px 16px;
+      letter-spacing: 0.03em;
+      outline: none;
+      transition: border-color 0.22s;
+    }
+    .notify-input::placeholder { color: rgba(248,248,246,0.22); }
+    .notify-input:focus { border-color: var(--pink); }
+    .notify-btn {
+      background: var(--pink);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      padding: 11px 18px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      flex-shrink: 0;
+    }
+    .notify-btn:hover { opacity: 0.84; }
+    .notify-note {
+      font-size: 9px;
+      color: rgba(248,248,246,0.22);
+      letter-spacing: 0.08em;
+      margin-top: 12px;
+    }
+    .notify-success {
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.38);
+      margin-top: 12px;
+      display: none;
+    }
+
+    /* ── SIZE GUIDE ─────────────────────────────── */
+    #size-guide {
+      padding: 96px 64px;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .size-eyebrow {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .size-eyebrow::before {
+      content: '';
+      display: block;
+      width: 18px;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.45;
+    }
+    .size-title {
+      font-family: var(--font-disp);
+      font-size: clamp(40px, 4vw, 64px);
+      color: var(--white);
+      line-height: 0.9;
+      margin-bottom: 28px;
+      letter-spacing: 0.02em;
+    }
+    .size-body {
+      font-size: 12.5px;
+      line-height: 1.95;
+      color: rgba(248,248,246,0.46);
+      font-weight: 300;
+    }
+    .size-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .size-table th {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.3);
+      text-align: left;
+      padding: 0 0 14px;
+      border-bottom: 1px solid var(--border-mid);
+    }
+    .size-table th + th { padding-left: 20px; }
+    .size-table td {
+      font-size: 11.5px;
+      color: rgba(248,248,246,0.6);
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.02em;
+    }
+    .size-table td + td { padding-left: 20px; }
+    .size-table td:first-child {
+      font-weight: 600;
+      color: var(--white);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .size-table tr:last-child td { border-bottom: none; }
+
+    /* ── FOOTER ─────────────────────────────────── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 72px 64px 48px;
+    }
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+    .footer-wordmark {
+      font-family: 'Modak', cursive;
+      font-size: 44px;
+      color: var(--pink);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+    .footer-tagline {
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.26);
+    }
+    .social-row {
+      display: flex;
+      gap: 8px;
+    }
+    .social-btn {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(248,248,246,0.32);
+      border: 1px solid var(--border);
+      padding: 7px 13px;
+      transition: color 0.22s, border-color 0.22s;
+    }
+    .social-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.22); }
+    .footer-bottom {
+      display: flex;
+      gap: 40px;
+      font-size: 8.5px;
+      letter-spacing: 0.16em;
+      color: rgba(248,248,246,0.18);
+      text-transform: uppercase;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 1100px) {
+      .product-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 52vw 52vw;
+      }
+      .product-card--featured { grid-row: 1 / 3; grid-column: 1 / 3; }
+      .coming-inner { grid-template-columns: 1fr; gap: 52px; }
+      #size-guide { grid-template-columns: 1fr; gap: 48px; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-left { gap: 20px; }
+      .nav-right { gap: 16px; }
+      .store-hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 55vw;
+      }
+      .hero-copy {
+        padding: 52px 24px 52px;
+        justify-content: flex-start;
+      }
+      .filter-bar { padding: 0 24px; gap: 16px; }
+      .filter-pills { gap: 4px; }
+      #collection { padding: 52px 24px 0; }
+      .product-grid {
+        grid-template-columns: 1fr;
+        grid-template-rows: 80vw 64vw 64vw;
+      }
+      .product-card--featured { grid-row: auto; grid-column: auto; }
+      .product-card--featured .card-name { font-size: 24px; }
+      #coming-soon { padding: 64px 24px; }
+      .countdown { grid-template-columns: repeat(2, 1fr); }
+      #size-guide { padding: 64px 24px; }
+      footer { padding: 52px 24px 40px; }
+      .footer-bottom { flex-direction: column; align-items: center; gap: 10px; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .filter-pill { font-size: 8px; padding: 4px 9px; }
+      .notify-form { flex-direction: column; }
+      .notify-input { border-right: 1px solid var(--border-mid); border-bottom: none; }
+      .notify-btn { padding: 11px; }
+      .social-row { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────────────────── -->
+<nav>
+  <ul class="nav-left">
+    <li><a href="biography.html">About</a></li>
+    <li><a href="discography.html">Discography</a></li>
+  </ul>
+  <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
+    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ──────────────────────────────────────── -->
+<section class="store-hero">
+  <div class="hero-copy">
+    <span class="hero-eyebrow">Official Store</span>
+    <h1 class="hero-title">Merch</h1>
+    <p class="hero-sub">Mania Collection</p>
+    <div class="hero-divider"></div>
+    <p class="hero-tagline">Limited runs. No reprints. Every piece drops once and disappears. Wear the era.</p>
+    <div class="hero-actions">
+      <a href="#collection" class="btn btn-pink">Shop Now</a>
+      <a href="https://imsofaygo.com" target="_blank" rel="noopener" class="btn btn-outline">imsofaygo.com ↗</a>
+    </div>
+  </div>
+  <div class="hero-photo">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Sofaygo_-_Rolling_Loud_2022_%285_of_25%29_%2852221024861%29.jpg/800px-Sofaygo_-_Rolling_Loud_2022_%285_of_25%29_%2852221024861%29.jpg"
+      alt="SoFaygo performing live at Rolling Loud 2022"
+    >
+    <div class="hero-stat">
+      <div class="hero-stat-number">3</div>
+      <div class="hero-stat-label">Pieces · Mania Era</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FILTER BAR ─────────────────────────────────── -->
+<div class="filter-bar">
+  <div class="filter-pills">
+    <button class="filter-pill active" data-filter="all">All (3)</button>
+    <button class="filter-pill" data-filter="hoodie">Hoodies (1)</button>
+    <button class="filter-pill" data-filter="tee">Tees (1)</button>
+    <button class="filter-pill" data-filter="bottom">Bottoms (1)</button>
+  </div>
+  <select class="sort-select" aria-label="Sort products">
+    <option value="newest">Newest</option>
+    <option value="price-asc">Price: Low to High</option>
+    <option value="price-desc">Price: High to Low</option>
+  </select>
+</div>
+
+<!-- ── COLLECTION ─────────────────────────────────── -->
+<section id="collection">
+  <div class="collection-header">
+    <span class="collection-label">Mania Collection · 2024</span>
+    <div class="collection-rule"></div>
+    <span class="collection-count" id="result-count">3 Items</span>
+  </div>
+
+  <div class="product-grid" id="product-grid">
+
+    <!-- 01 — Mania Skull Hoodie (featured) -->
+    <div class="product-card product-card--featured" data-category="hoodie" data-price="75" data-idx="1">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img
+              src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462"
+              alt="Mania Skull Hoodie, front view"
+            >
+          </div>
+          <div class="card-face card-face--back">
+            <img
+              src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462"
+              alt="Mania Skull Hoodie, back view"
+            >
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Sold Out</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">01</span>
+        <div class="card-name">Mania Skull Hoodie</div>
+        <div class="card-price">$75.00 · Sold Out</div>
+      </div>
+    </div>
+
+    <!-- 02 — Mania Gothic Tee -->
+    <div class="product-card" data-category="tee" data-price="35" data-idx="2">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img
+              src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912"
+              alt="Mania Gothic Tee, front view"
+            >
+          </div>
+          <div class="card-face card-face--back">
+            <img
+              src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915"
+              alt="Mania Gothic Tee, back view"
+            >
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Sold Out</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">02</span>
+        <div class="card-name">Mania Gothic Tee</div>
+        <div class="card-price">$35.00 · Sold Out</div>
+      </div>
+    </div>
+
+    <!-- 03 — Hardcore Sweatpants -->
+    <div class="product-card" data-category="bottom" data-price="75" data-idx="3">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img
+              src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133"
+              alt="Hardcore Sweatpants, front view"
+            >
+          </div>
+          <div class="card-face card-face--back">
+            <img
+              src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133"
+              alt="Hardcore Sweatpants, back view"
+            >
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Sold Out</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">03</span>
+        <div class="card-name">Hardcore Sweatpants</div>
+        <div class="card-price">$75.00 · Sold Out</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── NEXT DROP ──────────────────────────────────── -->
+<section id="coming-soon">
+  <div class="coming-inner">
+    <div class="coming-left">
+      <span class="coming-eyebrow">Next Drop</span>
+      <h2 class="coming-title">Coming<br>Soon</h2>
+      <p class="coming-note">Limited quantities.<br>No restocks. One run, then gone.</p>
+    </div>
+    <div class="coming-right">
+      <div class="countdown" id="countdown">
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-days">--</span>
+          <span class="countdown-label">Days</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-hours">--</span>
+          <span class="countdown-label">Hours</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-mins">--</span>
+          <span class="countdown-label">Mins</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="cd-secs">--</span>
+          <span class="countdown-label">Secs</span>
+        </div>
+      </div>
+      <form class="notify-form" id="notify-form">
+        <input
+          type="email"
+          class="notify-input"
+          id="notify-email"
+          placeholder="your@email.com"
+          required
+          aria-label="Email address for drop notification"
+        >
+        <button type="submit" class="notify-btn">Notify Me</button>
+      </form>
+      <p class="notify-note">No spam. Drop notification only.</p>
+      <p class="notify-success" id="notify-success">You're on the list.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── SIZE GUIDE ─────────────────────────────────── -->
+<section id="size-guide">
+  <div class="size-copy">
+    <span class="size-eyebrow">Size Guide</span>
+    <h2 class="size-title">Fit<br>Notes</h2>
+    <p class="size-body">All Mania Collection pieces run true to size with a relaxed cut. Hoodies fit roomy through the chest and shoulders. Tees sit slightly shorter than standard. Between sizes — size up. All measurements in inches.</p>
+  </div>
+  <div>
+    <table class="size-table">
+      <thead>
+        <tr>
+          <th>Size</th>
+          <th>Chest</th>
+          <th>Shoulder</th>
+          <th>Body Length</th>
+          <th>Sleeve</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>XS</td><td>36"</td><td>16.5"</td><td>26"</td><td>23.5"</td></tr>
+        <tr><td>S</td><td>38"</td><td>17.5"</td><td>27"</td><td>24.5"</td></tr>
+        <tr><td>M</td><td>40"</td><td>18.5"</td><td>28"</td><td>25.5"</td></tr>
+        <tr><td>L</td><td>42"</td><td>19.5"</td><td>29"</td><td>26.5"</td></tr>
+        <tr><td>XL</td><td>44"</td><td>20.5"</td><td>30"</td><td>27.5"</td></tr>
+        <tr><td>2XL</td><td>46"</td><td>21.5"</td><td>31"</td><td>28.5"</td></tr>
+        <tr><td>3XL</td><td>48"</td><td>22.5"</td><td>32"</td><td>29.5"</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Atlanta · Cactus Jack Records</div>
+    <div class="social-row">
+      <a href="#" class="social-btn" title="Instagram">IG</a>
+      <a href="#" class="social-btn" title="Twitter / X">X</a>
+      <a href="#" class="social-btn" title="Spotify">SP</a>
+      <a href="#" class="social-btn" title="YouTube">YT</a>
+      <a href="#" class="social-btn" title="Apple Music">AM</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── Countdown timer ─────────────────────────── */
+  const DROP_DATE = new Date('2025-09-01T00:00:00');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const diff = DROP_DATE - Date.now();
+    if (diff <= 0) {
+      document.getElementById('cd-days').textContent  = '00';
+      document.getElementById('cd-hours').textContent = '00';
+      document.getElementById('cd-mins').textContent  = '00';
+      document.getElementById('cd-secs').textContent  = '00';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000)  / 60000);
+    const s = Math.floor((diff % 60000)    / 1000);
+    document.getElementById('cd-days').textContent  = pad(d);
+    document.getElementById('cd-hours').textContent = pad(h);
+    document.getElementById('cd-mins').textContent  = pad(m);
+    document.getElementById('cd-secs').textContent  = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  /* ── Filter pills ────────────────────────────── */
+  const pills   = document.querySelectorAll('.filter-pill');
+  const cards   = Array.from(document.querySelectorAll('.product-card'));
+  const countEl = document.getElementById('result-count');
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', function () {
+      pills.forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+
+      const filter = this.dataset.filter;
+      let visible = 0;
+
+      cards.forEach(card => {
+        const show = filter === 'all' || card.dataset.category === filter;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      countEl.textContent = visible + (visible === 1 ? ' Item' : ' Items');
+    });
+  });
+
+  /* ── Sort select ─────────────────────────────── */
+  document.querySelector('.sort-select').addEventListener('change', function () {
+    const val  = this.value;
+    const grid = document.getElementById('product-grid');
+
+    const sorted = cards.slice().sort((a, b) => {
+      if (val === 'price-asc')  return +a.dataset.price - +b.dataset.price;
+      if (val === 'price-desc') return +b.dataset.price - +a.dataset.price;
+      return +a.dataset.idx - +b.dataset.idx;
+    });
+
+    sorted.forEach(c => grid.appendChild(c));
+  });
+
+  /* ── Tap-to-flip (mobile / touch) ───────────── */
+  cards.forEach(card => {
+    card.addEventListener('click', function () {
+      this.classList.toggle('tapped');
+    });
+  });
+
+  /* ── Notify me form ──────────────────────────── */
+  document.getElementById('notify-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const input = document.getElementById('notify-email');
+    const btn   = this.querySelector('.notify-btn');
+    const succ  = document.getElementById('notify-success');
+
+    btn.textContent       = 'Signed Up';
+    btn.style.background  = 'rgba(255,255,255,0.06)';
+    btn.style.color       = 'rgba(248,248,246,0.35)';
+    input.value           = '';
+    input.disabled        = true;
+    btn.disabled          = true;
+    succ.style.display    = 'block';
+  });
+</script>
+</body>
+</html>
