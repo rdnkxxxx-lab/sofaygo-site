@@ -6,245 +6,313 @@
   <title>SoFaygo — Discography</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Modak&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Modak&display=swap" rel="stylesheet">
   <style>
     :root {
-      --pink:      #FFFFFF;
-      --pink-dim:  #CCCCCC;
-      --black:     #080808;
-      --dark:      #101010;
-      --panel:     #141414;
-      --white:     #FFFFFF;
-      --off-white: #0f0f0f;
-      --muted:     rgba(255,255,255,0.55);
-      --border:    rgba(255,255,255,0.07);
+      --red:    #C8171E;
+      --black:  #080808;
+      --dark:   #0d0d0d;
+      --panel:  #121212;
+      --white:  #f2f1ef;
+      --muted:  rgba(242,241,239,0.52);
+      --dim:    rgba(242,241,239,0.26);
+      --border: rgba(242,241,239,0.07);
       --font-disp: 'Bebas Neue', sans-serif;
       --font-body: 'Inter', sans-serif;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; }
     a { text-decoration: none; color: inherit; }
-    img { display: block; width: 100%; height: 100%; object-fit: cover; }
-
-    .label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--pink); margin-bottom: 18px; display: block; }
-    .divider-pink { width: 36px; height: 2px; background: var(--pink); margin: 28px 0; }
+    img { display: block; }
 
     /* ── NAV ── */
     nav {
       position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       padding: 0 48px; height: 64px;
-      background: rgba(8,8,8,0.80);
-      backdrop-filter: blur(22px) saturate(1.5);
-      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
       border-bottom: 1px solid var(--border);
     }
-    .nav-left, .nav-right { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
     .nav-right { justify-content: flex-end; }
     .nav-left a, .nav-right a {
       font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
-      text-transform: uppercase; color: rgba(255,255,255,0.48);
-      transition: color 0.22s; position: relative;
+      text-transform: uppercase; color: var(--dim);
+      transition: color 0.2s; position: relative;
     }
     .nav-left a::after, .nav-right a::after {
       content: ''; position: absolute; bottom: -4px; left: 0;
-      width: 0; height: 1px; background: #C8171E;
-      transition: width 0.32s cubic-bezier(0.22,1,0.36,1);
+      width: 0; height: 1px; background: var(--red);
+      transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
     }
     .nav-left a:hover, .nav-right a:hover { color: var(--white); }
     .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
-    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: #C8171E; line-height: 1; }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: var(--red); line-height: 1; }
+    .nav-ticket-btn {
+      font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important;
+      text-transform: uppercase; color: #fff !important; background: var(--red);
+      padding: 6px 14px; transition: opacity 0.22s, transform 0.22s !important; white-space: nowrap;
+    }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
 
-    /* ── THEME SWITCHER ── */
-    .mode-switcher { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
-    .mode-btn { padding: 5px 10px; background: transparent; color: rgba(255,255,255,0.35); border: none; font-family: var(--font-body); font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; white-space: nowrap; transition: background 0.2s, color 0.2s; }
-    .mode-btn.active { background: var(--pink); color: var(--black); }
-    body.pink-mode .mode-btn.active { color: var(--white); }
-    .mode-btn:not(.active):hover { color: rgba(255,255,255,0.7); }
-
-    /* ── PINK MODE ── */
-    body.pink-mode { --pink: #FF1493; --pink-dim: #c0106f; --off-white: #F5F4F2; }
-
-    /* ── PAGE HEADER ── */
-    .page-header { padding-top: 64px; background: var(--black); border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; min-height: 100dvh; }
-    .page-header-copy { padding: 96px 64px; display: flex; flex-direction: column; justify-content: flex-end; }
-    .page-header-photo { position: relative; overflow: hidden; }
-    .page-header-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .page-title { font-family: var(--font-disp); font-size: clamp(80px, 10vw, 148px); line-height: 0.88; letter-spacing: 0.02em; }
-    .page-subtitle { font-size: 14px; color: var(--muted); margin-top: 32px; max-width: 480px; line-height: 1.8; }
-
-    /* ── SECTION LABELS ── */
-    .section-title { font-family: var(--font-disp); font-size: clamp(48px, 6vw, 80px); line-height: 1; letter-spacing: 0.02em; }
-    .section-count { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
-
-    /* ── CINEMA PANEL SYSTEM ── */
-    .rp-section { border-top: 1px solid var(--border); }
-    .rp-section-header { padding: 100px 72px 56px; display: flex; align-items: baseline; justify-content: space-between; }
-    .rp-alt { background: var(--off-white); }
-
-    .release-panel {
+    /* ── HERO ── */
+    .hero {
+      padding-top: 64px;
+      min-height: 100dvh;
+      position: relative;
       display: grid;
-      grid-template-columns: 56% 44%;
-      min-height: 780px;
+      grid-template-rows: 1fr auto;
+    }
+    .hero-copy {
+      position: relative; z-index: 1;
+      display: flex; flex-direction: column; justify-content: flex-end; gap: 36px;
+      padding: 72px 72px 56px;
+      max-width: 680px;
+    }
+    .hero-title {
+      font-family: var(--font-disp);
+      font-size: clamp(110px, 16vw, 200px);
+      line-height: 0.83;
+      letter-spacing: 0.01em;
+      color: var(--white);
+      position: relative;
+    }
+    .hero-stats {
+      display: flex; gap: 48px; align-items: flex-end;
+    }
+    .hero-stat-val {
+      font-family: var(--font-disp); font-size: 36px; color: var(--red); line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--dim); margin-top: 4px;
+    }
+    .hero-photo {
+      position: absolute; inset: 0; overflow: hidden;
+    }
+    .hero-photo::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(8,8,8,0.96) 0%,
+        rgba(8,8,8,0.82) 38%,
+        rgba(8,8,8,0.28) 65%,
+        rgba(8,8,8,0.08) 100%
+      );
+    }
+    .hero-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: 60% top;
+    }
+
+    /* ── FILMSTRIP ── */
+    .filmstrip-bar {
+      grid-row: 2;
+      position: relative; z-index: 1;
       border-top: 1px solid var(--border);
-      position: relative;
+      display: flex; align-items: stretch;
+      background: rgba(8,8,8,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 0 72px;
     }
-    .release-panel.rp-reverse { grid-template-columns: 44% 56%; }
-
-    .panel-cover { position: relative; overflow: hidden; }
-    .panel-cover img {
-      position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    .filmstrip-spine {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase;
+      color: var(--dim); writing-mode: vertical-rl; transform: rotate(180deg);
+      padding: 20px 0; margin-right: 28px; flex-shrink: 0; display: flex; align-items: center;
     }
-    .release-panel:hover .panel-cover img { transform: scale(1.04); }
+    .filmstrip {
+      display: flex; gap: 10px; padding: 18px 0;
+      overflow-x: auto; flex: 1; scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .filmstrip::-webkit-scrollbar { display: none; }
+    .strip-item {
+      flex-shrink: 0; display: flex; flex-direction: column; gap: 7px;
+      opacity: 0.65; transition: opacity 0.2s;
+    }
+    .strip-item:hover { opacity: 1; }
+    .strip-cover { width: 80px; height: 80px; object-fit: cover; }
+    .strip-num {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.14em; color: var(--dim);
+      text-align: center;
+    }
 
-    .rp-reverse .panel-cover { order: 2; }
-    .rp-reverse .panel-content { order: 1; }
-
-    .panel-content {
-      padding: 80px 72px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
+    /* ── CAT HEADER ── */
+    .cat-header {
+      border-top: 2px solid var(--red);
+      padding: 36px 72px 30px;
+      display: flex; align-items: baseline; justify-content: space-between; gap: 24px;
       background: var(--black);
     }
-    .rp-alt .panel-content { background: var(--off-white); }
-
-    /* ghost index watermark */
-    .panel-idx {
-      position: absolute;
-      bottom: -56px;
-      right: -16px;
-      font-family: var(--font-disp);
-      font-size: 340px;
-      line-height: 1;
-      color: var(--white);
-      opacity: 0.027;
-      pointer-events: none;
-      user-select: none;
-      letter-spacing: -0.04em;
+    .cat-type {
+      font-family: var(--font-disp); font-size: clamp(44px, 5.5vw, 68px);
+      letter-spacing: 0.03em; line-height: 1;
     }
-    .rp-reverse .panel-idx { right: auto; left: -16px; }
+    .cat-count {
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim);
+      white-space: nowrap; padding-bottom: 6px;
+    }
 
-    .panel-type { font-size: 9px; font-weight: 700; letter-spacing: 0.26em; text-transform: uppercase; color: var(--pink); margin-bottom: 20px; display: block; }
-    .panel-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
-    .panel-title { font-family: var(--font-disp); font-size: clamp(64px, 8vw, 104px); line-height: 0.88; letter-spacing: 0.02em; }
-    .panel-year { font-size: 12px; color: var(--muted); letter-spacing: 0.08em; margin-bottom: 28px; }
-    .panel-desc { font-size: 13.5px; line-height: 1.85; color: var(--muted); max-width: 440px; margin-bottom: 32px; }
+    /* ── RELEASE ITEM ── */
+    .release-item {
+      display: grid;
+      grid-template-columns: 48px 310px 1fr;
+      gap: 0 52px;
+      padding: 68px 72px;
+      border-top: 1px solid var(--border);
+      position: relative; overflow: hidden;
+      transition: background 0.35s;
+    }
+    .release-item.alt { background: var(--dark); }
+    .release-item:hover { background: rgba(200,23,30,0.022); }
+
+    .release-ghost {
+      position: absolute; bottom: -24px; right: 44px;
+      font-family: var(--font-disp);
+      font-size: clamp(160px, 20vw, 260px);
+      line-height: 1; color: rgba(242,241,239,0.026);
+      pointer-events: none; user-select: none; letter-spacing: -0.04em; z-index: 0;
+    }
+
+    .release-num-col {
+      display: flex; align-items: flex-start; padding-top: 6px; position: relative; z-index: 1;
+    }
+    .release-num {
+      font-family: var(--font-disp); font-size: 12px; letter-spacing: 0.22em;
+      color: var(--red); writing-mode: vertical-rl; transform: rotate(180deg);
+    }
+
+    .release-cover-col { position: relative; z-index: 1; }
+    .release-cover-wrap { position: sticky; top: 84px; }
+    .release-cover-img {
+      width: 100%; max-width: 310px; aspect-ratio: 1; object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .release-item:hover .release-cover-img { transform: scale(1.03); }
+    .release-stream-row { margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .stream-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 9px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--dim); border: 1px solid var(--border); padding: 5px 10px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .stream-link:hover { color: var(--white); border-color: rgba(242,241,239,0.22); }
+    .sc-dot { width: 16px; height: 16px; border-radius: 50%; background: #ff5500; display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 800; color: #fff; flex-shrink: 0; }
+
+    .release-body { min-width: 0; position: relative; z-index: 1; }
+    .release-type {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); display: block; margin-bottom: 10px;
+    }
+    .release-title {
+      font-family: var(--font-disp); font-size: clamp(60px, 7.5vw, 100px);
+      line-height: 0.86; letter-spacing: 0.02em; margin-bottom: 14px;
+    }
+    .release-year { font-size: 11px; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 22px; }
+    .release-desc { font-size: 13.5px; line-height: 1.84; color: var(--muted); max-width: 460px; margin-bottom: 22px; }
+    .release-ratings { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 26px; }
+    .rating-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border: 1px solid var(--border); }
+    .rc-src { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--dim); }
+    .rc-val { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--red); }
 
     /* ── TRACKLIST ── */
-    .tracklist-label { font-size: 10px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 14px; display: block; }
-    .tracklist { list-style: none; }
-    .track-row { display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.055); }
+    .tl-toggle {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-body); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--dim); padding: 0; margin-bottom: 0;
+      display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+    }
+    .tl-toggle:hover { color: var(--white); }
+    .tl-toggle-icon {
+      width: 18px; height: 18px; border: 1px solid var(--red);
+      position: relative; flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    .tl-toggle-icon::before,
+    .tl-toggle-icon::after {
+      content: ''; position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: var(--red);
+    }
+    .tl-toggle-icon::before { width: 8px; height: 1.5px; }
+    .tl-toggle-icon::after  { width: 1.5px; height: 8px; }
+    .tl-toggle.open .tl-toggle-icon { transform: rotate(45deg); }
+    .tracklist {
+      list-style: none; overflow: hidden;
+      max-height: 0; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+      margin-top: 0;
+    }
+    .tracklist.open { max-height: 9999px; margin-top: 18px; }
+    .track-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid rgba(242,241,239,0.05);
+    }
     .track-left { display: flex; align-items: center; gap: 14px; }
-    .track-idx { font-size: 11px; color: rgba(255,255,255,0.25); width: 22px; flex-shrink: 0; }
-    .track-title { font-size: 13px; color: rgba(255,255,255,0.75); }
-    .track-feat { font-size: 11px; color: rgba(255,255,255,0.3); margin-left: 6px; }
-    .track-dur { font-size: 11px; color: rgba(255,255,255,0.28); letter-spacing: 0.06em; }
-
-    /* ── RATING CHIPS ── */
-    .rating-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-    .rating-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border: 1px solid rgba(255,255,255,0.1); border-radius: 2px; }
-    .rc-src { font-size: 8px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
-    .rc-val { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; color: var(--pink); }
-
-    /* ── STREAMING LOGOS ── */
-    .spotify-logo-link { display: flex; align-items: center; flex-shrink: 0; margin-top: 6px; opacity: 0.85; transition: opacity 0.2s, transform 0.2s; }
-    .spotify-logo-link:hover { opacity: 1; transform: scale(1.08); }
-    .sc-logo-link { display: flex; align-items: center; flex-shrink: 0; margin-top: 6px; opacity: 0.85; transition: opacity 0.2s, transform 0.2s; }
-    .sc-logo-link:hover { opacity: 1; transform: scale(1.08); }
-    .sc-badge { width: 44px; height: 44px; background: #ff5500; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-weight: 800; font-family: var(--font-body); }
-
-    /* ── FILL COLORS ── */
-    .fill-a { background: #1a1228; }
-    .fill-b { background: #0d1a1a; }
-    .fill-c { background: #1a0d1a; }
-    .fill-d { background: #0a0a18; }
-    .fill-e { background: #1a1010; }
-    .fill-f { background: #0f0f0f; }
-    .fill-g { background: #121218; }
-    .fill-h { background: #180d0a; }
+    .track-idx { font-size: 10px; color: var(--dim); width: 20px; flex-shrink: 0; }
+    .track-title { font-size: 12.5px; color: rgba(242,241,239,0.72); }
+    .track-feat { font-size: 10.5px; color: var(--dim); margin-left: 5px; }
+    .track-dur { font-size: 10.5px; color: var(--dim); letter-spacing: 0.06em; }
 
     /* ── FOOTER ── */
-    footer { padding: 72px 64px 48px; background: var(--black); border-top: 1px solid var(--border); }
-    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 28px; }
-    .footer-wordmark { font-family: var(--font-disp); font-size: 56px; color: var(--pink); letter-spacing: 0.05em; }
-    .footer-tagline { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
-    .social-row { display: flex; gap: 12px; }
-    .social-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; color: rgba(255,255,255,0.45); transition: border-color 0.2s, color 0.2s, background 0.2s; }
-    .social-btn:hover { border-color: var(--pink); color: var(--pink); background: rgba(255,20,147,0.08); }
-    .footer-bottom { width: 100%; padding-top: 28px; margin-top: 12px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10.5px; letter-spacing: 0.1em; color: rgba(255,255,255,0.2); text-transform: uppercase; }
+    footer { padding: 72px 64px 48px; background: var(--black); border-top: 2px solid var(--red); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+    .footer-wordmark { font-family: 'Modak', cursive; font-size: 54px; color: var(--red); letter-spacing: 0.05em; }
+    .footer-tagline { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim); }
+    .social-row { display: flex; gap: 10px; }
+    .social-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: var(--dim);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .social-btn:hover { border-color: var(--red); color: var(--red); }
+    .footer-bottom {
+      width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between;
+      font-size: 10px; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase;
+    }
 
-    /* ── SCROLL REVEAL ── */
-    [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    /* ── REVEAL ── */
+    [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
     [data-reveal].visible { opacity: 1; transform: translateY(0); }
 
-    /* ── PINK MODE: rp-alt overrides ── */
-    body.pink-mode .rp-alt .panel-content { background: var(--off-white); }
-    body.pink-mode .rp-alt .panel-title { color: var(--black); }
-    body.pink-mode .rp-alt .section-title { color: var(--black); }
-    body.pink-mode .rp-alt .section-count { color: rgba(0,0,0,0.4); }
-    body.pink-mode .rp-alt .panel-year,
-    body.pink-mode .rp-alt .panel-desc { color: rgba(0,0,0,0.55); }
-    body.pink-mode .rp-alt .panel-type { color: var(--pink); }
-    body.pink-mode .rp-alt .panel-idx { color: var(--black); opacity: 0.04; }
-    body.pink-mode .rp-alt .tracklist-label { color: rgba(0,0,0,0.3); }
-    body.pink-mode .rp-alt .track-title { color: rgba(0,0,0,0.72); }
-    body.pink-mode .rp-alt .track-idx,
-    body.pink-mode .rp-alt .track-feat,
-    body.pink-mode .rp-alt .track-dur { color: rgba(0,0,0,0.28); }
-    body.pink-mode .rp-alt .track-row { border-bottom-color: rgba(0,0,0,0.05); }
-    body.pink-mode .rp-alt .rating-chip { border-color: rgba(0,0,0,0.1); }
-    body.pink-mode .rp-alt .rc-src { color: rgba(0,0,0,0.3); }
-    body.pink-mode .rp-alt .rc-val { color: var(--pink); }
-
-    /* ── LIQUID GLASS ── */
-    .liquid-glass { position: relative; overflow: hidden; border-radius: 9999px !important; background: rgba(255,255,255,0.04) !important; border: 1px solid rgba(255,255,255,0.22) !important; color: rgba(255,255,255,0.9) !important; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); box-shadow: 0 2px 10px rgba(0,0,0,0.14); transition: transform 0.3s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease; }
-    .liquid-glass::before { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: inset 1px 1px 1px -0.5px rgba(255,255,255,0.55), inset -1px -1px 1px -0.5px rgba(255,255,255,0.5), inset 0 0 8px 3px rgba(255,255,255,0.08), inset 0 0 2px 1px rgba(255,255,255,0.05); }
-    .liquid-glass:hover { transform: scale(1.05); background: rgba(255,255,255,0.08) !important; border-color: rgba(255,255,255,0.4) !important; box-shadow: 0 4px 18px rgba(0,0,0,0.18); }
-    .liquid-glass:active { transform: scale(0.97); }
-    body.pink-mode .liquid-glass { background: rgba(255,20,147,0.04) !important; border-color: rgba(255,20,147,0.4) !important; color: #FF1493 !important; box-shadow: 0 2px 10px rgba(255,20,147,0.1); }
-    body.pink-mode .liquid-glass::before { box-shadow: inset 1px 1px 1px -0.5px rgba(255,20,147,0.4), inset -1px -1px 1px -0.5px rgba(255,20,147,0.38), inset 0 0 8px 3px rgba(255,20,147,0.07), inset 0 0 2px 1px rgba(255,20,147,0.04); }
-    body.pink-mode .liquid-glass:hover { background: rgba(255,20,147,0.08) !important; border-color: rgba(255,20,147,0.68) !important; box-shadow: 0 4px 18px rgba(255,20,147,0.16); }
-
     /* ── RESPONSIVE ── */
-    @media (max-width: 960px) {
-      .release-panel,
-      .release-panel.rp-reverse { grid-template-columns: 1fr; min-height: unset; }
-      .panel-cover { min-height: 72vw; }
-      .rp-reverse .panel-cover,
-      .rp-reverse .panel-content { order: unset; }
-      .panel-content { padding: 52px 36px; }
-      .panel-idx { font-size: 200px; bottom: -32px; right: -12px; }
-      .rp-section-header { padding: 64px 36px 40px; }
+    @media (max-width: 1024px) {
+      .release-item { grid-template-columns: 40px 260px 1fr; gap: 0 36px; padding: 56px 48px; }
     }
-    @media (max-width: 768px) {
-      .page-header { grid-template-columns: 1fr; }
-      .page-header-photo { min-height: 55vw; }
-      .page-header-copy { padding: 64px 24px; }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-copy { padding: 48px 40px 40px; max-width: 100%; }
+      .filmstrip-bar { padding: 0 40px; }
+      .cat-header { padding: 28px 40px 24px; }
+      .release-item { grid-template-columns: 36px 1fr; grid-template-rows: auto auto; padding: 48px 40px; gap: 0 28px; }
+      .release-cover-col { grid-column: 2; grid-row: 1; margin-bottom: 32px; }
+      .release-cover-img { max-width: 240px; }
+      .release-body { grid-column: 2; grid-row: 2; }
+      .release-num-col { grid-row: 1 / 3; }
     }
     @media (max-width: 640px) {
       nav { padding: 0 20px; }
       .nav-left, .nav-right { display: none; }
+      .hero-copy { padding: 40px 24px 36px; }
+      .filmstrip-bar { padding: 0 24px; }
+      .cat-header { padding: 24px 24px 20px; }
+      .release-item { grid-template-columns: 1fr; padding: 40px 24px; gap: 24px 0; }
+      .release-num-col { display: none; }
+      .release-cover-img { max-width: 200px; }
+      .release-ghost { display: none; }
       footer { padding: 56px 24px 36px; }
       .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
     }
   </style>
 </head>
 <body>
-
-<svg id="liquid-glass-svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-  <defs>
-    <filter id="lg-filter" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.065 0.065" numOctaves="1" seed="2" result="noise"/>
-      <feGaussianBlur in="noise" stdDeviation="1.5" result="blurredNoise"/>
-      <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
-      <feGaussianBlur in="displaced" stdDeviation="3"/>
-    </filter>
-  </defs>
-</svg>
 
 <nav>
   <ul class="nav-left">
@@ -255,357 +323,463 @@
   <ul class="nav-right">
     <li><a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank">Stream</a></li>
     <li><a href="sofaygo.html#cactus">Label</a></li>
-    <li>
-      <div class="mode-switcher">
-        <button class="mode-btn" id="btn-black">Go+</button>
-        <button class="mode-btn" id="btn-pink">Pink Heartz</button>
-      </div>
-    </li>
+    <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
   </ul>
 </nav>
 
-<div class="page-header">
-  <div class="page-header-copy" data-reveal>
-    <span class="label">Andre Dontrel Burt Jr.</span>
-    <h1 class="page-title">Disco<br>graphy</h1>
-    <div class="divider-pink"></div>
-    <p class="page-subtitle">Every project from Atlanta's SoFaygo — from early SoundCloud tapes to Cactus Jack releases. Six years of melodic trap, raw vulnerability, and relentless artistry.</p>
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-copy">
+    <h1 class="hero-title" id="hero-title">DISCO<br>GRAPHY</h1>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-val">9</div>
+        <div class="hero-stat-label">Projects</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">2019</div>
+        <div class="hero-stat-label">First Release</div>
+      </div>
+      <div>
+        <div class="hero-stat-val">ATL</div>
+        <div class="hero-stat-label">Cactus Jack</div>
+      </div>
+    </div>
   </div>
-  <div class="page-header-photo">
-    <img src="https://i.pinimg.com/1200x/3b/68/34/3b6834afadd00e5a366de7d64e505577.jpg" alt="SoFaygo">
+  <div class="hero-photo">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/SoFaygo_%28cropped%29.jpg" alt="SoFaygo">
+  </div>
+
+  <!-- Filmstrip — full width, pinned to bottom of hero grid -->
+  <div class="filmstrip-bar">
+    <span class="filmstrip-spine">Complete Catalog</span>
+    <div class="filmstrip">
+      <a href="#release-01" class="strip-item">
+        <img src="https://i.scdn.co/image/ab67616d0000b273f5d35bf91a2b5f0009b010d4" alt="Pink Heartz" class="strip-cover">
+        <span class="strip-num">01</span>
+      </a>
+      <a href="#release-02" class="strip-item">
+        <img src="https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f6/51/fa/f651fa73-f439-230d-7285-bbd97eddad99/artwork.jpg/3000x3000bb.jpg" alt="Angelic 7" class="strip-cover">
+        <span class="strip-num">02</span>
+      </a>
+      <a href="#release-03" class="strip-item">
+        <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me" class="strip-cover">
+        <span class="strip-num">03</span>
+      </a>
+      <a href="#release-04" class="strip-item">
+        <img src="https://i.scdn.co/image/ab67616d0000b2737ae48cc47bca5d26ea71f547" alt="War" class="strip-cover">
+        <span class="strip-num">04</span>
+      </a>
+      <a href="#release-05" class="strip-item">
+        <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania" class="strip-cover">
+        <span class="strip-num">05</span>
+      </a>
+      <a href="#release-06" class="strip-item">
+        <img src="https://i.scdn.co/image/ab67616d0000b273cde9e3ad8134941008b201d6" alt="B4Pink" class="strip-cover">
+        <span class="strip-num">06</span>
+      </a>
+      <a href="#release-07" class="strip-item">
+        <img src="https://i1.sndcdn.com/artworks-UGx3cEpG8Ks2tcXk-rsOvNQ-t500x500.jpg" alt="Babyjack" class="strip-cover">
+        <span class="strip-num">07</span>
+      </a>
+      <a href="#release-08" class="strip-item">
+        <img src="https://i.scdn.co/image/ab67616d0000b273cdd5a49fd68603b5413931e7" alt="GO+" class="strip-cover">
+        <span class="strip-num">08</span>
+      </a>
+      <a href="#release-09" class="strip-item">
+        <img src="https://i1.sndcdn.com/artworks-ZvG3wVlIbujz0iXD-pf41GA-t500x500.jpg" alt="Pressure" class="strip-cover">
+        <span class="strip-num">09</span>
+      </a>
+    </div>
   </div>
 </div>
 
-<!-- ── STUDIO ALBUM ── -->
-<section class="rp-section">
-  <div class="rp-section-header" data-reveal>
-    <h2 class="section-title">Studio<br>Album</h2>
-    <span class="section-count">1 Release</span>
-  </div>
+<!-- ════════════════════════════════════════
+     STUDIO ALBUM
+════════════════════════════════════════ -->
+<div class="cat-header">
+  <span class="cat-type">Studio Album</span>
+  <span class="cat-count">1 Release</span>
+</div>
 
-  <div class="release-panel" data-reveal>
-    <div class="panel-cover fill-c">
-      <img src="https://i.scdn.co/image/ab67616d0000b273f5d35bf91a2b5f0009b010d4" alt="Pink Heartz">
-    </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">01</span>
-      <span class="panel-type">Studio Album · Cactus Jack / Epic</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">Pink<br>Heartz</h2>
-        <a href="https://open.spotify.com/album/1POWgdYTzfFt9rhKlXFwsU" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+<!-- 01 · Pink Heartz -->
+<article class="release-item" id="release-01" data-reveal>
+  <span class="release-ghost" aria-hidden="true">01</span>
+  <div class="release-num-col"><span class="release-num">01</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i.scdn.co/image/ab67616d0000b273f5d35bf91a2b5f0009b010d4" alt="Pink Heartz" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/album/1POWgdYTzfFt9rhKlXFwsU" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">November 11, 2022 · 16 Tracks</div>
-      <p class="panel-desc">SoFaygo's long-awaited debut studio album. Released on Cactus Jack Records, Pink Heartz blends melodic trap with emotional vulnerability — a defining statement for one of Atlanta's most compelling voices.</p>
-      <div class="rating-row">
-        <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">61/100</span></div>
-        <div class="rating-chip"><span class="rc-src">KRUI</span><span class="rc-val" style="font-size:9px;letter-spacing:0.05em;text-transform:none;color:rgba(255,255,255,0.38)">"A mixed bag"</span></div>
-      </div>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Transparency</span></div><span class="track-dur">1:44</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Out</span></div><span class="track-dur">2:26</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Hell Yeah<span class="track-feat">ft. Ken Carson</span></span></div><span class="track-dur">2:17</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Blitz V2</span></div><span class="track-dur">2:22</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Stay Awake</span></div><span class="track-dur">2:19</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Me Too</span></div><span class="track-dur">2:09</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Goin Back</span></div><span class="track-dur">2:33</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Another One</span></div><span class="track-dur">2:14</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Slip</span></div><span class="track-dur">2:52</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">I'll Say</span></div><span class="track-dur">2:26</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Price</span></div><span class="track-dur">2:48</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Fasho</span></div><span class="track-dur">2:11</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Takeoff</span></div><span class="track-dur">2:26</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Greed</span></div><span class="track-dur">2:13</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Marvelous</span></div><span class="track-dur">2:38</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Forever</span></div><span class="track-dur">3:12</span></li>
-      </ul>
     </div>
   </div>
-</section>
-
-<!-- ── ALBUMS ── -->
-<section class="rp-section rp-alt">
-  <div class="rp-section-header" data-reveal>
-    <h2 class="section-title">Albums</h2>
-    <span class="section-count">4 Releases</span>
-  </div>
-
-  <!-- 02: Angelic 7 -->
-  <div class="release-panel rp-reverse" data-reveal>
-    <div class="panel-cover fill-d">
-      <img src="https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f6/51/fa/f651fa73-f439-230d-7285-bbd97eddad99/artwork.jpg/3000x3000bb.jpg" alt="Angelic 7">
+  <div class="release-body">
+    <span class="release-type">Studio Album · Cactus Jack / Epic</span>
+    <h2 class="release-title">Pink Heartz</h2>
+    <div class="release-year">November 11, 2022 · 16 Tracks</div>
+    <p class="release-desc">SoFaygo's long-awaited debut studio album. Released on Cactus Jack Records, Pink Heartz blends melodic trap with emotional vulnerability — a defining statement for one of Atlanta's most compelling voices.</p>
+    <div class="release-ratings">
+      <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">61 / 100</span></div>
+      <div class="rating-chip"><span class="rc-src">KRUI</span><span class="rc-val" style="font-size:9px;letter-spacing:0.04em;text-transform:none;color:var(--dim)">"A mixed bag"</span></div>
     </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">02</span>
-      <span class="panel-type">Album</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">Angelic<br>7</h2>
-        <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Transparency</span></div><span class="track-dur">1:44</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Out</span></div><span class="track-dur">2:26</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Hell Yeah<span class="track-feat">ft. Ken Carson</span></span></div><span class="track-dur">2:17</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Blitz V2</span></div><span class="track-dur">2:22</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Stay Awake</span></div><span class="track-dur">2:19</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Me Too</span></div><span class="track-dur">2:09</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Goin Back</span></div><span class="track-dur">2:33</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Another One</span></div><span class="track-dur">2:14</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Slip</span></div><span class="track-dur">2:52</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">I'll Say</span></div><span class="track-dur">2:26</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Price</span></div><span class="track-dur">2:48</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Fasho</span></div><span class="track-dur">2:11</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Takeoff</span></div><span class="track-dur">2:26</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Greed</span></div><span class="track-dur">2:13</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Marvelous</span></div><span class="track-dur">2:38</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Forever</span></div><span class="track-dur">3:12</span></li>
+    </ul>
+  </div>
+</article>
+
+<!-- ════════════════════════════════════════
+     ALBUMS
+════════════════════════════════════════ -->
+<div class="cat-header">
+  <span class="cat-type">Albums</span>
+  <span class="cat-count">4 Releases</span>
+</div>
+
+<!-- 02 · Angelic 7 -->
+<article class="release-item alt" id="release-02" data-reveal>
+  <span class="release-ghost" aria-hidden="true">02</span>
+  <div class="release-num-col"><span class="release-num">02</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f6/51/fa/f651fa73-f439-230d-7285-bbd97eddad99/artwork.jpg/3000x3000bb.jpg" alt="Angelic 7" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/album/0VqPgJ14lyu0JlERRgqgUw" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">January 10, 2020 · 7 Tracks</div>
-      <p class="panel-desc">An early showcase of SoFaygo's melodic trap instincts. Seven tight tracks built on Atlanta street imagery and raw emotional honesty — before the Cactus Jack deal, before the spotlight, just the music.</p>
-      <div class="rating-row">
-        <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.2 / 5</span></div>
-      </div>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Seven</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">On What I'm On</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Nonchalant</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Clash</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Let The Girls Slay</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Hearse</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Knock Knock</span></div></li>
-      </ul>
     </div>
   </div>
-
-  <!-- 03: After Me -->
-  <div class="release-panel" data-reveal>
-    <div class="panel-cover fill-b">
-      <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me">
+  <div class="release-body">
+    <span class="release-type">Album</span>
+    <h2 class="release-title">Angelic 7</h2>
+    <div class="release-year">January 10, 2020 · 7 Tracks</div>
+    <p class="release-desc">An early showcase of SoFaygo's melodic trap instincts. Seven tight tracks built on Atlanta street imagery and raw emotional honesty — before the Cactus Jack deal, before the spotlight, just the music.</p>
+    <div class="release-ratings">
+      <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.2 / 5</span></div>
     </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">03</span>
-      <span class="panel-type">Album</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">After<br>Me</h2>
-        <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Seven</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">On What I'm On</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Nonchalant</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Clash</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Let The Girls Slay</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Hearse</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Knock Knock</span></div></li>
+    </ul>
+  </div>
+</article>
+
+<!-- 03 · After Me -->
+<article class="release-item" id="release-03" data-reveal>
+  <span class="release-ghost" aria-hidden="true">03</span>
+  <div class="release-num-col"><span class="release-num">03</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i.scdn.co/image/ab67616d0000b273338d845a67c815d9843f39d1" alt="After Me" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">December 17, 2020 · 8 Tracks</div>
-      <p class="panel-desc">SoFaygo's most acclaimed independent project. After Me deepens his melodic trap voice with vulnerable lyricism and atmospheric production — his strongest critical reception before the Cactus Jack era.</p>
-      <div class="rating-row">
-        <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">72 / 100</span></div>
-        <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.3 / 5</span></div>
-      </div>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Off The Map</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Chrome</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Up Off 1942</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Makz</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Hang With The Goats</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Matrix</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Everyday</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Blo It Down</span></div></li>
-      </ul>
     </div>
   </div>
-
-  <!-- 04: War -->
-  <div class="release-panel rp-reverse" data-reveal>
-    <div class="panel-cover fill-e">
-      <img src="https://i.scdn.co/image/ab67616d0000b2737ae48cc47bca5d26ea71f547" alt="War">
+  <div class="release-body">
+    <span class="release-type">Album</span>
+    <h2 class="release-title">After Me</h2>
+    <div class="release-year">December 17, 2020 · 8 Tracks</div>
+    <p class="release-desc">SoFaygo's most acclaimed independent project. After Me deepens his melodic trap voice with vulnerable lyricism and atmospheric production — his strongest critical reception before the Cactus Jack era.</p>
+    <div class="release-ratings">
+      <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">72 / 100</span></div>
+      <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.3 / 5</span></div>
     </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">04</span>
-      <span class="panel-type">Album</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">War</h2>
-        <a href="https://open.spotify.com/album/50A29EC0sSKjSAAaxeA6Sb" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Off The Map</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Chrome</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Up Off 1942</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Makz</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Hang With The Goats</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Matrix</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Everyday</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Blo It Down</span></div></li>
+    </ul>
+  </div>
+</article>
+
+<!-- 04 · War -->
+<article class="release-item alt" id="release-04" data-reveal>
+  <span class="release-ghost" aria-hidden="true">04</span>
+  <div class="release-num-col"><span class="release-num">04</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i.scdn.co/image/ab67616d0000b2737ae48cc47bca5d26ea71f547" alt="War" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/album/50A29EC0sSKjSAAaxeA6Sb" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">June 29, 2019 · 8 Tracks</div>
-      <p class="panel-desc">One of SoFaygo's earliest projects — raw, unpolished energy from a young Atlanta artist finding his voice. War laid the foundation for everything that followed, capturing a hunger few debut records manage to hold.</p>
-      <div class="rating-row">
-        <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">71 / 100</span></div>
-      </div>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Can't Be</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Fakin'</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Elimination</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Sum It Up</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Jugg</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Blitz</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Jeff</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Clutch</span></div></li>
-      </ul>
     </div>
   </div>
-
-  <!-- 05: Mania -->
-  <div class="release-panel" data-reveal>
-    <div class="panel-cover fill-g">
-      <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania">
+  <div class="release-body">
+    <span class="release-type">Album</span>
+    <h2 class="release-title">War</h2>
+    <div class="release-year">June 29, 2019 · 8 Tracks</div>
+    <p class="release-desc">One of SoFaygo's earliest projects — raw, unpolished energy from a young Atlanta artist finding his voice. War laid the foundation for everything that followed, capturing a hunger few debut records manage to hold.</p>
+    <div class="release-ratings">
+      <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">71 / 100</span></div>
     </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">05</span>
-      <span class="panel-type">Album</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">Mania</h2>
-        <a href="https://open.spotify.com/album/3Ot1gTcCdtkhyce9yrc4Wj" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Can't Be</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Fakin'</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Elimination</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Sum It Up</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Jugg</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Blitz</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Jeff</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Clutch</span></div></li>
+    </ul>
+  </div>
+</article>
+
+<!-- 05 · Mania -->
+<article class="release-item" id="release-05" data-reveal>
+  <span class="release-ghost" aria-hidden="true">05</span>
+  <div class="release-num-col"><span class="release-num">05</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/album/3Ot1gTcCdtkhyce9yrc4Wj" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">November 21, 2025 · 19 Tracks</div>
-      <p class="panel-desc">SoFaygo's most ambitious project to date. Nineteen tracks of melodic trap exploring fame, love, and self-reflection — a sprawling statement that marks a new chapter in his Cactus Jack journey.</p>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Open It Up<span class="track-feat">ft. Kaash Paige</span></span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Bankrolls</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Outside</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Back in the Mix</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Mayday</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Notice Me</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Relocate</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Extreme</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Challenge</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Monster</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Figure Me Out</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Mission</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Count Up Fast</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Wasted</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Money and Clothes</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Grow</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">17</span><span class="track-title">Crash Out</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">18</span><span class="track-title">Safe</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">19</span><span class="track-title">See Me Shine</span></div></li>
-      </ul>
     </div>
   </div>
-</section>
-
-<!-- ── EPs ── -->
-<section class="rp-section">
-  <div class="rp-section-header" data-reveal>
-    <h2 class="section-title">EPs</h2>
-    <span class="section-count">4 Releases</span>
+  <div class="release-body">
+    <span class="release-type">Album · Cactus Jack / Epic</span>
+    <h2 class="release-title">Mania</h2>
+    <div class="release-year">November 21, 2025 · 19 Tracks</div>
+    <p class="release-desc">SoFaygo's most ambitious project to date. Nineteen tracks of melodic trap exploring fame, love, and self-reflection — a sprawling statement that marks a new chapter in his Cactus Jack journey.</p>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Open It Up<span class="track-feat">ft. Kaash Paige</span></span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Bankrolls</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Outside</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Back in the Mix</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Mayday</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Notice Me</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Relocate</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Extreme</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Challenge</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Monster</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">Figure Me Out</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Mission</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">Count Up Fast</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Wasted</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Money and Clothes</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Grow</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">17</span><span class="track-title">Crash Out</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">18</span><span class="track-title">Safe</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">19</span><span class="track-title">See Me Shine</span></div></li>
+    </ul>
   </div>
+</article>
 
-  <!-- 06: B4Pink -->
-  <div class="release-panel rp-reverse" data-reveal>
-    <div class="panel-cover fill-a">
-      <img src="https://i.scdn.co/image/ab67616d0000b273cde9e3ad8134941008b201d6" alt="B4Pink">
-    </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">06</span>
-      <span class="panel-type">EP · Cactus Jack / Epic</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">B4Pink</h2>
-        <a href="https://open.spotify.com/album/0wgrKGnsLCq4tM0jIOBmkP" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+<!-- ════════════════════════════════════════
+     EPs
+════════════════════════════════════════ -->
+<div class="cat-header">
+  <span class="cat-type">EPs</span>
+  <span class="cat-count">4 Releases</span>
+</div>
+
+<!-- 06 · B4Pink -->
+<article class="release-item alt" id="release-06" data-reveal>
+  <span class="release-ghost" aria-hidden="true">06</span>
+  <div class="release-num-col"><span class="release-num">06</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i.scdn.co/image/ab67616d0000b273cde9e3ad8134941008b201d6" alt="B4Pink" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/album/0wgrKGnsLCq4tM0jIOBmkP" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">June 14, 2022 · 5 Tracks</div>
-      <p class="panel-desc">Released months before Pink Heartz, B4Pink is a tight five-track preview of what was coming — polished Cactus Jack production paired with SoFaygo's signature melodic delivery at its most focused.</p>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Long Way</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Count Me Out</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Good Day</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Fall</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Got Damn!</span></div></li>
-      </ul>
     </div>
   </div>
+  <div class="release-body">
+    <span class="release-type">EP · Cactus Jack / Epic</span>
+    <h2 class="release-title">B4Pink</h2>
+    <div class="release-year">June 14, 2022 · 5 Tracks</div>
+    <p class="release-desc">Released months before Pink Heartz, B4Pink is a tight five-track preview of what was coming — polished Cactus Jack production paired with SoFaygo's signature melodic delivery at its most focused.</p>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Long Way</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Count Me Out</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Good Day</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Fall</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Got Damn!</span></div></li>
+    </ul>
+  </div>
+</article>
 
-  <!-- 07: Babyjack -->
-  <div class="release-panel" data-reveal>
-    <div class="panel-cover fill-f">
-      <img src="https://i1.sndcdn.com/artworks-UGx3cEpG8Ks2tcXk-rsOvNQ-t500x500.jpg" alt="Babyjack">
-    </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">07</span>
-      <span class="panel-type">EP · SoundCloud</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">Baby<br>jack</h2>
-        <a href="https://soundcloud.com/imsofaygo" target="_blank" class="sc-logo-link" title="Stream on SoundCloud">
-          <span class="sc-badge">SC</span>
+<!-- 07 · Babyjack -->
+<article class="release-item" id="release-07" data-reveal>
+  <span class="release-ghost" aria-hidden="true">07</span>
+  <div class="release-num-col"><span class="release-num">07</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i1.sndcdn.com/artworks-UGx3cEpG8Ks2tcXk-rsOvNQ-t500x500.jpg" alt="Babyjack" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://soundcloud.com/imsofaygo" target="_blank" class="stream-link">
+          <span class="sc-dot">SC</span>
+          SoundCloud
         </a>
       </div>
-      <div class="panel-year">July 14, 2022 · 10 Tracks</div>
-      <p class="panel-desc">A SoundCloud-exclusive drop from the same summer as Pink Heartz. Babyjack shows a rawer, more experimental side of SoFaygo — ten tracks of unfiltered creativity outside the major label framework.</p>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">No Time</span></div><span class="track-dur">1:57</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Hate It</span></div><span class="track-dur">2:32</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Gnarly</span></div><span class="track-dur">1:38</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">2 Far</span></div><span class="track-dur">2:01</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Thinking Out Loud</span></div><span class="track-dur">3:01</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">So Gone</span></div><span class="track-dur">1:59</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Easy</span></div><span class="track-dur">3:06</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">3AM in Norway</span></div><span class="track-dur">2:48</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Cartier</span></div><span class="track-dur">2:04</span></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Remain the Same</span></div><span class="track-dur">2:15</span></li>
-      </ul>
     </div>
   </div>
+  <div class="release-body">
+    <span class="release-type">EP · SoundCloud</span>
+    <h2 class="release-title">Babyjack</h2>
+    <div class="release-year">July 14, 2022 · 10 Tracks</div>
+    <p class="release-desc">A SoundCloud-exclusive drop from the same summer as Pink Heartz. Babyjack shows a rawer, more experimental side of SoFaygo — ten tracks of unfiltered creativity outside the major label framework.</p>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">No Time</span></div><span class="track-dur">1:57</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Hate It</span></div><span class="track-dur">2:32</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Gnarly</span></div><span class="track-dur">1:38</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">2 Far</span></div><span class="track-dur">2:01</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Thinking Out Loud</span></div><span class="track-dur">3:01</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">So Gone</span></div><span class="track-dur">1:59</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Easy</span></div><span class="track-dur">3:06</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">3AM in Norway</span></div><span class="track-dur">2:48</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">Cartier</span></div><span class="track-dur">2:04</span></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Remain the Same</span></div><span class="track-dur">2:15</span></li>
+    </ul>
+  </div>
+</article>
 
-  <!-- 08: GO+ -->
-  <div class="release-panel rp-reverse" data-reveal>
-    <div class="panel-cover fill-h">
-      <img src="https://i.scdn.co/image/ab67616d0000b273cdd5a49fd68603b5413931e7" alt="GO+">
-    </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">08</span>
-      <span class="panel-type">EP · Cactus Jack / Epic</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">GO+</h2>
-        <a href="https://open.spotify.com/album/3bBREOGR2MXC5kNkxg3Lsw" target="_blank" class="spotify-logo-link" title="Stream on Spotify">
-          <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+<!-- 08 · GO+ -->
+<article class="release-item alt" id="release-08" data-reveal>
+  <span class="release-ghost" aria-hidden="true">08</span>
+  <div class="release-num-col"><span class="release-num">08</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i.scdn.co/image/ab67616d0000b273cdd5a49fd68603b5413931e7" alt="GO+" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://open.spotify.com/album/3bBREOGR2MXC5kNkxg3Lsw" target="_blank" class="stream-link">
+          <svg width="11" height="11" viewBox="0 0 496 512"><path fill="#1DB954" d="M248 8C111.1 8 8 111.1 8 248s103.1 240 240 240 240-103.1 240-240S384.9 8 248 8zm100.7 339.5c-3.9 6.4-12.3 8.4-18.7 4.5-51.2-31.3-115.8-38.4-191.7-21-7.3 1.7-14.6-2.9-16.3-10.2-1.7-7.3 2.9-14.6 10.2-16.3 83.1-19 154.5-10.8 212.2 24.3 6.4 3.9 8.4 12.3 4.3 18.7zm26.9-59.7c-4.9 8-15.3 10.5-23.3 5.6-58.6-36.1-147.9-46.6-217.2-25.5-9 2.7-18.5-2.4-21.2-11.4-2.7-9 2.4-18.5 11.4-21.2 79.2-24.1 177.6-12.4 244.8 29.2 8.1 4.9 10.5 15.3 5.5 23.3zm2.3-62.2c-70.3-41.7-186.2-45.6-253.3-25.2-10.8 3.3-22.2-2.8-25.5-13.6-3.3-10.8 2.8-22.2 13.6-25.5 77-23.4 205-18.9 285.9 29.2 9.7 5.8 13 18.2 7.2 27.9-5.8 9.7-18.2 13-27.9 7.2z"/></svg>
+          Spotify
         </a>
       </div>
-      <div class="panel-year">June 14, 2023 · 12 Tracks</div>
-      <p class="panel-desc">SoFaygo's post-Pink Heartz statement. GO+ expands his sonic palette across twelve tracks with features from Yung Kayo and DD Osama, demonstrating growth and confidence a year after his debut album.</p>
-      <div class="rating-row">
-        <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">68 / 100</span></div>
-        <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.0 / 5</span></div>
-      </div>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Pure<span class="track-feat">ft. Yung Kayo</span></span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">4Sum+</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Fuck a Post</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">On the Moon</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Backseat</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Havoc</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Wish I Could Tell You<span class="track-feat">ft. DD Osama</span></span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Undercover</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">RC</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Beautiful Rockstar</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">11–12</span><span class="track-title" style="color:rgba(255,255,255,0.35);font-style:italic">Full tracklist on Spotify</span></div></li>
-      </ul>
     </div>
   </div>
-
-  <!-- 09: Pressure -->
-  <div class="release-panel" data-reveal>
-    <div class="panel-cover fill-e">
-      <img src="https://i1.sndcdn.com/artworks-ZvG3wVlIbujz0iXD-pf41GA-t500x500.jpg" alt="Pressure">
+  <div class="release-body">
+    <span class="release-type">EP · Cactus Jack / Epic</span>
+    <h2 class="release-title">GO+</h2>
+    <div class="release-year">June 14, 2023 · 12 Tracks</div>
+    <p class="release-desc">SoFaygo's post-Pink Heartz statement. GO+ expands his sonic palette across twelve tracks with features from Yung Kayo and DD Osama, demonstrating growth and confidence a year after his debut album.</p>
+    <div class="release-ratings">
+      <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">68 / 100</span></div>
+      <div class="rating-chip"><span class="rc-src">Musicboard</span><span class="rc-val">3.0 / 5</span></div>
     </div>
-    <div class="panel-content">
-      <span class="panel-idx" aria-hidden="true">09</span>
-      <span class="panel-type">EP · SoundCloud</span>
-      <div class="panel-title-row">
-        <h2 class="panel-title">Pressure</h2>
-        <a href="https://soundcloud.com/imsofaygo" target="_blank" class="sc-logo-link" title="Stream on SoundCloud">
-          <span class="sc-badge">SC</span>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Pure<span class="track-feat">ft. Yung Kayo</span></span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">4Sum+</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Fuck a Post</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">On the Moon</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Backseat</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">Havoc</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Wish I Could Tell You<span class="track-feat">ft. DD Osama</span></span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Undercover</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">RC</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Beautiful Rockstar</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">11–12</span><span class="track-title" style="color:var(--dim);font-style:italic">Full tracklist on Spotify</span></div></li>
+    </ul>
+  </div>
+</article>
+
+<!-- 09 · Pressure -->
+<article class="release-item" id="release-09" data-reveal>
+  <span class="release-ghost" aria-hidden="true">09</span>
+  <div class="release-num-col"><span class="release-num">09</span></div>
+  <div class="release-cover-col">
+    <div class="release-cover-wrap">
+      <img src="https://i1.sndcdn.com/artworks-ZvG3wVlIbujz0iXD-pf41GA-t500x500.jpg" alt="Pressure" class="release-cover-img">
+      <div class="release-stream-row">
+        <a href="https://soundcloud.com/imsofaygo" target="_blank" class="stream-link">
+          <span class="sc-dot">SC</span>
+          SoundCloud
         </a>
       </div>
-      <div class="panel-year">November 3, 2024 · 4 Tracks</div>
-      <p class="panel-desc">A four-track pressure drop released exclusively on SoundCloud. Concise and hard-hitting, Pressure strips SoFaygo's sound back to its essentials — proof that less can say more.</p>
-      <div class="rating-row">
-        <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">68 / 100</span></div>
-      </div>
-      <span class="tracklist-label">Tracklist</span>
-      <ul class="tracklist">
-        <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Big Body</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Road Rage</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Pointers / Act Up</span></div></li>
-        <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Minute Maid</span></div></li>
-      </ul>
     </div>
   </div>
-</section>
+  <div class="release-body">
+    <span class="release-type">EP · SoundCloud</span>
+    <h2 class="release-title">Pressure</h2>
+    <div class="release-year">November 3, 2024 · 4 Tracks</div>
+    <p class="release-desc">A four-track pressure drop released exclusively on SoundCloud. Concise and hard-hitting, Pressure strips SoFaygo's sound back to its essentials — proof that less can say more.</p>
+    <div class="release-ratings">
+      <div class="rating-chip"><span class="rc-src">AOTY User</span><span class="rc-val">68 / 100</span></div>
+    </div>
+    <button class="tl-toggle" onclick="toggleTL(this)">
+      <span class="tl-toggle-icon"></span>Tracklist
+    </button>
+    <ul class="tracklist">
+      <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Big Body</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Road Rage</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Pointers / Act Up</span></div></li>
+      <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Minute Maid</span></div></li>
+    </ul>
+  </div>
+</article>
 
+<!-- ── FOOTER ── -->
 <footer>
   <div class="footer-inner">
     <div class="footer-wordmark">SoFaygo</div>
@@ -625,118 +799,97 @@
 </footer>
 
 <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
+  /* Scroll reveal */
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.08 }
+  );
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 
-  function setMode(mode) {
-    document.body.classList.toggle('pink-mode', mode === 'pink');
-    localStorage.setItem('colorMode', mode);
-    document.getElementById('btn-black').classList.toggle('active', mode !== 'pink');
-    document.getElementById('btn-pink').classList.toggle('active', mode === 'pink');
+  /* Tracklist toggle */
+  function toggleTL(btn) {
+    const ul = btn.nextElementSibling;
+    const open = ul.classList.toggle('open');
+    btn.classList.toggle('open', open);
   }
-  document.getElementById('btn-black').addEventListener('click', () => setMode('black'));
-  document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
-  setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
 
+  /* Paint-brush reveal on hero title */
   (function () {
-    var nameEl = document.querySelector('.page-title');
-    var copyEl = document.querySelector('.page-header-copy');
+    var nameEl = document.getElementById('hero-title');
+    var copyEl = document.querySelector('.hero-copy');
     if (!nameEl || !copyEl) return;
     copyEl.style.position = 'relative';
     var cv = document.createElement('canvas');
     cv.style.cssText = 'position:absolute;left:0;top:0;z-index:10;pointer-events:none;';
     copyEl.appendChild(cv);
     var ctx = cv.getContext('2d');
-    var maskCv = document.createElement('canvas');
-    var mctx = maskCv.getContext('2d');
-    var tmpCv = document.createElement('canvas');
-    var tctx = tmpCv.getContext('2d');
+    var maskCv = document.createElement('canvas'), mctx = maskCv.getContext('2d');
+    var tmpCv  = document.createElement('canvas'), tctx = tmpCv.getContext('2d');
     var maskReady = false;
+
     function buildMask() {
       maskReady = false;
       maskCv.width = cv.width; maskCv.height = cv.height;
-      tmpCv.width = cv.width; tmpCv.height = cv.height;
+      tmpCv.width  = cv.width; tmpCv.height  = cv.height;
       mctx.clearRect(0, 0, maskCv.width, maskCv.height);
       var cs = window.getComputedStyle(nameEl);
       var cr = copyEl.getBoundingClientRect();
       var size = parseFloat(cs.fontSize);
       mctx.font = cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
-      mctx.fillStyle = 'white';
-      mctx.textBaseline = 'top';
-      mctx.textAlign = 'left';
-      var walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT, null, false);
-      var node;
+      mctx.fillStyle = 'white'; mctx.textBaseline = 'top'; mctx.textAlign = 'left';
+      var walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT, null, false), node;
       while ((node = walker.nextNode())) {
         var text = node.nodeValue;
         if (!text.trim()) continue;
         for (var k = 0; k < text.length; k++) {
-          var ch = text[k];
-          if (ch === ' ') continue;
+          var ch = text[k]; if (ch === ' ') continue;
           var rng = document.createRange();
           rng.setStart(node, k); rng.setEnd(node, k + 1);
           var r = rng.getBoundingClientRect();
           if (r.width < 1) continue;
-          var halfLeading = (r.height - size) / 2;
-          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + halfLeading + 7);
+          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + (r.height - size) / 2 + 7);
         }
       }
       maskReady = true;
     }
+
     function place() { cv.width = copyEl.offsetWidth; cv.height = copyEl.offsetHeight; buildMask(); }
-    var placed = false;
-    function oncePlaced() { if (!placed) { placed = true; place(); } }
-    copyEl.addEventListener('transitionend', function () { document.fonts.ready.then(oncePlaced); }, { once: true });
-    document.fonts.ready.then(function () { setTimeout(oncePlaced, 800); });
+    document.fonts.ready.then(function () { setTimeout(place, 200); });
     window.addEventListener('resize', place);
-    function col() { return '#C8171E'; }
+
     var prevX = null, prevY = null;
     nameEl.style.cursor = 'crosshair';
     copyEl.addEventListener('mousemove', function (e) {
       if (!cv.width || !maskReady) return;
-      var r = copyEl.getBoundingClientRect();
-      var x = e.clientX - r.left, y = e.clientY - r.top;
-      var c = col();
-      var dx = prevX !== null ? x - prevX : 1;
-      var dy = prevY !== null ? y - prevY : 0;
+      var rect = copyEl.getBoundingClientRect();
+      var x = e.clientX - rect.left, y = e.clientY - rect.top;
+      var dx = prevX !== null ? x - prevX : 1, dy = prevY !== null ? y - prevY : 0;
       prevX = x; prevY = y;
       var speed = Math.sqrt(dx * dx + dy * dy) || 1;
-      var ax = dx / speed, ay = dy / speed;
-      var px = -ay, py = ax;
-      var brushHalf = 28, bristles = 22;
-      var strokeLen = Math.min(speed * 1.4 + 10, 30);
-      tctx.clearRect(0, 0, tmpCv.width, tmpCv.height);
-      tctx.lineCap = 'round';
+      var ax = dx / speed, ay = dy / speed, px = -ay, py = ax;
+      var brushHalf = 28, bristles = 22, strokeLen = Math.min(speed * 1.4 + 10, 30);
+      tctx.clearRect(0, 0, tmpCv.width, tmpCv.height); tctx.lineCap = 'round';
       for (var i = 0; i < bristles; i++) {
         var t = (i / (bristles - 1) - 0.5) * 2;
         var spread = t * brushHalf + (Math.random() - 0.5) * 5;
         var bx = x + px * spread, by = y + py * spread;
         var half = strokeLen * (Math.random() * 0.4 + 0.6) * 0.5;
         tctx.globalAlpha = Math.random() * 0.45 + 0.5;
-        tctx.strokeStyle = c;
-        tctx.lineWidth = Math.random() * 3 + 2;
-        tctx.beginPath();
-        tctx.moveTo(bx - ax * half, by - ay * half);
-        tctx.lineTo(bx + ax * half, by + ay * half);
-        tctx.stroke();
+        tctx.strokeStyle = '#C8171E'; tctx.lineWidth = Math.random() * 3 + 2;
+        tctx.beginPath(); tctx.moveTo(bx - ax * half, by - ay * half);
+        tctx.lineTo(bx + ax * half, by + ay * half); tctx.stroke();
       }
-      tctx.globalAlpha = 1;
-      tctx.globalCompositeOperation = 'destination-in';
-      tctx.drawImage(maskCv, 0, 0);
-      tctx.globalCompositeOperation = 'source-over';
+      tctx.globalAlpha = 1; tctx.globalCompositeOperation = 'destination-in';
+      tctx.drawImage(maskCv, 0, 0); tctx.globalCompositeOperation = 'source-over';
       ctx.drawImage(tmpCv, 0, 0);
     });
     copyEl.addEventListener('mouseleave', function () { prevX = null; prevY = null; });
     setInterval(function () {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.globalAlpha = 0.010;
+      ctx.globalCompositeOperation = 'destination-out'; ctx.globalAlpha = 0.010;
       ctx.fillRect(0, 0, cv.width, cv.height);
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = 1;
     }, 50);
   })();
 </script>
-
 </body>
 </html>

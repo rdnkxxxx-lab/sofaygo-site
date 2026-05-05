@@ -26,28 +26,6 @@
     a { text-decoration: none; color: inherit; }
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-    /* ── PINK MODE ─────────────────────────────── */
-    body.pink-mode { --pink: #FF1493; --pink-dim: #c0106f; --off-white: #F5F4F2; }
-    body.pink-mode .btn-pink { color: var(--white); }
-    body.pink-mode .acc-header { border-color: rgba(0,0,0,0.1); }
-    body.pink-mode .acc-header:hover { background: rgba(0,0,0,0.03); }
-    body.pink-mode .acc-body-inner { background: var(--off-white); }
-    body.pink-mode .entry-body,
-    body.pink-mode .quote-text  { color: #3a3a3a; }
-    body.pink-mode .entry-headline,
-    body.pink-mode .milestone-text { color: var(--black); }
-    body.pink-mode .milestone { border-color: rgba(0,0,0,0.12); }
-    body.pink-mode .tag { border-color: rgba(0,0,0,0.15); color: rgba(0,0,0,0.5); }
-    body.pink-mode .quote-source { color: rgba(0,0,0,0.3); }
-    body.pink-mode .acc-year-num { color: rgba(0,0,0,0.06); }
-    body.pink-mode .intro-band { background: #f0eeec; border-color: rgba(0,0,0,0.08); }
-    body.pink-mode .intro-item-sub { color: #4a4a4a; }
-    body.pink-mode .influences-section { background: #f0eeec; }
-    body.pink-mode .influence-name { color: rgba(0,0,0,0.45); border-color: rgba(0,0,0,0.08); }
-    body.pink-mode .footer-tagline,
-    body.pink-mode .footer-bottom { color: rgba(0,0,0,0.3); }
-    body.pink-mode footer { border-color: rgba(0,0,0,0.1); }
-
     /* ── NAV ──────────────────────────────────── */
     nav {
       position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
@@ -73,16 +51,10 @@
     .nav-left a:hover, .nav-right a:hover { color: var(--white); }
     .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
     .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: #C8171E; line-height: 1; }
-    .mode-switcher { display: flex; align-items: center; border: 1px solid rgba(255,255,255,0.2); border-radius: 3px; overflow: hidden; }
-    .mode-btn {
-      padding: 5px 10px; background: transparent; color: rgba(255,255,255,0.35);
-      border: none; font-family: var(--font-body); font-size: 9px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
-      white-space: nowrap; transition: background 0.2s, color 0.2s;
-    }
-    .mode-btn.active { background: var(--pink); color: var(--black); }
-    body.pink-mode .mode-btn.active { color: var(--white); }
-    .mode-btn:not(.active):hover { color: rgba(255,255,255,0.7); }
+    /* ── NAV TICKET BUTTON ── */
+    .nav-ticket-btn { font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important; text-transform: uppercase; color: #fff !important; background: #C8171E; padding: 6px 14px; transition: opacity 0.22s, transform 0.22s !important; white-space: nowrap; }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
 
     /* ── BTN ──────────────────────────────────── */
     .btn {
@@ -278,13 +250,6 @@
     .inf-popup-meta { display: flex; flex-direction: column; gap: 6px; }
     .inf-popup-row { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.45; }
     .inf-popup-row strong { color: rgba(255,255,255,0.65); font-weight: 500; margin-right: 4px; }
-    body.pink-mode .inf-popup-inner { background: #f5f4f2; border-color: rgba(0,0,0,0.1); }
-    body.pink-mode .inf-popup-name { color: #111; }
-    body.pink-mode .inf-popup-genre { opacity: 1; }
-    body.pink-mode .inf-popup-row { color: rgba(0,0,0,0.4); }
-    body.pink-mode .inf-popup-row strong { color: rgba(0,0,0,0.65); }
-    body.pink-mode .inf-popup-photo-placeholder { background: linear-gradient(160deg,#e8e6e3 0%,#d8d5d0 100%); }
-
     /* ── FOOTER ──────────────────────────────── */
     footer { padding: 72px 64px 48px; background: var(--black); border-top: 1px solid var(--border); }
     .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; }
@@ -335,12 +300,7 @@
   <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
   <ul class="nav-right">
     <li><a href="https://open.spotify.com/artist/2SJhf6rTOU53g8yBdAjPby" target="_blank">Stream</a></li>
-    <li>
-      <div class="mode-switcher">
-        <button class="mode-btn" id="btn-black">Go+</button>
-        <button class="mode-btn" id="btn-pink">Pink Heartz</button>
-      </div>
-    </li>
+    <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
   </ul>
 </nav>
 
@@ -1097,17 +1057,6 @@
     { threshold: 0.08 }
   );
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
-
-  /* Theme */
-  function setMode(mode) {
-    document.body.classList.toggle('pink-mode', mode === 'pink');
-    localStorage.setItem('colorMode', mode);
-    document.getElementById('btn-black').classList.toggle('active', mode !== 'pink');
-    document.getElementById('btn-pink').classList.toggle('active', mode === 'pink');
-  }
-  document.getElementById('btn-black').addEventListener('click', () => setMode('black'));
-  document.getElementById('btn-pink').addEventListener('click', () => setMode('pink'));
-  setMode(localStorage.getItem('colorMode') === 'pink' ? 'pink' : 'black');
 
   /* Brush effect on bio hero title */
   (function () {
