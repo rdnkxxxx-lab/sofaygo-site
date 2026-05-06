@@ -61,7 +61,7 @@
 
     /* ── HERO ── */
     .hero {
-      display: grid; grid-template-columns: 1.1fr 0.9fr;
+      display: grid; grid-template-columns: 1fr 1fr;
       min-height: 100dvh; padding-top: 64px;
     }
     .hero-copy {
@@ -85,12 +85,25 @@
     .hero-stats { display: flex; gap: 40px; flex-wrap: wrap; }
     .hero-stat-val { font-family: var(--font-disp); font-size: 38px; color: var(--red); line-height: 1; }
     .hero-stat-label { font-size: 9px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dim); margin-top: 4px; }
-    .hero-photo { position: relative; overflow: hidden; }
-    .hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-    .hero-photo::after {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(to left, transparent 50%, rgba(8,8,8,0.7) 100%);
-      pointer-events: none; z-index: 1;
+    .hero-photo {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      overflow: hidden;
+    }
+    .roster-slot { position: relative; overflow: hidden; }
+    .roster-slot img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; transition: transform 0.45s cubic-bezier(0.22,1,0.36,1); }
+    .roster-slot:hover img { transform: scale(1.06); }
+    .roster-slot-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 28px 12px 10px;
+      background: linear-gradient(to top, rgba(8,8,8,0.92) 0%, transparent 100%);
+      font-family: var(--font-disp);
+      font-size: 14px; letter-spacing: 0.05em; color: var(--white); z-index: 2; pointer-events: none;
+    }
+    .roster-slot-role {
+      font-size: 7.5px; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--red); display: block; margin-bottom: 3px;
     }
 
     /* ── INTRO BAND ── */
@@ -200,6 +213,22 @@
       pointer-events: none; user-select: none; letter-spacing: -0.04em;
     }
 
+    /* ── ARTIST CARD PHOTO ── */
+    .artist-card-photo {
+      width: calc(100% + 80px);
+      margin: -48px -40px 24px;
+      height: 380px;
+      overflow: hidden;
+      position: relative;
+    }
+    .artist-card-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.22,1,0.36,1);
+    }
+    .artist-card:hover .artist-card-photo img { transform: scale(1.04); }
+
     /* ── ARTIST POPUP ── */
     #artist-popup {
       position: fixed; z-index: 9999; pointer-events: none;
@@ -213,7 +242,7 @@
       border-radius: 12px; overflow: hidden;
       box-shadow: 0 28px 72px rgba(0,0,0,0.8), 0 4px 18px rgba(0,0,0,0.5);
     }
-    .ap-photo-wrap { width: 100%; height: 200px; background: #1a1a1a; position: relative; overflow: hidden; }
+    .ap-photo-wrap { display: none; }
     .ap-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
     .ap-placeholder {
       position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
@@ -253,6 +282,25 @@
       color: rgba(242,241,239,0.022); line-height: 1;
       pointer-events: none; user-select: none; letter-spacing: -0.04em;
     }
+
+    /* ── TRACKLIST ── */
+    .jb-tracklist { margin-top: 32px; border-top: 1px solid var(--border); position: relative; z-index: 1; padding-top: 16px; }
+    .tl-toggle { background: none; border: none; cursor: pointer; font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); padding: 0; display: flex; align-items: center; gap: 8px; transition: color 0.2s; }
+    .tl-toggle:hover { color: var(--white); }
+    .tl-toggle-icon { width: 18px; height: 18px; border: 1px solid var(--red); position: relative; flex-shrink: 0; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .tl-toggle-icon::before, .tl-toggle-icon::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: var(--red); }
+    .tl-toggle-icon::before { width: 8px; height: 1.5px; }
+    .tl-toggle-icon::after { width: 1.5px; height: 8px; }
+    .tl-toggle.open .tl-toggle-icon { transform: rotate(45deg); }
+    .tracklist { list-style: none; overflow: hidden; max-height: 0; transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1); margin-top: 0; }
+    .tracklist.open { max-height: 9999px; margin-top: 18px; }
+    .track-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(242,241,239,0.05); }
+    .track-left { display: flex; align-items: center; gap: 14px; }
+    .track-idx { font-size: 10px; color: var(--dim); width: 20px; flex-shrink: 0; }
+    .track-title { font-size: 12.5px; color: rgba(242,241,239,0.72); }
+    .track-feat { font-size: 10.5px; color: var(--dim); margin-left: 5px; }
+    .track-dur { font-size: 10.5px; color: var(--dim); letter-spacing: 0.06em; }
+    .tracklist-deluxe-sep { font-size: 8px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dim); display: block; padding: 12px 0 6px; border-top: 1px solid var(--border); margin-top: 4px; }
 
     /* ── DISCOGRAPHY TABLE ── */
     .disco-table { width: 100%; border-collapse: collapse; }
@@ -304,11 +352,7 @@
     .footer-links { display: flex; gap: 28px; }
     .footer-links a { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dim); transition: color 0.2s; }
     .footer-links a:hover { color: var(--red); }
-    .footer-bottom {
-      width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--border);
-      display: flex; justify-content: space-between;
-      font-size: 10px; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase;
-    }
+    .footer-bottom { width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: var(--dim); text-transform: uppercase; }
 
     /* ── REVEAL ── */
     [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
@@ -359,12 +403,14 @@
 <!-- ── NAV ── -->
 <nav>
   <ul class="nav-left">
-    <li><a href="sofaygo.html">Home</a></li>
+    <li><a href="biography.html">About</a></li>
     <li><a href="discography.html">Discography</a></li>
   </ul>
   <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
   <ul class="nav-right">
-    <li><a href="biography.html">About</a></li>
+    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="merch.html">Store</a></li>
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
     <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
   </ul>
 </nav>
@@ -399,11 +445,30 @@
     </div>
   </div>
   <div class="hero-photo">
-    <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Travis_Scott_-_Openair_Frauenfeld_2018_14.jpg/800px-Travis_Scott_-_Openair_Frauenfeld_2018_14.jpg"
-      alt="Travis Scott — Cactus Jack Records"
-      onerror="this.src='https://i.scdn.co/image/ab6761610000e5eb19c2790744c792d05570bb71';this.onerror=null;"
-    >
+    <div class="roster-slot">
+      <img src="https://i.pinimg.com/1200x/f6/5e/07/f65e07cda6de5c61df716e17c157bbb7.jpg" alt="Travis Scott">
+      <div class="roster-slot-label"><span class="roster-slot-role">Founder</span>Travis Scott</div>
+    </div>
+    <div class="roster-slot">
+      <img src="https://i.pinimg.com/1200x/0f/b1/fd/0fb1fd6968c13c2a7b5604be69390870.jpg" alt="Don Toliver">
+      <div class="roster-slot-label"><span class="roster-slot-role">Artist</span>Don Toliver</div>
+    </div>
+    <div class="roster-slot">
+      <img src="https://i.pinimg.com/1200x/ca/f0/4c/caf04ca84697208cb42170d394a7444a.jpg" alt="Sheck Wes">
+      <div class="roster-slot-label"><span class="roster-slot-role">Artist</span>Sheck Wes</div>
+    </div>
+    <div class="roster-slot">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/Chase_B.jpg" alt="Chase B">
+      <div class="roster-slot-label"><span class="roster-slot-role">DJ / Producer</span>Chase B</div>
+    </div>
+    <div class="roster-slot">
+      <img src="https://i.pinimg.com/1200x/a9/84/c1/a984c100da6bcf6857eed95912df606b.jpg" alt="SoFaygo">
+      <div class="roster-slot-label"><span class="roster-slot-role">Artist</span>SoFaygo</div>
+    </div>
+    <div class="roster-slot">
+      <img src="https://thefader-res.cloudinary.com/private_images/w_1440,c_limit,f_auto,q_auto:best/IMG_3446_ut2y3b/wallie-the-sensei.jpg" alt="Wallie the Sensei">
+      <div class="roster-slot-label"><span class="roster-slot-role">Artist</span>Wallie the Sensei</div>
+    </div>
   </div>
 </div>
 
@@ -473,7 +538,7 @@
 <div class="roster-grid">
 
   <!-- Travis Scott -->
-  <div class="artist-card" data-artist="Travis Scott" data-wiki="Travis_Scott" data-origin="Houston, TX" data-genre="Psychedelic Trap · Hip-Hop" data-role="Founder" data-signed="2017" data-key="Astroworld · Utopia · Rodeo">
+  <div class="artist-card" data-artist="Travis Scott" data-wiki="Travis_Scott" data-photo="https://i.pinimg.com/1200x/f6/5e/07/f65e07cda6de5c61df716e17c157bbb7.jpg" data-origin="Houston, TX" data-genre="Psychedelic Trap · Hip-Hop" data-role="Founder" data-signed="2017" data-key="Astroworld · Utopia · Rodeo">
     <span class="artist-card-num">01</span>
     <div class="artist-card-name">Travis Scott</div>
     <span class="artist-card-status">Founder</span>
@@ -492,7 +557,7 @@
   </div>
 
   <!-- Don Toliver -->
-  <div class="artist-card" data-artist="Don Toliver" data-wiki="Don_Toliver" data-origin="Houston, TX" data-genre="R&B · Psychedelic Soul · Trap" data-role="Artist" data-signed="2018" data-key="Heaven or Hell · Hardstone Psycho">
+  <div class="artist-card" data-artist="Don Toliver" data-wiki="Don_Toliver" data-photo="https://i.pinimg.com/1200x/0f/b1/fd/0fb1fd6968c13c2a7b5604be69390870.jpg" data-origin="Houston, TX" data-genre="R&B · Psychedelic Soul · Trap" data-role="Artist" data-signed="2018" data-key="Heaven or Hell · Hardstone Psycho">
     <span class="artist-card-num">02</span>
     <div class="artist-card-name">Don Toliver</div>
     <span class="artist-card-status">Current · Since 2018</span>
@@ -511,7 +576,7 @@
   </div>
 
   <!-- Sheck Wes -->
-  <div class="artist-card" data-artist="Sheck Wes" data-wiki="Sheck_Wes" data-origin="Harlem, NY" data-genre="Trap · Rap · Punk" data-role="Artist" data-signed="2018" data-key="Mo Bamba · Mudboy">
+  <div class="artist-card" data-artist="Sheck Wes" data-wiki="Sheck_Wes" data-photo="https://i.pinimg.com/1200x/ca/f0/4c/caf04ca84697208cb42170d394a7444a.jpg" data-origin="Harlem, NY" data-genre="Trap · Rap · Punk" data-role="Artist" data-signed="2018" data-key="Mo Bamba · Mudboy">
     <span class="artist-card-num">03</span>
     <div class="artist-card-name">Sheck Wes</div>
     <span class="artist-card-status">Current · Since 2018</span>
@@ -530,7 +595,7 @@
   </div>
 
   <!-- Chase B -->
-  <div class="artist-card" data-artist="Chase B" data-wiki="Chase_B" data-origin="Houston, TX" data-genre="DJ · Producer · Electronic" data-role="DJ / Producer" data-signed="2019" data-key="Be Very Afraid (2026)">
+  <div class="artist-card" data-artist="Chase B" data-wiki="Chase_B" data-photo="https://upload.wikimedia.org/wikipedia/commons/1/1a/Chase_B.jpg" data-origin="Houston, TX" data-genre="DJ · Producer · Electronic" data-role="DJ / Producer" data-signed="2019" data-key="Be Very Afraid (2026)">
     <span class="artist-card-num">04</span>
     <div class="artist-card-name">Chase B</div>
     <span class="artist-card-status">Current · Since 2019</span>
@@ -549,7 +614,7 @@
   </div>
 
   <!-- SoFaygo -->
-  <div class="artist-card" data-artist="SoFaygo" data-wiki="SoFaygo" data-origin="Atlanta, GA" data-genre="Melodic Trap · Plugg · Rage" data-role="Artist" data-signed="2021" data-key="Pink Heartz · MANIA">
+  <div class="artist-card" data-artist="SoFaygo" data-wiki="SoFaygo" data-photo="https://i.pinimg.com/1200x/a9/84/c1/a984c100da6bcf6857eed95912df606b.jpg" data-origin="Atlanta, GA" data-genre="Melodic Trap · Plugg · Rage" data-role="Artist" data-signed="2021" data-key="Pink Heartz · MANIA">
     <span class="artist-card-num">05</span>
     <div class="artist-card-name">SoFaygo</div>
     <span class="artist-card-status">Current · Since 2021</span>
@@ -568,7 +633,7 @@
   </div>
 
   <!-- Wallie the Sensei -->
-  <div class="artist-card" data-artist="Wallie the Sensei" data-wiki="Wallie_the_Sensei" data-origin="Compton, CA" data-genre="West Coast Rap · Street · R&B" data-role="Artist" data-signed="2025" data-key="JackBoys 2 (2025)">
+  <div class="artist-card" data-artist="Wallie the Sensei" data-wiki="Wallie_the_Sensei" data-photo="https://thefader-res.cloudinary.com/private_images/w_1440,c_limit,f_auto,q_auto:best/IMG_3446_ut2y3b/wallie-the-sensei.jpg" data-origin="Compton, CA" data-genre="West Coast Rap · Street · R&B" data-role="Artist" data-signed="2025" data-key="JackBoys 2 (2025)">
     <span class="artist-card-num">06</span>
     <div class="artist-card-name">Wallie the Sensei</div>
     <span class="artist-card-status">Current · Since 2025</span>
@@ -631,7 +696,7 @@
     <div class="jb-card" data-reveal>
       <span class="jb-num">Vol. 01</span>
       <img
-        src="https://i.scdn.co/image/ab67616d0000b273e52e18e9c61523c03e2d1ae8"
+        src="https://upload.wikimedia.org/wikipedia/en/8/82/JACKBOYS_-_Album_Cover_by_JACKBOYS_%26_Travis_Scott%2C_December_27%2C_2019.jpg"
         alt="JackBoys"
         class="jb-cover"
         onerror="this.style.background='#1a1a1a';this.style.display='block';"
@@ -647,12 +712,24 @@
         <div class="jb-peak"><div class="jb-peak-val">#1</div><div class="jb-peak-label">Billboard 200</div></div>
         <div class="jb-peak"><div class="jb-peak-val">2019</div><div class="jb-peak-label">Released</div></div>
       </div>
+      <div class="jb-tracklist">
+        <button class="tl-toggle" onclick="toggleTL(this)"><span class="tl-toggle-icon"></span>Tracklist · 7 Tracks · 21:19</button>
+        <ul class="tracklist">
+          <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">Highest in the Room (Remix)<span class="track-feat">ft. Rosalía, Lil Baby</span></span></div><span class="track-dur">4:04</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">JackBoys</span></div><span class="track-dur">0:46</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">Gang Gang<span class="track-feat">ft. Sheck Wes</span></span></div><span class="track-dur">4:04</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Had Enough<span class="track-feat">ft. Quavo, Offset</span></span></div><span class="track-dur">2:37</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Out West<span class="track-feat">ft. Young Thug</span></span></div><span class="track-dur">2:37</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">What to Do?<span class="track-feat">ft. Don Toliver</span></span></div><span class="track-dur">4:10</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Gatti<span class="track-feat">ft. Pop Smoke</span></span></div><span class="track-dur">3:01</span></li>
+        </ul>
+      </div>
       <div class="jb-ghost">01</div>
     </div>
     <div class="jb-card" data-reveal>
       <span class="jb-num">Vol. 02</span>
       <img
-        src="https://i.scdn.co/image/ab67616d0000b27321a7c6d6c5e9b44c0b9c5b4a"
+        src="https://upload.wikimedia.org/wikipedia/en/7/75/JACKBOYS_2_-_Album_Cover_by_JACKBOYS_%26_Travis_Scott.png"
         alt="JackBoys 2"
         class="jb-cover"
         onerror="this.style.background='#1a1a1a';this.style.display='block';"
@@ -669,6 +746,32 @@
         <div class="jb-peak"><div class="jb-peak-val">#1</div><div class="jb-peak-label">Billboard 200</div></div>
         <div class="jb-peak"><div class="jb-peak-val">232K</div><div class="jb-peak-label">Week One Units</div></div>
         <div class="jb-peak"><div class="jb-peak-val">2025</div><div class="jb-peak-label">Released</div></div>
+      </div>
+      <div class="jb-tracklist">
+        <button class="tl-toggle" onclick="toggleTL(this)"><span class="tl-toggle-icon"></span>Tracklist · 17 Tracks · 55:40</button>
+        <ul class="tracklist">
+          <li class="track-row"><div class="track-left"><span class="track-idx">01</span><span class="track-title">JB2 Radio<span class="track-feat">JackBoys</span></span></div><span class="track-dur">0:31</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">02</span><span class="track-title">Champain &amp; Vacay<span class="track-feat">ft. Don Toliver</span></span></div><span class="track-dur">3:04</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">03</span><span class="track-title">2000 Excursion<span class="track-feat">ft. Sheck Wes, Don Toliver</span></span></div><span class="track-dur">3:42</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">04</span><span class="track-title">Kick Out<span class="track-feat">Travis Scott</span></span></div><span class="track-dur">2:50</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">05</span><span class="track-title">Dumbo<span class="track-feat">Travis Scott</span></span></div><span class="track-dur">3:58</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">06</span><span class="track-title">MM3<span class="track-feat">SoFaygo</span></span></div><span class="track-dur">2:54</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">07</span><span class="track-title">Velour<span class="track-feat">ft. Sheck Wes</span></span></div><span class="track-dur">2:24</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">08</span><span class="track-title">Contest<span class="track-feat">ft. SoFaygo</span></span></div><span class="track-dur">4:32</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">09</span><span class="track-title">ILMB<span class="track-feat">Sheck Wes ft. Travis Scott</span></span></div><span class="track-dur">3:04</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">10</span><span class="track-title">Where Was You<span class="track-feat">ft. Playboi Carti, Future</span></span></div><span class="track-dur">4:32</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">11</span><span class="track-title">No Comments<span class="track-feat">Don Toliver</span></span></div><span class="track-dur">2:09</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">12</span><span class="track-title">Beep Beep<span class="track-feat">ft. SahBabii</span></span></div><span class="track-dur">3:54</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">13</span><span class="track-title">PBT<span class="track-feat">ft. Tyla, Vybz Kartel</span></span></div><span class="track-dur">4:10</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">14</span><span class="track-title">Shyne<span class="track-feat">ft. GloRilla</span></span></div><span class="track-dur">3:13</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">15</span><span class="track-title">Outside<span class="track-feat">ft. YoungBoy Never Broke Again</span></span></div><span class="track-dur">3:03</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">16</span><span class="track-title">Cant Stop<span class="track-feat">Don Toliver ft. Future, Wallie the Sensei</span></span></div><span class="track-dur">2:12</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">17</span><span class="track-title">Florida Flow<span class="track-feat">ft. Kodak Black</span></span></div><span class="track-dur">5:28</span></li>
+          <li class="tracklist-deluxe-sep">Deluxe · 3 Bonus Tracks · +7:40</li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">18</span><span class="track-title">Da Wizard<span class="track-feat">Travis Scott</span></span></div><span class="track-dur">2:37</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">19</span><span class="track-title">Trip Out<span class="track-feat">Sheck Wes ft. Yeat</span></span></div><span class="track-dur">2:16</span></li>
+          <li class="track-row"><div class="track-left"><span class="track-idx">20</span><span class="track-title">110 South<span class="track-feat">Wallie the Sensei ft. Luxury Tax</span></span></div><span class="track-dur">2:47</span></li>
+        </ul>
       </div>
       <div class="jb-ghost">02</div>
     </div>
@@ -802,8 +905,9 @@
     <div class="footer-tagline">Cactus Jack Records · Est. 2017 · Houston, TX</div>
     <div class="footer-links">
       <a href="sofaygo.html">Home</a>
-      <a href="biography.html">Biography</a>
+      <a href="biography.html">About</a>
       <a href="discography.html">Discography</a>
+      <a href="merch.html">Store</a>
     </div>
     <div class="footer-bottom">
       <span>© 2025 SoFaygo. All Rights Reserved.</span>
@@ -898,74 +1002,11 @@
     }, 50);
   })();
 
-  /* ── Artist card hover popups ── */
-  (function () {
-    var popup    = document.getElementById('artist-popup');
-    var photoEl  = document.getElementById('ap-photo');
-    var pholder  = document.getElementById('ap-placeholder');
-    var nameEl   = document.getElementById('ap-name');
-    var genreEl  = document.getElementById('ap-genre');
-    var originEl = document.getElementById('ap-origin');
-    var signedEl = document.getElementById('ap-signed');
-    var keyEl    = document.getElementById('ap-key');
-
-    var cache = {}, hideTimer = null, currentArtist = null;
-
-    function pos(cx, cy) {
-      var margin = 16, pw = popup.offsetWidth || 300, ph = popup.offsetHeight || 340;
-      var x = cx + 24, y = cy - ph / 2;
-      if (x + pw > window.innerWidth - margin) x = cx - pw - 24;
-      if (y < margin) y = margin;
-      if (y + ph > window.innerHeight - margin) y = window.innerHeight - ph - margin;
-      popup.style.left = x + 'px'; popup.style.top = y + 'px';
-    }
-
-    function showPhoto(src) {
-      if (!src) return;
-      photoEl.src = src;
-      photoEl.style.display = 'block';
-      pholder.style.display = 'none';
-    }
-
-    function fetchPhoto(wikiKey, artist) {
-      if (cache[wikiKey] !== undefined) {
-        if (currentArtist === artist) showPhoto(cache[wikiKey]);
-        return;
-      }
-      cache[wikiKey] = null;
-      fetch('https://en.wikipedia.org/w/api.php?action=query&titles=' + encodeURIComponent(wikiKey) + '&prop=pageimages&format=json&pithumbsize=600&origin=*')
-        .then(function (r) { return r.json(); })
-        .then(function (j) {
-          var pages = j.query && j.query.pages;
-          if (!pages) return;
-          var page = pages[Object.keys(pages)[0]];
-          cache[wikiKey] = (page && page.thumbnail && page.thumbnail.source) ? page.thumbnail.source : null;
-          if (currentArtist === artist) showPhoto(cache[wikiKey]);
-        })
-        .catch(function () {});
-    }
-
-    document.querySelectorAll('.artist-card[data-artist]').forEach(function (card) {
-      card.addEventListener('mouseenter', function (e) {
-        clearTimeout(hideTimer);
-        currentArtist = card.dataset.artist;
-        nameEl.textContent   = card.dataset.artist;
-        genreEl.textContent  = card.dataset.genre;
-        originEl.textContent = card.dataset.origin;
-        signedEl.textContent = card.dataset.signed;
-        keyEl.textContent    = card.dataset.key;
-        photoEl.style.display = 'none'; photoEl.src = '';
-        pholder.style.display = 'flex';
-        pos(e.clientX, e.clientY);
-        popup.classList.add('visible');
-        if (card.dataset.wiki) fetchPhoto(card.dataset.wiki, currentArtist);
-      });
-      card.addEventListener('mousemove', function (e) { pos(e.clientX, e.clientY); });
-      card.addEventListener('mouseleave', function () {
-        hideTimer = setTimeout(function () { popup.classList.remove('visible'); currentArtist = null; }, 120);
-      });
-    });
-  })();
+  function toggleTL(btn) {
+    const ul = btn.nextElementSibling;
+    const open = ul.classList.toggle('open');
+    btn.classList.toggle('open', open);
+  }
 </script>
 </body>
 </html>

@@ -126,7 +126,7 @@
     /* ── HERO ──────────────────────────────────── */
     .store-hero {
       display: grid;
-      grid-template-columns: 1.12fr 0.88fr;
+      grid-template-columns: 1fr 1fr;
       min-height: 100dvh;
       padding-top: 64px;
     }
@@ -231,14 +231,14 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 60% 15%;
+      object-position: center 15%;
     }
     .hero-photo::after {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(to right, rgba(8,8,8,0.65) 0%, transparent 55%),
+        linear-gradient(to right, rgba(8,8,8,0.45) 0%, transparent 30%),
         linear-gradient(to top, rgba(8,8,8,0.55) 0%, transparent 35%);
       pointer-events: none;
       z-index: 1;
@@ -365,8 +365,8 @@
     /* ── PRODUCT GRID ───────────────────────────── */
     .product-grid {
       display: grid;
-      grid-template-columns: 1.5fr 1fr;
-      grid-template-rows: 58vh 44vh;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 32vw;
       gap: 2px;
     }
 
@@ -376,7 +376,10 @@
       overflow: hidden;
       background: var(--dark);
     }
-    .product-card--featured { grid-row: 1 / 3; }
+    .product-card--featured {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
     .product-card[style*="display: none"] { display: none !important; }
 
     /* 3D flip scene */
@@ -701,66 +704,35 @@
     .size-table tr:last-child td { border-bottom: none; }
 
     /* ── FOOTER ─────────────────────────────────── */
-    footer {
-      background: var(--dark);
-      border-top: 1px solid var(--border);
-      padding: 72px 64px 48px;
-    }
-    .footer-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 22px;
-    }
-    .footer-wordmark {
-      font-family: 'Modak', cursive;
-      font-size: 44px;
-      color: var(--pink);
-      letter-spacing: 0.03em;
-      line-height: 1;
-    }
-    .footer-tagline {
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 0.32em;
-      text-transform: uppercase;
-      color: rgba(248,248,246,0.26);
-    }
-    .social-row {
-      display: flex;
-      gap: 8px;
-    }
-    .social-btn {
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      color: rgba(248,248,246,0.32);
-      border: 1px solid var(--border);
-      padding: 7px 13px;
-      transition: color 0.22s, border-color 0.22s;
-    }
-    .social-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.22); }
-    .footer-bottom {
-      display: flex;
-      gap: 40px;
-      font-size: 8.5px;
-      letter-spacing: 0.16em;
-      color: rgba(248,248,246,0.18);
-      text-transform: uppercase;
-      padding-top: 22px;
-      border-top: 1px solid var(--border);
-      width: 100%;
-      justify-content: center;
+    footer { background: var(--black); border-top: 3px solid var(--pink); }
+    .footer-body { display: grid; grid-template-columns: 1fr 260px; gap: 0; padding: 44px 64px 36px; border-bottom: 1px solid var(--border); }
+    .footer-brand { padding-right: 48px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
+    .footer-mark { display: flex; flex-direction: column; line-height: 0.86; margin-bottom: 20px; }
+    .footer-mark-cactus { font-family: var(--font-disp); font-size: clamp(24px,3vw,38px); color: rgba(248,248,246,0.22); letter-spacing: 0.04em; }
+    .footer-mark-jack { font-family: var(--font-disp); font-size: clamp(52px,7vw,88px); color: var(--pink); letter-spacing: -0.01em; line-height: 0.82; }
+    .footer-mark-records { font-family: var(--font-disp); font-size: clamp(14px,1.6vw,22px); color: rgba(248,248,246,0.14); letter-spacing: 0.14em; margin-top: 4px; }
+    .footer-origin { display: flex; align-items: center; gap: 12px; font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(248,248,246,0.28); }
+    .footer-origin-line { width: 18px; height: 1px; background: var(--pink); opacity: 0.5; flex-shrink: 0; }
+    .footer-right { padding-left: 40px; display: flex; flex-direction: column; justify-content: space-between; }
+    .footer-col-head { display: block; font-size: 8px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--pink); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .footer-nav-list { display: flex; flex-direction: column; list-style: none; margin-bottom: 20px; }
+    .footer-nav-list li { border-bottom: 1px solid var(--border); }
+    .footer-nav-list li:last-child { border-bottom: none; }
+    .footer-nav-list a { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-disp); font-size: 20px; letter-spacing: 0.04em; color: rgba(248,248,246,0.38); padding: 5px 0; transition: color 0.18s, transform 0.22s cubic-bezier(0.22,1,0.36,1); }
+    .footer-nav-list a:hover { color: var(--white); transform: translateX(4px); }
+    .footer-nav-list a .footer-nav-arrow { font-size: 11px; opacity: 0; color: var(--pink); transition: opacity 0.18s; }
+    .footer-nav-list a:hover .footer-nav-arrow { opacity: 1; }
+    .footer-affiliations { font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(248,248,246,0.18); line-height: 2; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 12px 64px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248,248,246,0.16);
     }
 
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 1100px) {
       .product-grid {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 52vw 52vw;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 38vw;
       }
-      .product-card--featured { grid-row: 1 / 3; grid-column: 1 / 3; }
+      .product-card--featured { grid-column: span 2; grid-row: span 2; }
       .coming-inner { grid-template-columns: 1fr; gap: 52px; }
       #size-guide { grid-template-columns: 1fr; gap: 48px; }
     }
@@ -780,16 +752,18 @@
       .filter-pills { gap: 4px; }
       #collection { padding: 52px 24px 0; }
       .product-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: 80vw 64vw 64vw;
+        grid-template-columns: repeat(2, 1fr);
+        grid-auto-rows: 52vw;
       }
-      .product-card--featured { grid-row: auto; grid-column: auto; }
+      .product-card--featured { grid-column: span 2; grid-row: span 1; }
       .product-card--featured .card-name { font-size: 24px; }
       #coming-soon { padding: 64px 24px; }
       .countdown { grid-template-columns: repeat(2, 1fr); }
       #size-guide { padding: 64px 24px; }
-      footer { padding: 52px 24px 40px; }
-      .footer-bottom { flex-direction: column; align-items: center; gap: 10px; }
+      .footer-body { grid-template-columns: 1fr; padding: 52px 24px 44px; }
+      .footer-brand { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 44px; margin-bottom: 44px; }
+      .footer-right { padding-left: 0; }
+      .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
     }
     @media (max-width: 480px) {
       .hero-actions { flex-direction: column; }
@@ -811,8 +785,9 @@
   </ul>
   <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
   <ul class="nav-right">
-    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
     <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="merch.html">Store</a></li>
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
     <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
   </ul>
 </nav>
@@ -822,7 +797,7 @@
   <div class="hero-copy">
     <span class="hero-eyebrow">Official Store</span>
     <h1 class="hero-title">Merch</h1>
-    <p class="hero-sub">Mania Collection</p>
+    <p class="hero-sub">Full Catalog · All Eras</p>
     <div class="hero-divider"></div>
     <p class="hero-tagline">Limited runs. No reprints. Every piece drops once and disappears. Wear the era.</p>
     <div class="hero-actions">
@@ -832,12 +807,12 @@
   </div>
   <div class="hero-photo">
     <img
-      src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Sofaygo_-_Rolling_Loud_2022_%285_of_25%29_%2852221024861%29.jpg/800px-Sofaygo_-_Rolling_Loud_2022_%285_of_25%29_%2852221024861%29.jpg"
-      alt="SoFaygo performing live at Rolling Loud 2022"
+      src="https://i.pinimg.com/1200x/47/2a/86/472a860e653552264c485d48ae2bb252.jpg"
+      alt="SoFaygo"
     >
     <div class="hero-stat">
-      <div class="hero-stat-number">3</div>
-      <div class="hero-stat-label">Pieces · Mania Era</div>
+      <div class="hero-stat-number">16</div>
+      <div class="hero-stat-label">Pieces · Full Catalog</div>
     </div>
   </div>
 </section>
@@ -845,10 +820,12 @@
 <!-- ── FILTER BAR ─────────────────────────────────── -->
 <div class="filter-bar">
   <div class="filter-pills">
-    <button class="filter-pill active" data-filter="all">All (3)</button>
-    <button class="filter-pill" data-filter="hoodie">Hoodies (1)</button>
-    <button class="filter-pill" data-filter="tee">Tees (1)</button>
-    <button class="filter-pill" data-filter="bottom">Bottoms (1)</button>
+    <button class="filter-pill active" data-filter="all">All (16)</button>
+    <button class="filter-pill" data-filter="hoodie">Hoodies (2)</button>
+    <button class="filter-pill" data-filter="tee">Tees (6)</button>
+    <button class="filter-pill" data-filter="bottom">Bottoms (2)</button>
+    <button class="filter-pill" data-filter="vinyl">Vinyl (5)</button>
+    <button class="filter-pill" data-filter="accessory">Accessories (1)</button>
   </div>
   <select class="sort-select" aria-label="Sort products">
     <option value="newest">Newest</option>
@@ -860,9 +837,9 @@
 <!-- ── COLLECTION ─────────────────────────────────── -->
 <section id="collection">
   <div class="collection-header">
-    <span class="collection-label">Mania Collection · 2024</span>
+    <span class="collection-label">Full Catalog · 2022–2024</span>
     <div class="collection-rule"></div>
-    <span class="collection-count" id="result-count">3 Items</span>
+    <span class="collection-count" id="result-count">16 Items</span>
   </div>
 
   <div class="product-grid" id="product-grid">
@@ -872,25 +849,18 @@
       <div class="card-scene">
         <div class="card-flipper">
           <div class="card-face card-face--front">
-            <img
-              src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462"
-              alt="Mania Skull Hoodie, front view"
-            >
+            <img src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie, front view">
           </div>
           <div class="card-face card-face--back">
-            <img
-              src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462"
-              alt="Mania Skull Hoodie, back view"
-            >
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie, back view">
           </div>
         </div>
       </div>
-      <div class="card-badge">Sold Out</div>
       <div class="card-flip-hint">Flip</div>
       <div class="card-info">
         <span class="card-idx">01</span>
         <div class="card-name">Mania Skull Hoodie</div>
-        <div class="card-price">$75.00 · Sold Out</div>
+        <div class="card-price">$75.00</div>
       </div>
     </div>
 
@@ -899,52 +869,302 @@
       <div class="card-scene">
         <div class="card-flipper">
           <div class="card-face card-face--front">
-            <img
-              src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912"
-              alt="Mania Gothic Tee, front view"
-            >
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912" alt="Mania Gothic Tee, front view">
           </div>
           <div class="card-face card-face--back">
-            <img
-              src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915"
-              alt="Mania Gothic Tee, back view"
-            >
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915" alt="Mania Gothic Tee, back view">
           </div>
         </div>
       </div>
-      <div class="card-badge">Sold Out</div>
       <div class="card-flip-hint">Flip</div>
       <div class="card-info">
         <span class="card-idx">02</span>
         <div class="card-name">Mania Gothic Tee</div>
-        <div class="card-price">$35.00 · Sold Out</div>
+        <div class="card-price">$35.00</div>
       </div>
     </div>
 
-    <!-- 03 — Hardcore Sweatpants -->
-    <div class="product-card" data-category="bottom" data-price="75" data-idx="3">
+    <!-- 03 — Road to Mania Tee -->
+    <div class="product-card" data-category="tee" data-price="35" data-idx="3">
       <div class="card-scene">
         <div class="card-flipper">
           <div class="card-face card-face--front">
-            <img
-              src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133"
-              alt="Hardcore Sweatpants, front view"
-            >
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAISCOMINGTEE1_large.png?v=1761953503" alt="Road to Mania Tee, front view">
           </div>
           <div class="card-face card-face--back">
-            <img
-              src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133"
-              alt="Hardcore Sweatpants, back view"
-            >
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAISCOMINGTEE2_large.png?v=1761953503" alt="Road to Mania Tee, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">03</span>
+        <div class="card-name">Road to Mania Tee</div>
+        <div class="card-price">$35.00</div>
+      </div>
+    </div>
+
+    <!-- 04 — Mania Skull Tee -->
+    <div class="product-card" data-category="tee" data-price="35" data-idx="4">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLTEE_BLACK_2_732bd0bb-92b2-4184-9c79-52acf9b4eaf3_large.png?v=1763691942" alt="Mania Skull Tee, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLTEE_BLACK_2_732bd0bb-92b2-4184-9c79-52acf9b4eaf3_large.png?v=1763691942" alt="Mania Skull Tee, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">04</span>
+        <div class="card-name">Mania Skull Tee</div>
+        <div class="card-price">$35.00</div>
+      </div>
+    </div>
+
+    <!-- 05 — Mania Scream Tee -->
+    <div class="product-card" data-category="tee" data-price="35" data-idx="5">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASCREAMTEE1_large.png?v=1763691949" alt="Mania Scream Tee, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASCREAMTEE2_large.png?v=1763691949" alt="Mania Scream Tee, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Limited</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">05</span>
+        <div class="card-name">Mania Scream Tee</div>
+        <div class="card-price">$35.00 · M / XL Only</div>
+      </div>
+    </div>
+
+    <!-- 06 — Hardcore Sweatpants -->
+    <div class="product-card" data-category="bottom" data-price="75" data-idx="6">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">06</span>
+        <div class="card-name">Hardcore Sweatpants</div>
+        <div class="card-price">$75.00</div>
+      </div>
+    </div>
+
+    <!-- 07 — MM Sweatpants -->
+    <div class="product-card" data-category="bottom" data-price="75" data-idx="7">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MMSWEATPANTS1_large.png?v=1763584260" alt="MM Sweatpants, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MMSWEATPANTS2_large.png?v=1763584260" alt="MM Sweatpants, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">07</span>
+        <div class="card-name">MM Sweatpants</div>
+        <div class="card-price">$75.00</div>
+      </div>
+    </div>
+
+    <!-- 08 — Mania Vinyl -->
+    <div class="product-card" data-category="vinyl" data-price="27.99" data-idx="8">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAVINYL2_cf810673-f817-4882-9a3a-f4ba4b71e621_large.png?v=1764050550" alt="Mania Vinyl">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAVINYL2_cf810673-f817-4882-9a3a-f4ba4b71e621_large.png?v=1764050550" alt="Mania Vinyl">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">08</span>
+        <div class="card-name">Mania Vinyl</div>
+        <div class="card-price">$27.99</div>
+      </div>
+    </div>
+
+    <!-- 09 — Mania Alt Cover Vinyl -->
+    <div class="product-card" data-category="vinyl" data-price="27.99" data-idx="9">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAALTCOVERVINYL3_815eb4d5-ee84-4ff6-b73d-b909a86f9c1c_large.png?v=1764050610" alt="Mania Alt Cover Vinyl">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAALTCOVERVINYL3_815eb4d5-ee84-4ff6-b73d-b909a86f9c1c_large.png?v=1764050610" alt="Mania Alt Cover Vinyl">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">09</span>
+        <div class="card-name">Mania Alt Cover Vinyl</div>
+        <div class="card-price">$27.99</div>
+      </div>
+    </div>
+
+    <!-- 10 — Mania Signed Vinyl -->
+    <div class="product-card" data-category="vinyl" data-price="27.99" data-idx="10">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASIGNEDVINYL1_large.png?v=1764050486" alt="Mania Signed Vinyl, front">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASIGNEDVINYL2_large.png?v=1764050486" alt="Mania Signed Vinyl, back">
           </div>
         </div>
       </div>
       <div class="card-badge">Sold Out</div>
       <div class="card-flip-hint">Flip</div>
       <div class="card-info">
-        <span class="card-idx">03</span>
-        <div class="card-name">Hardcore Sweatpants</div>
-        <div class="card-price">$75.00 · Sold Out</div>
+        <span class="card-idx">10</span>
+        <div class="card-name">Mania Signed Vinyl</div>
+        <div class="card-price">$27.99 · Sold Out</div>
+      </div>
+    </div>
+
+    <!-- 11 — Mania Signed Alt Cover Vinyl -->
+    <div class="product-card" data-category="vinyl" data-price="27.99" data-idx="11">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASIGNEDALTCOVERVINYL1_large.png?v=1764050501" alt="Mania Signed Alt Cover Vinyl, front">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASIGNEDALTCOVERVINYL2_large.png?v=1764050501" alt="Mania Signed Alt Cover Vinyl, back">
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Sold Out</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">11</span>
+        <div class="card-name">Signed Alt Cover Vinyl</div>
+        <div class="card-price">$27.99 · Sold Out</div>
+      </div>
+    </div>
+
+    <!-- 12 — After Me Hoodie -->
+    <div class="product-card" data-category="hoodie" data-price="75" data-idx="12">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEHOODIE1_large.png?v=1765933349" alt="After Me Hoodie, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEHOODIE2_large.png?v=1765933349" alt="After Me Hoodie, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">12</span>
+        <div class="card-name">After Me Hoodie</div>
+        <div class="card-price">$75.00</div>
+      </div>
+    </div>
+
+    <!-- 13 — After Me Inverted Tee -->
+    <div class="product-card" data-category="tee" data-price="35" data-idx="13">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEINVERTEDTEE1_large.png?v=1765931888" alt="After Me Inverted Tee, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEINVERTEDTEE2_large.png?v=1765931888" alt="After Me Inverted Tee, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Sold Out</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">13</span>
+        <div class="card-name">After Me Inverted Tee</div>
+        <div class="card-price">$35.00 · Sold Out</div>
+      </div>
+    </div>
+
+    <!-- 14 — After Me Illustration Tee -->
+    <div class="product-card" data-category="tee" data-price="35" data-idx="14">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEILLUSTRATIONTEE1_large.png?v=1765931870" alt="After Me Illustration Tee, front view">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEILLUSTRATIONTEE2_large.png?v=1765931870" alt="After Me Illustration Tee, back view">
+          </div>
+        </div>
+      </div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">14</span>
+        <div class="card-name">After Me Illus. Tee</div>
+        <div class="card-price">$35.00</div>
+      </div>
+    </div>
+
+    <!-- 15 — After Me Vinyl -->
+    <div class="product-card" data-category="vinyl" data-price="27.99" data-idx="15">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEVINYL1_large.png?v=1765957302" alt="After Me Vinyl, front">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://imsofaygo.com/cdn/shop/files/AFTERMEVINYL2_large.png?v=1765957302" alt="After Me Vinyl, back">
+          </div>
+        </div>
+      </div>
+      <div class="card-badge">Pre-Order</div>
+      <div class="card-flip-hint">Flip</div>
+      <div class="card-info">
+        <span class="card-idx">15</span>
+        <div class="card-name">After Me Vinyl</div>
+        <div class="card-price">$27.99 · Ships Mar 2026</div>
+      </div>
+    </div>
+
+    <!-- 16 — Hardcore Episode Bandana -->
+    <div class="product-card" data-category="accessory" data-price="30" data-idx="16">
+      <div class="card-scene">
+        <div class="card-flipper">
+          <div class="card-face card-face--front">
+            <img src="https://cdn.shopify.com/s/files/1/0984/1908/1397/files/HARDCOREEPISODEBANDANA1.png?v=1763582198" alt="Hardcore Episode Bandana">
+          </div>
+          <div class="card-face card-face--back">
+            <img src="https://cdn.shopify.com/s/files/1/0984/1908/1397/files/HARDCOREEPISODEBANDANA1.png?v=1763582198" alt="Hardcore Episode Bandana">
+          </div>
+        </div>
+      </div>
+      <div class="card-info">
+        <span class="card-idx">16</span>
+        <div class="card-name">Hardcore Bandana</div>
+        <div class="card-price">$30.00</div>
       </div>
     </div>
 
@@ -1028,20 +1248,42 @@
 
 <!-- ── FOOTER ─────────────────────────────────────── -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-wordmark">SoFaygo</div>
-    <div class="footer-tagline">Atlanta · Cactus Jack Records</div>
-    <div class="social-row">
-      <a href="#" class="social-btn" title="Instagram">IG</a>
-      <a href="#" class="social-btn" title="Twitter / X">X</a>
-      <a href="#" class="social-btn" title="Spotify">SP</a>
-      <a href="#" class="social-btn" title="YouTube">YT</a>
-      <a href="#" class="social-btn" title="Apple Music">AM</a>
+  <div class="footer-body">
+    <div class="footer-brand">
+      <div class="footer-mark">
+        <span class="footer-mark-cactus">So</span>
+        <span class="footer-mark-jack">Faygo</span>
+        <span class="footer-mark-records">Atlanta, GA</span>
+      </div>
+      <div class="footer-origin">
+        <span class="footer-origin-line"></span>
+        <span>Atlanta</span>
+        <span class="footer-origin-line"></span>
+        <span>Cactus Jack Records</span>
+      </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 SoFaygo. All Rights Reserved.</span>
-      <span>Cactus Jack Records</span>
+    <div class="footer-right">
+      <div>
+        <span class="footer-col-head">Navigate</span>
+        <ul class="footer-nav-list">
+          <li><a href="sofaygo.html">Home <span class="footer-nav-arrow">&#8594;</span></a></li>
+          <li><a href="biography.html">About <span class="footer-nav-arrow">&#8594;</span></a></li>
+          <li><a href="discography.html">Discography <span class="footer-nav-arrow">&#8594;</span></a></li>
+          <li><a href="cactus-jack.html">Label <span class="footer-nav-arrow">&#8594;</span></a></li>
+          <li><a href="merch.html">Store <span class="footer-nav-arrow">&#8594;</span></a></li>
+          <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream <span class="footer-nav-arrow">&#8599;</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-affiliations">
+        Epic Records<br>
+        Sony Music Entertainment<br>
+        Cactus Jack Records
+      </div>
     </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 SoFaygo. All Rights Reserved.</span>
+    <span>Cactus Jack Records · Epic Records · Sony Music</span>
   </div>
 </footer>
 
