@@ -50,6 +50,8 @@
     }
     .nav-left a:hover, .nav-right a:hover { color: var(--white); }
     .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-left a[aria-current="page"], .nav-right a[aria-current="page"] { color: var(--white); }
+    .nav-left a[aria-current="page"]::after, .nav-right a[aria-current="page"]::after { width: 100%; }
     .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: var(--red); line-height: 1; }
     .nav-ticket-btn {
       font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important;
@@ -408,7 +410,7 @@
   </ul>
   <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
   <ul class="nav-right">
-    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="cactus-jack.html" aria-current="page">Label</a></li>
     <li><a href="merch.html">Store</a></li>
     <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
     <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>

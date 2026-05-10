@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SoFaygo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600&family=Modak&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -544,9 +544,73 @@
       .card-wrap { width: 120px; height: 160px; }
       .cards { gap: 12px; }
     }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: 0 48px; height: 64px;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-right { justify-content: flex-end; }
+    .nav-left a, .nav-right a {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(255,255,255,0.32);
+      text-decoration: none; transition: color 0.2s; position: relative;
+    }
+    .nav-left a::after, .nav-right a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: #C8171E;
+      transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-left a:hover, .nav-right a:hover { color: #fff; }
+    .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-left a[aria-current="page"], .nav-right a[aria-current="page"] { color: #fff; }
+    .nav-left a[aria-current="page"]::after, .nav-right a[aria-current="page"]::after { width: 100%; }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: #C8171E; line-height: 1; text-decoration: none; }
+    .nav-ticket-btn { font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important; text-transform: uppercase; color: #fff !important; background: #C8171E; padding: 6px 14px; transition: opacity 0.22s, transform 0.22s !important; white-space: nowrap; }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
+    @media (max-width: 640px) {
+      nav { padding: 0 20px; }
+      .nav-left, .nav-right { display: none; }
+    }
+
+    /* ── FOOTER ── */
+    footer { padding: 72px 64px 48px; background: #080808; border-top: 2px solid #C8171E; }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+    .footer-wordmark { font-family: 'Modak', cursive; font-size: 54px; color: #C8171E; letter-spacing: 0.05em; }
+    .footer-tagline { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.32); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #C8171E; }
+    .footer-bottom { width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.07); display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: rgba(255,255,255,0.32); text-transform: uppercase; }
+    @media (max-width: 640px) {
+      footer { padding: 56px 24px 36px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+    }
   </style>
 </head>
 <body>
+
+<!-- ── NAV ── -->
+<nav>
+  <ul class="nav-left">
+    <li><a href="biography.html">About</a></li>
+    <li><a href="discography.html">Discography</a></li>
+  </ul>
+  <a href="sofaygo.html" class="nav-logo" aria-current="page">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="merch.html">Store</a></li>
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
+    <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
+  </ul>
+</nav>
 
 <!-- ── 1: HERO ── -->
 <section id="hero">
@@ -812,6 +876,25 @@ const io = new IntersectionObserver(entries => {
   if (el) io.observe(el);
 });
 </script>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Cactus Jack Records · Est. 2017 · Houston, TX</div>
+    <div class="footer-links">
+      <a href="sofaygo.html">Home</a>
+      <a href="biography.html">About</a>
+      <a href="discography.html">Discography</a>
+      <a href="cactus-jack.html">Label</a>
+      <a href="merch.html">Store</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records · Epic Records · Sony Music</span>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>

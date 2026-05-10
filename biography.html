@@ -31,27 +31,28 @@
       position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
       display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
       padding: 0 48px; height: 64px;
-      background: rgba(8,8,8,0.80);
-      backdrop-filter: blur(22px) saturate(1.5);
-      -webkit-backdrop-filter: blur(22px) saturate(1.5);
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(24px) saturate(1.4);
+      -webkit-backdrop-filter: blur(24px) saturate(1.4);
       border-bottom: 1px solid var(--border);
     }
-    .nav-left, .nav-right { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
     .nav-right { justify-content: flex-end; }
     .nav-left a, .nav-right a {
       font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
-      text-transform: uppercase; color: rgba(255,255,255,0.48);
-      transition: color 0.22s; position: relative;
+      text-transform: uppercase; color: rgba(255,255,255,0.32);
+      transition: color 0.2s; position: relative;
     }
     .nav-left a::after, .nav-right a::after {
       content: ''; position: absolute; bottom: -4px; left: 0;
       width: 0; height: 1px; background: #C8171E;
-      transition: width 0.32s cubic-bezier(0.22,1,0.36,1);
+      transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
     }
     .nav-left a:hover, .nav-right a:hover { color: var(--white); }
     .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-left a[aria-current="page"], .nav-right a[aria-current="page"] { color: var(--white); }
+    .nav-left a[aria-current="page"]::after, .nav-right a[aria-current="page"]::after { width: 100%; }
     .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: #C8171E; line-height: 1; }
-    /* ── NAV TICKET BUTTON ── */
     .nav-ticket-btn { font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important; text-transform: uppercase; color: #fff !important; background: #C8171E; padding: 6px 14px; transition: opacity 0.22s, transform 0.22s !important; white-space: nowrap; }
     .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
     .nav-ticket-btn::after { display: none !important; }
@@ -251,26 +252,14 @@
     .inf-popup-row { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.45; }
     .inf-popup-row strong { color: rgba(255,255,255,0.65); font-weight: 500; margin-right: 4px; }
     /* ── FOOTER ──────────────────────────────── */
-    footer { background: var(--black); border-top: 3px solid var(--pink); }
-    .footer-body { display: grid; grid-template-columns: 1fr 260px; gap: 0; padding: 44px 64px 36px; border-bottom: 1px solid var(--border); }
-    .footer-brand { padding-right: 48px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
-    .footer-mark { display: flex; flex-direction: column; line-height: 0.86; margin-bottom: 20px; }
-    .footer-mark-cactus { font-family: var(--font-disp); font-size: clamp(24px,3vw,38px); color: rgba(255,255,255,0.22); letter-spacing: 0.04em; }
-    .footer-mark-jack { font-family: var(--font-disp); font-size: clamp(52px,7vw,88px); color: var(--pink); letter-spacing: -0.01em; line-height: 0.82; }
-    .footer-mark-records { font-family: var(--font-disp); font-size: clamp(14px,1.6vw,22px); color: rgba(255,255,255,0.14); letter-spacing: 0.14em; margin-top: 4px; }
-    .footer-origin { display: flex; align-items: center; gap: 12px; font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
-    .footer-origin-line { width: 18px; height: 1px; background: var(--pink); opacity: 0.5; flex-shrink: 0; }
-    .footer-right { padding-left: 40px; display: flex; flex-direction: column; justify-content: space-between; }
-    .footer-col-head { display: block; font-size: 8px; font-weight: 700; letter-spacing: 0.32em; text-transform: uppercase; color: var(--pink); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-    .footer-nav-list { display: flex; flex-direction: column; list-style: none; margin-bottom: 20px; }
-    .footer-nav-list li { border-bottom: 1px solid var(--border); }
-    .footer-nav-list li:last-child { border-bottom: none; }
-    .footer-nav-list a { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-disp); font-size: 20px; letter-spacing: 0.04em; color: rgba(255,255,255,0.38); padding: 5px 0; transition: color 0.18s, transform 0.22s cubic-bezier(0.22,1,0.36,1); }
-    .footer-nav-list a:hover { color: var(--white); transform: translateX(4px); }
-    .footer-nav-list a .footer-nav-arrow { font-size: 11px; opacity: 0; color: var(--pink); transition: opacity 0.18s; }
-    .footer-nav-list a:hover .footer-nav-arrow { opacity: 1; }
-    .footer-affiliations { font-size: 9px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.18); line-height: 2; }
-    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: 12px 64px; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.16); }
+    footer { padding: 72px 64px 48px; background: var(--black); border-top: 2px solid var(--pink); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+    .footer-wordmark { font-family: 'Modak', cursive; font-size: 54px; color: var(--pink); letter-spacing: 0.05em; }
+    .footer-tagline { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(255,255,255,0.32); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.32); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--pink); }
+    .footer-bottom { width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: rgba(255,255,255,0.32); text-transform: uppercase; }
 
     /* ── REVEAL ──────────────────────────────── */
     [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -298,10 +287,8 @@
       .acc-header { grid-template-columns: 80px 1fr auto; gap: 14px; padding: 24px 16px; }
       .influences-section { padding: 64px 24px; }
       .influences-grid { grid-template-columns: repeat(2,1fr); }
-      .footer-body { grid-template-columns: 1fr; padding: 52px 24px 44px; }
-      .footer-brand { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 44px; margin-bottom: 44px; }
-      .footer-right { padding-left: 0; }
-      .footer-bottom { padding: 16px 24px; flex-direction: column; gap: 8px; text-align: center; }
+      footer { padding: 56px 24px 36px; }
+      .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
       .bio-hero-stats { gap: 24px; }
     }
   </style>
@@ -311,7 +298,7 @@
 <!-- ── NAV ─────────────────────────────────────── -->
 <nav>
   <ul class="nav-left">
-    <li><a href="biography.html">About</a></li>
+    <li><a href="biography.html" aria-current="page">About</a></li>
     <li><a href="discography.html">Discography</a></li>
   </ul>
   <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
@@ -1017,44 +1004,22 @@
   </div>
 </div>
 
-<!-- ── FOOTER ───────────────────────────────────── -->
+<!-- ── FOOTER ── -->
 <footer>
-  <div class="footer-body">
-    <div class="footer-brand">
-      <div class="footer-mark">
-        <span class="footer-mark-cactus">So</span>
-        <span class="footer-mark-jack">Faygo</span>
-        <span class="footer-mark-records">Atlanta, GA</span>
-      </div>
-      <div class="footer-origin">
-        <span class="footer-origin-line"></span>
-        <span>Atlanta</span>
-        <span class="footer-origin-line"></span>
-        <span>Cactus Jack Records</span>
-      </div>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Cactus Jack Records · Est. 2017 · Houston, TX</div>
+    <div class="footer-links">
+      <a href="sofaygo.html">Home</a>
+      <a href="biography.html">About</a>
+      <a href="discography.html">Discography</a>
+      <a href="cactus-jack.html">Label</a>
+      <a href="merch.html">Store</a>
     </div>
-    <div class="footer-right">
-      <div>
-        <span class="footer-col-head">Navigate</span>
-        <ul class="footer-nav-list">
-          <li><a href="sofaygo.html">Home <span class="footer-nav-arrow">&#8594;</span></a></li>
-          <li><a href="biography.html">About <span class="footer-nav-arrow">&#8594;</span></a></li>
-          <li><a href="discography.html">Discography <span class="footer-nav-arrow">&#8594;</span></a></li>
-          <li><a href="cactus-jack.html">Label <span class="footer-nav-arrow">&#8594;</span></a></li>
-          <li><a href="merch.html">Store <span class="footer-nav-arrow">&#8594;</span></a></li>
-          <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream <span class="footer-nav-arrow">&#8599;</span></a></li>
-        </ul>
-      </div>
-      <div class="footer-affiliations">
-        Epic Records<br>
-        Sony Music Entertainment<br>
-        Cactus Jack Records
-      </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records · Epic Records · Sony Music</span>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2025 SoFaygo. All Rights Reserved.</span>
-    <span>Cactus Jack Records · Epic Records · Sony Music</span>
   </div>
 </footer>
 
