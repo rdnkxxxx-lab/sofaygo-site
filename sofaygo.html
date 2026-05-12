@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -6,6 +6,11 @@
   <title>SoFaygo — Official</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://i.pinimg.com">
+  <link rel="preconnect" href="https://i.scdn.co">
+  <link rel="preconnect" href="https://img.youtube.com">
+  <link rel="preconnect" href="https://imsofaygo.com">
+  <link rel="dns-prefetch" href="https://open.spotify.com">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Modak&display=swap" rel="stylesheet">
   <style>
     /* ── Design Tokens ─────────────────────────── */
@@ -1203,7 +1208,7 @@
 <!-- ── HERO ────────────────────────────────────── -->
 <section id="hero">
   <div class="hero-photo fill-a">
-    <img src="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg" alt="SoFaygo">
+    <img src="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg" alt="SoFaygo" fetchpriority="high">
   </div>
   <div class="hero-copy">
     <span class="label" style="color:var(--white);">Atlanta, Georgia</span>
@@ -1232,7 +1237,7 @@
 <!-- ── RECOGNITION ──────────────────────────────── -->
 <section id="recognition">
   <div class="recog-photo fill-c">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/SoFaygo_%28cropped%29.jpg" alt="SoFaygo performing live" style="object-position: center 10%;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/SoFaygo_%28cropped%29.jpg" alt="SoFaygo performing live" style="object-position: center 10%;" loading="lazy">
   </div>
   <div class="recog-copy" data-reveal>
     <div class="recog-left">
@@ -1280,7 +1285,7 @@
 <!-- ── SONGS TO LISTEN ──────────────────────────── -->
 <section id="songs">
   <div class="songs-right">
-    <img src="https://i0.wp.com/postconcertdepression.com/wp-content/uploads/2024/03/Lil-Tecca-Opener-SoFaygoEd-3-683x1024.jpg?w=1400" alt="SoFaygo performing live 2024">
+    <img src="https://i0.wp.com/postconcertdepression.com/wp-content/uploads/2024/03/Lil-Tecca-Opener-SoFaygoEd-3-683x1024.jpg?w=1400" alt="SoFaygo performing live 2024" loading="lazy">
   </div>
   <div class="songs-copy">
     <span class="label">Playlist</span>
@@ -1370,11 +1375,21 @@
 
 <!-- Spotify IFrame API container -->
 <div id="embed-iframe" style="position:fixed; width:1px; height:1px; overflow:hidden; pointer-events:none; opacity:0; bottom:0; right:0;"></div>
-<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+<script>
+  window._spotifyLoaded = false;
+  function _loadSpotify() {
+    if (window._spotifyLoaded) return;
+    window._spotifyLoaded = true;
+    var s = document.createElement('script');
+    s.src = 'https://open.spotify.com/embed/iframe-api/v1';
+    s.async = true;
+    document.head.appendChild(s);
+  }
+</script>
 
 <!-- ── MANIA ───────────────────────────────────────── -->
 <div class="album-feat" id="mania">
-  <img class="album-feat-bg" src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania" style="object-position: center 15%;">
+  <img class="album-feat-bg" src="https://i.scdn.co/image/ab67616d0000b27365bcb5fddcf5de10bfe6c4b4" alt="Mania" style="object-position: center 15%;" loading="lazy">
   <div class="album-feat-overlay"></div>
   <span class="album-ghost-num">M</span>
   <div class="album-feat-content" data-reveal>
@@ -1404,7 +1419,7 @@
   <a href="https://youtu.be/zUdW0nlmeXw?si=hw30rNeaZxIt1d0V" target="_blank" rel="noopener"
      id="yt-facade"
      style="width:100%;max-width:1100px;position:relative;border-radius:12px;overflow:hidden;aspect-ratio:16/9;box-shadow:0 24px 80px rgba(0,0,0,0.7);cursor:pointer;display:block;">
-    <img src="https://img.youtube.com/vi/zUdW0nlmeXw/maxresdefault.jpg" alt="SoFaygo — Back in the Mix" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);" id="yt-thumb">
+    <img src="https://img.youtube.com/vi/zUdW0nlmeXw/maxresdefault.jpg" alt="SoFaygo — Back in the Mix" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.5s cubic-bezier(0.22,1,0.36,1);" id="yt-thumb" loading="lazy">
     <div style="position:absolute;inset:0;background:rgba(8,8,8,0.25);transition:background 0.3s;" id="yt-overlay"></div>
     <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;background:rgba(200,23,30,0.92);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 10px rgba(200,23,30,0.2),0 8px 40px rgba(0,0,0,0.55);transition:transform 0.3s cubic-bezier(0.22,1,0.36,1),box-shadow 0.3s;" id="yt-btn">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="margin-left:4px;"><path d="M8 5v14l11-7z"/></svg>
@@ -1436,7 +1451,7 @@
 <!-- ── CACTUS JACK ───────────────────────────────── -->
 <section id="cactus">
   <div class="cj-photo">
-    <img src="https://img.youtube.com/vi/R-P2B5CXGuk/maxresdefault.jpg" alt="SoFaygo & Travis Scott — Cactus Jack at Summer Smash 2024" style="object-position: center center;">
+    <img src="https://img.youtube.com/vi/R-P2B5CXGuk/maxresdefault.jpg" alt="SoFaygo & Travis Scott — Cactus Jack at Summer Smash 2024" style="object-position: center center;" loading="lazy">
   </div>
   <div class="cj-copy" data-reveal>
     <span class="label">Label</span>
@@ -1478,10 +1493,10 @@
         <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
           <div class="merch-card-face merch-card-face-front">
-            <img src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Front">
+            <img src="https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Front" loading="lazy">
           </div>
           <div class="merch-card-face merch-card-face-back">
-            <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Back" loading="lazy">
           </div>
         </div>
         <div class="merch-flip-hint">Flip</div>
@@ -1497,10 +1512,10 @@
         <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
           <div class="merch-card-face merch-card-face-front">
-            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912" alt="Mania Gothic Tee — Front">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912" alt="Mania Gothic Tee — Front" loading="lazy">
           </div>
           <div class="merch-card-face merch-card-face-back">
-            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915" alt="Mania Gothic Tee — Back">
+            <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915" alt="Mania Gothic Tee — Back" loading="lazy">
           </div>
         </div>
         <div class="merch-flip-hint">Flip</div>
@@ -1516,10 +1531,10 @@
         <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
           <div class="merch-card-face merch-card-face-front">
-            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Front">
+            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Front" loading="lazy">
           </div>
           <div class="merch-card-face merch-card-face-back">
-            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Back">
+            <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Back" loading="lazy">
           </div>
         </div>
         <div class="merch-flip-hint">Flip</div>
@@ -1664,6 +1679,7 @@
 
   /* Track player */
   function playTrack(row, id) {
+    _loadSpotify();
     document.querySelectorAll('.track-row.playing').forEach(function(r){ r.classList.remove('playing'); });
     row.classList.add('playing');
     document.getElementById('player-title').textContent = row.querySelector('.track-title').textContent.trim();
