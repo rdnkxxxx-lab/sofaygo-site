@@ -233,11 +233,11 @@
       box-shadow: 0 28px 72px rgba(0,0,0,0.75), 0 4px 18px rgba(0,0,0,0.45);
     }
     .inf-popup-photo {
-      width: 100%; height: 210px; object-fit: cover; object-position: center top;
+      width: 100%; height: 250px; object-fit: cover; object-position: center 15%;
       display: block; background: #222;
     }
     .inf-popup-photo-placeholder {
-      width: 100%; height: 210px; background: linear-gradient(160deg,#1e1e1e 0%,#111 100%);
+      width: 100%; height: 250px; background: linear-gradient(160deg,#1e1e1e 0%,#111 100%);
       display: flex; align-items: center; justify-content: center;
     }
     .inf-popup-photo-placeholder svg { opacity: 0.15; }
@@ -992,7 +992,7 @@
         <path d="M6 40c0-9.941 8.059-18 18-18s18 8.059 18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </div>
-    <img class="inf-popup-photo" id="inf-photo" src="" alt="" style="display:none">
+    <img class="inf-popup-photo" id="inf-photo" src="" alt="" style="display:none" onerror="this.style.display='none';document.getElementById('inf-placeholder').style.display='flex'">
     <div class="inf-popup-body">
       <div class="inf-popup-name" id="inf-name"></div>
       <div class="inf-popup-genre" id="inf-genre"></div>
@@ -1196,18 +1196,18 @@
   /* Influence artist popups */
   (function () {
     var artistData = {
-      'Drake':        { origin: 'Toronto, Canada',      genre: 'Hip-hop · R&B · Pop rap',          known: 'Views · Take Care · Certified Lover Boy', wiki: 'Drake_(musician)' },
-      'Travis Scott': { origin: 'Houston, TX',           genre: 'Psychedelic trap · Hip-hop',        known: 'Astroworld · UTOPIA · Rodeo',              wiki: 'Travis_Scott' },
-      'Chief Keef':   { origin: 'Chicago, IL',           genre: 'Drill · Trap',                      known: 'Finally Rich · Almighty So',               wiki: 'Chief_Keef' },
-      'Lil Wayne':    { origin: 'New Orleans, LA',       genre: 'Hip-hop · Rap',                     known: 'Tha Carter series · No Ceilings',           wiki: 'Lil_Wayne' },
-      'Chris Brown':  { origin: 'Tappahannock, VA',      genre: 'R&B · Pop · Hip-hop',               known: 'Fortune · X · Indigo',                     wiki: 'Chris_Brown' },
-      'Playboi Carti':{ origin: 'Atlanta, GA',           genre: 'Mumble rap · Trap',                 known: 'Die Lit · Whole Lotta Red',                 wiki: 'Playboi_Carti' },
-      'Lil Uzi Vert': { origin: 'Philadelphia, PA',      genre: 'Alt-trap · Emo rap',                known: 'Luv Is Rage 2 · Eternal Atake · Pink Tape', wiki: 'Lil_Uzi_Vert' },
-      'Lil Tecca':    { origin: 'Queens, NY',            genre: 'Melodic trap · Hip-hop',            known: 'We Love You Tecca · 8 ✕ 10',               wiki: 'Lil_Tecca' },
-      'Don Toliver':  { origin: 'Houston, TX',           genre: 'R&B · Psychedelic soul · Trap',     known: 'Heaven or Hell · Life of a DON · Hardstone Psycho', wiki: 'Don_Toliver' },
-      'Young Thug':   { origin: 'Atlanta, GA',           genre: 'Trap · Melodic rap',                known: 'Slime Season · JEFFERY · PUNK',             wiki: 'Young_Thug' },
-      'The Ramones':  { origin: 'Queens, NY',            genre: 'Punk rock · Proto-punk',            known: 'Ramones · Rocket to Russia · Road to Ruin', wiki: 'Ramones' },
-      'Blondie':      { origin: 'New York, NY',          genre: 'New wave · Punk · Pop',             known: 'Parallel Lines · Heart of Glass · Call Me',  wiki: 'Blondie_(band)' }
+      'Drake':        { origin: 'Toronto, Canada',      genre: 'Hip-hop · R&B · Pop rap',          known: 'Views · Take Care · Certified Lover Boy',         wiki: 'Drake_(musician)', imgPos: 'center 30%', photo: 'https://i.pinimg.com/736x/03/57/d9/0357d919e215d311137956320f93f9b5.jpg' },
+      'Travis Scott': { origin: 'Houston, TX',          genre: 'Psychedelic trap · Hip-hop',        known: 'Astroworld · UTOPIA · Rodeo',                     wiki: 'Travis_Scott',     imgPos: 'center 15%', photo: 'https://i.pinimg.com/1200x/6b/c1/21/6bc121b7e5a2120703fb04e652e612ba.jpg' },
+      'Chief Keef':   { origin: 'Chicago, IL',          genre: 'Drill · Trap',                      known: 'Finally Rich · Almighty So',                     wiki: 'Chief_Keef',       imgPos: 'center 18%', photo: 'https://i.pinimg.com/736x/8a/11/4c/8a114cb134ee7b926c371130dd4633e0.jpg' },
+      'Lil Wayne':    { origin: 'New Orleans, LA',      genre: 'Hip-hop · Rap',                     known: 'Tha Carter series · No Ceilings',                 wiki: 'Lil_Wayne',        imgPos: 'center 10%' },
+      'Chris Brown':  { origin: 'Tappahannock, VA',     genre: 'R&B · Pop · Hip-hop',               known: 'Fortune · X · Indigo',                           wiki: 'Chris_Brown',      imgPos: 'center 5%', photo: 'https://i.pinimg.com/736x/05/1b/fa/051bfa772e1186eb9cd9ea84d567bbf2.jpg' },
+      'Playboi Carti':{ origin: 'Atlanta, GA',          genre: 'Mumble rap · Trap',                 known: 'Die Lit · Whole Lotta Red',                      wiki: 'Playboi_Carti',    imgPos: 'center 20%', photo: 'https://i.pinimg.com/736x/4b/04/e2/4b04e2f44470d832f9fc6a1383cfdaa4.jpg' },
+      'Lil Uzi Vert': { origin: 'Philadelphia, PA',     genre: 'Alt-trap · Emo rap',                known: 'Luv Is Rage 2 · Eternal Atake · Pink Tape',      wiki: 'Lil_Uzi_Vert',     imgPos: 'center 20%', photo: 'https://i.pinimg.com/1200x/4f/d5/d4/4fd5d4d267f4eedb5c33bc3de6c813c4.jpg' },
+      'Lil Tecca':    { origin: 'Queens, NY',           genre: 'Melodic trap · Hip-hop',            known: 'We Love You Tecca · 8 ✕ 10',                    wiki: 'Lil_Tecca',        imgPos: 'center 5%', photo: 'https://i.pinimg.com/736x/ca/33/aa/ca33aaa73b97003e77e6e86d09a55a36.jpg' },
+      'Don Toliver':  { origin: 'Houston, TX',          genre: 'R&B · Psychedelic soul · Trap',     known: 'Heaven or Hell · Life of a DON · Hardstone Psycho', wiki: 'Don_Toliver',   imgPos: 'center 5%', photo: 'https://i.pinimg.com/736x/14/58/77/1458777e7c1013a0cd2072212e9a41e6.jpg' },
+      'Young Thug':   { origin: 'Atlanta, GA',          genre: 'Trap · Melodic rap',                known: 'Slime Season · JEFFERY · PUNK',                  wiki: 'Young_Thug',       imgPos: 'center 20%', photo: 'https://i.pinimg.com/736x/4c/7d/89/4c7d89b8e98b0a9091322cbcb0ab8984.jpg' },
+      'The Ramones':  { origin: 'Queens, NY',           genre: 'Punk rock · Proto-punk',            known: 'Ramones · Rocket to Russia · Road to Ruin',      wiki: 'Ramones',          imgPos: 'center 20%' },
+      'Blondie':      { origin: 'New York, NY',         genre: 'New wave · Punk · Pop',             known: 'Parallel Lines · Heart of Glass · Call Me',      wiki: 'Blondie_(band)',   imgPos: 'center 18%' }
     };
 
     var popup      = document.getElementById('influence-popup');
@@ -1237,12 +1237,20 @@
 
     function showPhoto(src) {
       if (!src) return;
+      var info = currentArtist && artistData[currentArtist];
+      photoEl.style.objectPosition = (info && info.imgPos) ? info.imgPos : 'center 15%';
       photoEl.src = src;
       photoEl.style.display = 'block';
       placeholder.style.display = 'none';
     }
 
     function fetchPhoto(wikiKey, artist) {
+      var info = artistData[artist];
+      if (info && info.photo) {
+        cache[wikiKey] = info.photo;
+        if (currentArtist === artist) showPhoto(info.photo);
+        return;
+      }
       if (cache[wikiKey] !== undefined) {
         if (currentArtist === artist) showPhoto(cache[wikiKey]);
         return;
@@ -1250,7 +1258,7 @@
       cache[wikiKey] = null; /* mark in-flight so we don't double-fetch */
       var url = 'https://en.wikipedia.org/w/api.php?action=query&titles='
         + encodeURIComponent(wikiKey)
-        + '&prop=pageimages&format=json&pithumbsize=600&origin=*';
+        + '&prop=pageimages&format=json&pithumbsize=1200&origin=*';
       fetch(url)
         .then(function (r) { return r.json(); })
         .then(function (j) {
