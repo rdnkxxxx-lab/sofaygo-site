@@ -1,0 +1,6 @@
+.claude/
+*.mp4
+*.mov
+*.avi
+Thumbs.db
+.DS_Store
