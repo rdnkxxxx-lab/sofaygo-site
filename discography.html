@@ -286,10 +286,10 @@
       .release-item { grid-template-columns: 40px 260px 1fr; gap: 0 36px; padding: 56px 48px; }
     }
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; grid-template-rows: auto auto auto; }
       .hero-photo { grid-column: 1; grid-row: 1; min-height: 60vw; }
       .hero-copy { grid-column: 1; grid-row: 2; padding: 48px 40px 48px; }
-      .filmstrip-bar { padding: 0 40px; }
+      .filmstrip-bar { grid-column: 1; grid-row: 3; padding: 0 40px; }
       .cat-header { padding: 28px 40px 24px; }
       .release-item { grid-template-columns: 36px 1fr; grid-template-rows: auto auto; padding: 48px 40px; gap: 0 28px; }
       .release-cover-col { grid-column: 2; grid-row: 1; margin-bottom: 32px; }
@@ -393,16 +393,16 @@
 
     /* ── Mobile — Discography Layout ───────────────────── */
 
-    /* Hero */
-    .is-mobile .hero              { grid-template-columns: 1fr; }
-    .is-mobile .hero-photo        { grid-column: 1; grid-row: 1; min-height: 56vw; }
-    .is-mobile .hero-copy         { grid-column: 1; grid-row: 2; padding: 36px 20px 28px; gap: 20px; }
-    .is-mobile .hero-title        { font-size: clamp(58px, 16vw, 80px); }
+    /* Hero — fix row collision: photo=1, copy=2, filmstrip=3 */
+    .is-mobile .hero              { grid-template-columns: 1fr; grid-template-rows: auto auto auto; min-height: unset; }
+    .is-mobile .hero-photo        { grid-column: 1; grid-row: 1; min-height: 88vw; }
+    .is-mobile .hero-copy         { grid-column: 1; grid-row: 2; padding: 32px 20px 24px; gap: 20px; }
+    .is-mobile .hero-title        { font-size: clamp(56px, 15vw, 80px); }
     .is-mobile .hero-stats        { gap: 20px; flex-wrap: wrap; }
     .is-mobile .hero-stat-val     { font-size: 28px; }
 
-    /* Filmstrip */
-    .is-mobile .filmstrip-bar     { padding: 0 20px; }
+    /* Filmstrip — move to row 3, full width */
+    .is-mobile .filmstrip-bar     { grid-column: 1; grid-row: 3; padding: 0 20px; }
     .is-mobile .filmstrip-spine   { display: none; }
     .is-mobile .strip-cover       { width: 64px; height: 64px; }
     .is-mobile .filmstrip         { gap: 8px; padding: 14px 0; }
