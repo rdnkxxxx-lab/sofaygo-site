@@ -390,6 +390,46 @@
     .is-mobile  .nav-right     { display: none; }
     .is-mobile  .nav-logo      { grid-column: 2; grid-row: 1; }
     .is-mobile  .nav-hamburger { display: flex; grid-column: 3; grid-row: 1; }
+
+    /* ── Mobile — Discography Layout ───────────────────── */
+
+    /* Hero */
+    .is-mobile .hero              { grid-template-columns: 1fr; }
+    .is-mobile .hero-photo        { grid-column: 1; grid-row: 1; min-height: 56vw; }
+    .is-mobile .hero-copy         { grid-column: 1; grid-row: 2; padding: 36px 20px 28px; gap: 20px; }
+    .is-mobile .hero-title        { font-size: clamp(58px, 16vw, 80px); }
+    .is-mobile .hero-stats        { gap: 20px; flex-wrap: wrap; }
+    .is-mobile .hero-stat-val     { font-size: 28px; }
+
+    /* Filmstrip */
+    .is-mobile .filmstrip-bar     { padding: 0 20px; }
+    .is-mobile .filmstrip-spine   { display: none; }
+    .is-mobile .strip-cover       { width: 64px; height: 64px; }
+    .is-mobile .filmstrip         { gap: 8px; padding: 14px 0; }
+
+    /* Category header */
+    .is-mobile .cat-header        { padding: 20px 20px 16px; }
+    .is-mobile .cat-type          { font-size: clamp(34px, 8.5vw, 52px); }
+
+    /* Release items — single column, full-width cover */
+    .is-mobile .release-item      { grid-template-columns: 1fr; padding: 28px 20px 32px; gap: 0; }
+    .is-mobile .release-num-col   { display: none; }
+    .is-mobile .release-ghost     { display: none; }
+    .is-mobile .release-cover-col { grid-column: auto; grid-row: auto; margin-bottom: 20px; }
+    .is-mobile .release-cover-wrap{ position: static; }
+    .is-mobile .release-cover-img { max-width: 100%; width: 100%; }
+    .is-mobile .release-body      { grid-column: auto; grid-row: auto; }
+    .is-mobile .release-title     { font-size: clamp(42px, 11vw, 64px); margin-bottom: 10px; }
+    .is-mobile .release-year      { margin-bottom: 14px; }
+    .is-mobile .release-desc      { font-size: 13px; line-height: 1.75; margin-bottom: 16px; max-width: 100%; }
+    .is-mobile .release-ratings   { margin-bottom: 18px; }
+    .is-mobile .release-stream-row{ margin-top: 12px; gap: 6px; }
+    .is-mobile .stream-link       { padding: 7px 12px; font-size: 9px; }
+
+    /* Tracklist */
+    .is-mobile .tl-toggle         { font-size: 9px; padding: 2px 0; }
+    .is-mobile .track-title       { font-size: 12px; }
+    .is-mobile .track-row         { padding: 10px 0; }
   </style>
   <script>!function(){var u=navigator.userAgent,c=window.matchMedia('(pointer:coarse)').matches,n=window.innerWidth<768,m=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(u)||(c&&window.innerWidth<=1200)||n;document.documentElement.classList.add(m?'is-mobile':'is-desktop')}()</script>
 </head>
