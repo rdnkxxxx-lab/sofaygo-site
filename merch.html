@@ -726,6 +726,67 @@
       .notify-btn { padding: 11px; }
       .social-row { flex-wrap: wrap; justify-content: center; }
     }
+
+    /* ── Mobile Navigation ──────────────────────── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 24px;
+      height: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      justify-self: end;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 100%;
+      height: 1.5px;
+      background: #F8F8F6;
+      border-radius: 1px;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7.25px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7.25px) rotate(-45deg); }
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 199;
+      background: rgba(8,8,8,0.97);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-nav-links {
+      list-style: none;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+    }
+    .mobile-nav-links li a {
+      font-family: var(--font-disp);
+      font-size: clamp(40px, 10.5vw, 56px);
+      letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.38);
+      transition: color 0.22s;
+      display: block;
+      padding: 8px 40px;
+    }
+    .mobile-nav-links li a:hover,
+    .mobile-nav-links li a[aria-current="page"] { color: #F8F8F6; }
+    .mobile-nav-tickets-link { color: #C8171E !important; }
+    .mobile-nav-tickets-link:hover { color: #e82028 !important; }
+    @media (max-width: 640px) {
+      .nav-hamburger { display: flex; }
+    }
   </style>
 </head>
 <body>
@@ -743,7 +804,21 @@
     <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
     <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <ul class="mobile-nav-links">
+    <li><a href="biography.html">About</a></li>
+    <li><a href="discography.html">Discography</a></li>
+    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="merch.html" aria-current="page">Store</a></li>
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
+    <li><a href="sofaygo.html#tickets" class="mobile-nav-tickets-link">Tickets</a></li>
+  </ul>
+</div>
 
 <!-- ── HERO ──────────────────────────────────────── -->
 <section class="store-hero">
@@ -1304,6 +1379,30 @@
     btn.disabled          = true;
     succ.style.display    = 'block';
   });
+</script>
+
+<script>
+(function() {
+  var btn = document.getElementById('nav-hamburger');
+  var menu = document.getElementById('mobile-menu');
+  if (!btn || !menu) return;
+  btn.addEventListener('click', function() {
+    var open = menu.classList.toggle('open');
+    btn.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+    menu.setAttribute('aria-hidden', String(!open));
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  menu.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      menu.classList.remove('open');
+      btn.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+  });
+})();
 </script>
 </body>
 </html>
