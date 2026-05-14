@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoFaygo — Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Modak&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink: #C8171E; --pink-dim: #9E1218;
+      --black: #080808; --dark: #0c0c0c; --panel: #161616;
+      --white: #F8F8F6; --muted: rgba(248,248,246,0.68);
+      --border: rgba(255,255,255,0.07); --border-mid: rgba(255,255,255,0.13);
+      --font-disp: 'Bebas Neue', sans-serif; --font-body: 'Inter', sans-serif;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body { font-family: var(--font-body); background: var(--black); color: var(--white); overflow-x: hidden; }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; }
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 100; pointer-events: none; opacity: 0.038;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.11); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+    ::selection { background: rgba(255,255,255,0.14); color: var(--white); }
+
+    /* NAV */
+    nav {
+      position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 200;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+      padding: 0 48px; height: 64px;
+      background: rgba(8,8,8,0.88);
+      backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
+    .nav-right { justify-content: flex-end; padding-right: 12px; }
+    .nav-left a, .nav-right a {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: rgba(248,248,246,0.32);
+      transition: color 0.2s; position: relative;
+    }
+    .nav-left a::after, .nav-right a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1px; background: var(--pink);
+      transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-left a:hover, .nav-right a:hover { color: var(--white); }
+    .nav-left a:hover::after, .nav-right a:hover::after { width: 100%; }
+    .nav-left a[aria-current="page"]::after, .nav-right a[aria-current="page"]::after { width: 100%; }
+    .nav-left a[aria-current="page"], .nav-right a[aria-current="page"] { color: var(--white); }
+    .nav-logo { text-align: center; font-family: 'Modak', cursive; font-size: 34px; letter-spacing: 0.03em; color: var(--pink); line-height: 1; }
+    .nav-ticket-btn { font-size: 10px !important; font-weight: 600 !important; letter-spacing: 0.18em !important; text-transform: uppercase; color: #fff !important; background: var(--pink); padding: 6px 14px; transition: opacity 0.22s, transform 0.22s !important; white-space: nowrap; }
+    .nav-ticket-btn:hover { opacity: 0.82; transform: translateY(-1px) !important; }
+    .nav-ticket-btn::after { display: none !important; }
+    .nav-cart-btn {
+      position: relative; background: none; border: none; cursor: pointer;
+      padding: 4px; display: flex; align-items: center;
+      color: rgba(248,248,246,0.32); transition: color 0.2s;
+    }
+    .nav-cart-btn:hover { color: var(--white); }
+    .nav-cart-btn svg { width: 18px; height: 18px; }
+    .cart-badge {
+      position: absolute; top: -2px; right: -4px;
+      background: var(--pink); color: var(--white);
+      font-size: 8px; font-weight: 700; font-family: var(--font-body);
+      width: 14px; height: 14px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity 0.22s;
+    }
+    .cart-badge.visible { opacity: 1; }
+    .nav-hamburger {
+      display: none; flex-direction: column; justify-content: space-between;
+      width: 24px; height: 16px; background: none; border: none;
+      cursor: pointer; padding: 0; justify-self: end;
+    }
+    .nav-hamburger span {
+      display: block; width: 100%; height: 1.5px; background: #F8F8F6;
+      border-radius: 1px; transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.25s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7.25px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7.25px) rotate(-45deg); }
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 199; background: rgba(8,8,8,0.97);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+    .mobile-nav-links { list-style: none; text-align: center; display: flex; flex-direction: column; }
+    .mobile-nav-links li a {
+      font-family: var(--font-disp); font-size: clamp(40px, 10.5vw, 56px);
+      letter-spacing: 0.06em; color: rgba(255,255,255,0.38);
+      transition: color 0.22s; display: block; padding: 8px 40px;
+    }
+    .mobile-nav-links li a:hover, .mobile-nav-links li a[aria-current="page"] { color: #F8F8F6; }
+    .mobile-nav-tickets-link { color: #C8171E !important; }
+    .is-desktop .nav-left, .is-desktop .nav-right { display: flex; }
+    .is-desktop .nav-hamburger { display: none; }
+    .is-mobile .nav-left, .is-mobile .nav-right { display: none; }
+    .is-mobile .nav-logo { grid-column: 2; grid-row: 1; }
+    .is-mobile .nav-hamburger { display: flex; grid-column: 3; grid-row: 1; }
+    @media (max-width: 640px) { nav { padding: 0 20px; } }
+
+    /* CART DRAWER */
+    .cart-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none; transition: opacity 0.35s var(--ease);
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 301;
+      width: min(420px, 100vw); background: var(--panel);
+      border-left: 1px solid var(--border-mid);
+      display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.42s var(--ease);
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 28px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .cart-title {
+      font-family: var(--font-disp); font-size: 28px; letter-spacing: 0.05em;
+      color: var(--white); display: flex; align-items: baseline; gap: 10px;
+    }
+    .cart-count-label {
+      font-family: var(--font-body); font-size: 9px; font-weight: 600;
+      letter-spacing: 0.22em; color: rgba(248,248,246,0.3); text-transform: uppercase;
+    }
+    .cart-close {
+      background: none; border: none; cursor: pointer;
+      color: rgba(248,248,246,0.4); padding: 4px; transition: color 0.2s; display: flex;
+    }
+    .cart-close:hover { color: var(--white); }
+    .cart-close svg { width: 20px; height: 20px; }
+    .cart-items { flex: 1; overflow-y: auto; }
+    .cart-items::-webkit-scrollbar { width: 3px; }
+    .cart-items::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); }
+    .cart-empty {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 100%; gap: 16px; color: rgba(248,248,246,0.22);
+    }
+    .cart-empty svg { width: 40px; height: 40px; opacity: 0.3; }
+    .cart-empty p { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; }
+    .cart-item {
+      display: grid; grid-template-columns: 76px 1fr auto;
+      gap: 16px; align-items: start; padding: 20px 28px; border-bottom: 1px solid var(--border);
+    }
+    .cart-item-img {
+      width: 76px; height: 76px; background: var(--dark); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center; padding: 8px; flex-shrink: 0;
+    }
+    .cart-item-img img { width: 100%; height: 100%; object-fit: contain; }
+    .cart-item-details { min-width: 0; }
+    .cart-item-name {
+      font-family: var(--font-disp); font-size: 16px; letter-spacing: 0.04em;
+      color: var(--white); margin-bottom: 4px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .cart-item-meta {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(248,248,246,0.3); margin-bottom: 12px;
+    }
+    .cart-item-qty { display: flex; align-items: center; border: 1px solid var(--border-mid); width: fit-content; }
+    .qty-btn {
+      background: none; border: none; color: rgba(248,248,246,0.5); cursor: pointer;
+      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 300; transition: color 0.18s, background 0.18s;
+    }
+    .qty-btn:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+    .qty-value { font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: var(--white); width: 28px; text-align: center; }
+    .cart-item-right { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+    .cart-item-price { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; color: var(--white); white-space: nowrap; }
+    .cart-remove {
+      background: none; border: none; cursor: pointer;
+      color: rgba(248,248,246,0.2); padding: 2px; transition: color 0.2s; display: flex;
+    }
+    .cart-remove:hover { color: var(--pink); }
+    .cart-remove svg { width: 14px; height: 14px; }
+    .cart-footer { border-top: 1px solid var(--border-mid); padding: 24px 28px; flex-shrink: 0; }
+    .cart-subtotal { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+    .cart-subtotal-label { font-size: 9px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(248,248,246,0.35); }
+    .cart-subtotal-value { font-family: var(--font-disp); font-size: 28px; letter-spacing: 0.04em; color: var(--white); }
+    .cart-checkout-btn {
+      width: 100%; padding: 14px; background: var(--pink); color: var(--white); border: none;
+      font-family: var(--font-body); font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+      text-transform: uppercase; cursor: pointer; transition: opacity 0.2s, transform 0.28s var(--ease);
+      margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .cart-checkout-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .cart-continue {
+      display: block; text-align: center; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase; color: rgba(248,248,246,0.28);
+      cursor: pointer; transition: color 0.2s; background: none; border: none;
+      width: 100%; font-family: var(--font-body);
+    }
+    .cart-continue:hover { color: var(--white); }
+
+    /* PRODUCT PAGE */
+    .product-page { min-height: 100dvh; padding-top: 64px; }
+    .breadcrumb {
+      padding: 22px 64px; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase; color: rgba(248,248,246,0.28);
+      border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px;
+    }
+    .breadcrumb a { color: rgba(248,248,246,0.28); transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--white); }
+    .breadcrumb-sep { opacity: 0.35; }
+    .breadcrumb-current { color: rgba(248,248,246,0.55); }
+    .product-layout { display: grid; grid-template-columns: 1fr 1fr; }
+    .product-images {
+      position: sticky; top: 64px; height: calc(100dvh - 64px);
+      background: var(--dark); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; padding: 48px; gap: 20px;
+      border-right: 1px solid var(--border); overflow: hidden;
+    }
+    .product-main-image { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; min-height: 0; }
+    .product-main-image img { max-width: 100%; max-height: 100%; object-fit: contain; transition: opacity 0.25s; }
+    .product-thumbs { display: flex; gap: 10px; flex-shrink: 0; }
+    .product-thumb {
+      width: 60px; height: 60px; border: 1px solid var(--border-mid);
+      padding: 6px; cursor: pointer; background: var(--dark);
+      transition: border-color 0.2s; overflow: hidden;
+    }
+    .product-thumb.active { border-color: var(--pink); }
+    .product-thumb:hover { border-color: rgba(255,255,255,0.3); }
+    .product-thumb img { width: 100%; height: 100%; object-fit: contain; }
+    .product-info { padding: 64px; display: flex; flex-direction: column; }
+    .product-eyebrow {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.32em; text-transform: uppercase;
+      color: var(--pink); margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+    }
+    .product-eyebrow::before { content: ''; display: block; width: 14px; height: 1px; background: currentColor; opacity: 0.5; flex-shrink: 0; }
+    .product-name { font-family: var(--font-disp); font-size: clamp(44px, 4.5vw, 76px); line-height: 0.9; letter-spacing: 0.02em; color: var(--white); margin-bottom: 18px; }
+    .product-price-row { display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px; }
+    .product-price { font-family: var(--font-disp); font-size: 36px; color: var(--white); letter-spacing: 0.05em; }
+    .product-badge-inline { font-size: 8px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; padding: 4px 10px; border: 1px solid rgba(200,23,30,0.4); color: var(--pink); }
+    .product-badge-inline.sold-out { border-color: rgba(255,255,255,0.15); color: rgba(248,248,246,0.35); }
+    .product-badge-inline.pre-order { border-color: rgba(200,23,30,0.35); color: var(--pink); }
+    .product-divider { width: 36px; height: 1px; background: var(--border-mid); margin-bottom: 28px; }
+    .product-desc { font-size: 13px; line-height: 1.9; color: rgba(248,248,246,0.46); font-weight: 300; margin-bottom: 40px; letter-spacing: 0.01em; max-width: 420px; }
+    .size-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(248,248,246,0.4); margin-bottom: 14px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .size-guide-link { color: rgba(248,248,246,0.28); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+    .size-guide-link:hover { color: var(--white); }
+    .size-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px; }
+    .size-btn {
+      font-family: var(--font-body); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.18em; text-transform: uppercase; padding: 9px 16px;
+      background: transparent; border: 1px solid var(--border-mid);
+      color: rgba(248,248,246,0.5); cursor: pointer;
+      transition: border-color 0.18s, color 0.18s, background 0.18s; min-width: 50px; text-align: center;
+    }
+    .size-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--white); }
+    .size-btn.selected { background: var(--pink); border-color: var(--pink); color: var(--white); }
+    .atc-btn {
+      width: 100%; padding: 16px 28px; font-family: var(--font-body);
+      font-size: 11px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+      background: var(--pink); color: var(--white); border: none; cursor: pointer;
+      transition: transform 0.28s var(--ease), opacity 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 14px;
+    }
+    .atc-btn:hover:not(:disabled) { transform: translateY(-2px); opacity: 0.9; }
+    .atc-btn:disabled { background: rgba(255,255,255,0.05); color: rgba(248,248,246,0.28); cursor: not-allowed; transform: none; }
+    .atc-btn.sold-out-state { background: transparent; border: 1px solid var(--border-mid); color: rgba(248,248,246,0.28); cursor: not-allowed; }
+    .atc-btn.preorder-state { background: rgba(200,23,30,0.12); border: 1px solid rgba(200,23,30,0.3); color: var(--pink); }
+    .atc-btn.preorder-state:hover:not(:disabled) { background: rgba(200,23,30,0.22); transform: translateY(-1px); }
+    .atc-feedback {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(200,23,30,0.7); text-align: center; min-height: 18px; opacity: 0; transition: opacity 0.3s;
+    }
+    .back-link {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(248,248,246,0.28); display: inline-flex; align-items: center; gap: 8px;
+      transition: color 0.2s; margin-top: auto; padding-top: 40px;
+    }
+    .back-link:hover { color: var(--white); }
+    .not-found {
+      min-height: calc(100dvh - 64px); display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 20px; text-align: center; padding: 40px;
+    }
+    .not-found h2 { font-family: var(--font-disp); font-size: 64px; letter-spacing: 0.04em; color: rgba(248,248,246,0.12); }
+    .not-found p { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(248,248,246,0.3); }
+    .not-found a { color: var(--pink); }
+
+    /* FOOTER */
+    footer { padding: 72px 64px 48px; background: var(--black); border-top: 2px solid var(--pink); }
+    .footer-inner { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+    .footer-wordmark { font-family: 'Modak', cursive; font-size: 54px; color: var(--pink); letter-spacing: 0.05em; }
+    .footer-tagline { font-size: 10px; letter-spacing: 0.24em; text-transform: uppercase; color: rgba(248,248,246,0.32); }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(248,248,246,0.32); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--pink); }
+    .footer-bottom { width: 100%; padding-top: 26px; margin-top: 10px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; letter-spacing: 0.1em; color: rgba(248,248,246,0.32); text-transform: uppercase; }
+    .footer-legal { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+    .footer-legal a { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.2); transition: color 0.2s; }
+    .footer-legal a:hover { color: rgba(255,255,255,0.5); }
+
+    /* RESPONSIVE */
+    @media (max-width: 960px) {
+      .product-layout { grid-template-columns: 1fr; }
+      .product-images { position: relative; top: 0; height: 72vw; border-right: none; border-bottom: 1px solid var(--border); }
+      .product-info { padding: 44px 40px; }
+      .breadcrumb { padding: 18px 40px; }
+    }
+    @media (max-width: 640px) {
+      .product-images { height: 80vw; padding: 32px; }
+      .product-info { padding: 36px 24px; }
+      .breadcrumb { padding: 14px 24px; }
+      footer { padding: 52px 24px 40px; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+      .footer-bottom { flex-direction: column; align-items: center; gap: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cart-drawer, .cart-overlay { transition: none; }
+    }
+  </style>
+  <script>!function(){var u=navigator.userAgent,c=window.matchMedia('(pointer:coarse)').matches,n=window.innerWidth<768,m=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(u)||(c&&window.innerWidth<=1200)||n;document.documentElement.classList.add(m?'is-mobile':'is-desktop')}()</script>
+</head>
+<body>
+
+<nav>
+  <ul class="nav-left">
+    <li><a href="biography.html">About</a></li>
+    <li><a href="discography.html">Discography</a></li>
+  </ul>
+  <a href="sofaygo.html" class="nav-logo">SoFaygo</a>
+  <ul class="nav-right">
+    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="merch.html" aria-current="page">Store</a></li>
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
+    <li>
+      <button class="nav-cart-btn" id="nav-cart-btn" aria-label="Open cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </li>
+    <li><a href="sofaygo.html#tickets" class="nav-ticket-btn">Tickets</a></li>
+  </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+  <ul class="mobile-nav-links">
+    <li><a href="biography.html">About</a></li>
+    <li><a href="discography.html">Discography</a></li>
+    <li><a href="cactus-jack.html">Label</a></li>
+    <li><a href="merch.html" aria-current="page">Store</a></li>
+    <li><a href="https://open.spotify.com/artist/4nYsmWkuDRGSZhOTKxLEZq" target="_blank" rel="noopener">Stream</a></li>
+    <li><a href="sofaygo.html#tickets" class="mobile-nav-tickets-link">Tickets</a></li>
+  </ul>
+</div>
+
+<div class="cart-overlay" id="cart-overlay"></div>
+<div class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Shopping cart" aria-modal="true">
+  <div class="cart-header">
+    <div class="cart-title">
+      Cart
+      <span class="cart-count-label" id="drawer-count">0 items</span>
+    </div>
+    <button class="cart-close" id="cart-close" aria-label="Close cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div class="cart-items" id="cart-items-list"></div>
+  <div class="cart-footer">
+    <div class="cart-subtotal">
+      <span class="cart-subtotal-label">Subtotal</span>
+      <span class="cart-subtotal-value" id="cart-subtotal">$0.00</span>
+    </div>
+    <button class="cart-checkout-btn" onclick="window.open('https://imsofaygo.com','_blank')">
+      Checkout
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </button>
+    <button class="cart-continue" id="cart-continue">Continue Shopping</button>
+  </div>
+</div>
+
+<main class="product-page" id="product-page"></main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-wordmark">SoFaygo</div>
+    <div class="footer-tagline">Cactus Jack Records · Est. 2017 · Houston, TX</div>
+    <div class="footer-links">
+      <a href="sofaygo.html">Home</a>
+      <a href="biography.html">About</a>
+      <a href="discography.html">Discography</a>
+      <a href="cactus-jack.html">Label</a>
+      <a href="merch.html">Store</a>
+    </div>
+    <div class="footer-legal">
+      <a href="help.html">Help</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms of Use</a>
+      <a href="accessibility.html">Accessibility</a>
+      <a href="do-not-sell.html">Do Not Sell My Personal Info</a>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 SoFaygo. All Rights Reserved.</span>
+      <span>Cactus Jack Records · Epic Records · Sony Music</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){var u=navigator.userAgent,c=window.matchMedia('(pointer:coarse)').matches,n=window.innerWidth<768,m=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(u)||(c&&window.innerWidth<=1200)||n;function a(mob){window.DEVICE=mob?'mobile':'desktop';document.documentElement.classList.remove('is-mobile','is-desktop');document.documentElement.classList.add(mob?'is-mobile':'is-desktop');document.body.classList.remove('is-mobile','is-desktop');document.body.classList.add(mob?'is-mobile':'is-desktop');}a(m);var t;window.addEventListener('resize',function(){clearTimeout(t);t=setTimeout(function(){var u2=navigator.userAgent,c2=window.matchMedia('(pointer:coarse)').matches,n2=window.innerWidth<768,m2=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(u2)||(c2&&window.innerWidth<=1200)||n2;a(m2);},300);});})();
+
+const PRODUCTS = {
+  1:  { id:1,  idx:'01', name:'Mania Skull Hoodie',       price:75,    category:'Hoodie',    badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL','3XL'], images:['https://imsofaygo.com/cdn/shop/files/Sofaygo-Mania-SkullHoodie-Front2.1_1024x1024@2x.png?v=1763668462','https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462'],                                                                                           desc:'The Mania Skull Hoodie. Heavy-weight fleece, oversized fit. Screen-printed skull graphic with distressed ink texture. Runs true to size — if between sizes, size up.' },
+  2:  { id:2,  idx:'02', name:'Mania Gothic Tee',         price:35,    category:'Tee',       badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL'],       images:['https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE1_1024x1024@2x.png?v=1763691912','https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915'],                                                                                                           desc:'Mania Gothic Tee. 100% heavyweight cotton, boxy fit. Gothic lettering print front and back. One run — no restock.' },
+  3:  { id:3,  idx:'03', name:'Road to Mania Tee',        price:35,    category:'Tee',       badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL'],       images:['https://imsofaygo.com/cdn/shop/files/MANIAISCOMINGTEE1_large.png?v=1761953503','https://imsofaygo.com/cdn/shop/files/MANIAISCOMINGTEE2_large.png?v=1761953503'],                                                                                                                   desc:'Road to Mania Tee. 100% heavyweight cotton, relaxed fit. Limited drop commemorating the Mania era rollout.' },
+  4:  { id:4,  idx:'04', name:'Mania Skull Tee',          price:35,    category:'Tee',       badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL'],       images:['https://imsofaygo.com/cdn/shop/files/MANIASKULLTEE_BLACK_2_732bd0bb-92b2-4184-9c79-52acf9b4eaf3_large.png?v=1763691942','https://imsofaygo.com/cdn/shop/files/MANIASKULLTEE_BLACK_2_732bd0bb-92b2-4184-9c79-52acf9b4eaf3_large.png?v=1763691942'],                               desc:'Mania Skull Tee. 100% heavyweight cotton, boxy fit. Skull graphic print on chest. Black.' },
+  5:  { id:5,  idx:'05', name:'Mania Scream Tee',         price:35,    category:'Tee',       badge:'Limited',  soldOut:false, preOrder:null,           sizes:['M','XL'],                          images:['https://imsofaygo.com/cdn/shop/files/MANIASCREAMTEE1_large.png?v=1763691949','https://imsofaygo.com/cdn/shop/files/MANIASCREAMTEE2_large.png?v=1763691949'],                                                                                                                       desc:'Mania Scream Tee. 100% heavyweight cotton. Very limited — only M and XL remaining. Distressed scream graphic. No restock.' },
+  6:  { id:6,  idx:'06', name:'Hardcore Sweatpants',      price:75,    category:'Bottoms',   badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL','3XL'], images:['https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS1_ab1a0280-c0f9-4236-8374-567112036c2c_1024x1024@2x.png?v=1763626133','https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133'],           desc:'Hardcore Sweatpants. Heavyweight fleece, relaxed fit. Elastic waist and tapered cuffs, embroidered logo. Black.' },
+  7:  { id:7,  idx:'07', name:'MM Sweatpants',            price:75,    category:'Bottoms',   badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL','3XL'], images:['https://imsofaygo.com/cdn/shop/files/MMSWEATPANTS1_large.png?v=1763584260','https://imsofaygo.com/cdn/shop/files/MMSWEATPANTS2_large.png?v=1763584260'],                                                                                                                           desc:'MM Sweatpants. Heavyweight fleece, straight leg. Screenprint graphic, elastic waistband with drawstring. Black.' },
+  8:  { id:8,  idx:'08', name:'Mania Vinyl',              price:27.99, category:'Vinyl',     badge:null,       soldOut:false, preOrder:null,           sizes:[],                                  images:['https://imsofaygo.com/cdn/shop/files/MANIAVINYL2_cf810673-f817-4882-9a3a-f4ba4b71e621_large.png?v=1764050550','https://imsofaygo.com/cdn/shop/files/MANIAVINYL2_cf810673-f817-4882-9a3a-f4ba4b71e621_large.png?v=1764050550'],                                                   desc:'Mania — Standard Edition Vinyl. 12" LP, black vinyl. Full album with original artwork. Includes digital download insert.' },
+  9:  { id:9,  idx:'09', name:'Mania Alt Cover Vinyl',    price:27.99, category:'Vinyl',     badge:null,       soldOut:false, preOrder:null,           sizes:[],                                  images:['https://imsofaygo.com/cdn/shop/files/MANIAALTCOVERVINYL3_815eb4d5-ee84-4ff6-b73d-b909a86f9c1c_large.png?v=1764050610','https://imsofaygo.com/cdn/shop/files/MANIAALTCOVERVINYL3_815eb4d5-ee84-4ff6-b73d-b909a86f9c1c_large.png?v=1764050610'],                                   desc:'Mania — Alternate Cover Vinyl. 12" LP, black vinyl. Alternate artwork edition. Limited pressing.' },
+  10: { id:10, idx:'10', name:'Mania Signed Vinyl',       price:27.99, category:'Vinyl',     badge:'Sold Out', soldOut:true,  preOrder:null,           sizes:[],                                  images:['https://imsofaygo.com/cdn/shop/files/MANIASIGNEDVINYL1_large.png?v=1764050486','https://imsofaygo.com/cdn/shop/files/MANIASIGNEDVINYL2_large.png?v=1764050486'],                                                                                                                   desc:'Mania — Signed Vinyl. Hand-signed by SoFaygo. 12" LP, black vinyl. This run is fully sold out.' },
+  11: { id:11, idx:'11', name:'Signed Alt Cover Vinyl',   price:27.99, category:'Vinyl',     badge:'Sold Out', soldOut:true,  preOrder:null,           sizes:[],                                  images:['https://imsofaygo.com/cdn/shop/files/MANIASIGNEDALTCOVERVINYL1_large.png?v=1764050501','https://imsofaygo.com/cdn/shop/files/MANIASIGNEDALTCOVERVINYL2_large.png?v=1764050501'],                                                                                                   desc:'Mania — Signed Alt Cover Vinyl. Hand-signed by SoFaygo. Alternate artwork cover. Fully sold out.' },
+  12: { id:12, idx:'12', name:'After Me Hoodie',          price:75,    category:'Hoodie',    badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL','3XL'], images:['https://imsofaygo.com/cdn/shop/files/AFTERMEHOODIE1_large.png?v=1765933349','https://imsofaygo.com/cdn/shop/files/AFTERMEHOODIE2_large.png?v=1765933349'],                                                                                                                           desc:'After Me Hoodie. Heavyweight fleece, oversized silhouette. After Me era graphic print. Drop shoulder, relaxed cuffs. Black.' },
+  13: { id:13, idx:'13', name:'After Me Inverted Tee',    price:35,    category:'Tee',       badge:'Sold Out', soldOut:true,  preOrder:null,           sizes:['XS','S','M','L','XL','2XL'],       images:['https://imsofaygo.com/cdn/shop/files/AFTERMEINVERTEDTEE1_large.png?v=1765931888','https://imsofaygo.com/cdn/shop/files/AFTERMEINVERTEDTEE2_large.png?v=1765931888'],                                                                                                               desc:'After Me Inverted Tee. Inverted colorway, 100% heavyweight cotton. This run is sold out — no restock planned.' },
+  14: { id:14, idx:'14', name:'After Me Illustration Tee',price:35,    category:'Tee',       badge:null,       soldOut:false, preOrder:null,           sizes:['XS','S','M','L','XL','2XL'],       images:['https://imsofaygo.com/cdn/shop/files/AFTERMEILLUSTRATIONTEE1_large.png?v=1765931870','https://imsofaygo.com/cdn/shop/files/AFTERMEILLUSTRATIONTEE2_large.png?v=1765931870'],                                                                                                       desc:'After Me Illustration Tee. 100% heavyweight cotton, boxy fit. Hand-illustration graphic, front and back print.' },
+  15: { id:15, idx:'15', name:'After Me Vinyl',           price:27.99, category:'Vinyl',     badge:'Pre-Order',soldOut:false, preOrder:'Ships Mar 2026',sizes:[],                                 images:['https://imsofaygo.com/cdn/shop/files/AFTERMEVINYL1_large.png?v=1765957302','https://imsofaygo.com/cdn/shop/files/AFTERMEVINYL2_large.png?v=1765957302'],                                                                                                                           desc:'After Me Vinyl — Pre-Order. 12" LP on black vinyl with original After Me artwork. Ships March 2026. Limited pressing.' },
+  16: { id:16, idx:'16', name:'Hardcore Bandana',         price:30,    category:'Accessory', badge:null,       soldOut:false, preOrder:null,           sizes:[],                                  images:['https://cdn.shopify.com/s/files/1/0984/1908/1397/files/HARDCOREEPISODEBANDANA1.png?v=1763582198','https://cdn.shopify.com/s/files/1/0984/1908/1397/files/HARDCOREEPISODEBANDANA1.png?v=1763582198'],                                                                             desc:'Hardcore Episode Bandana. 100% cotton, 22" × 22". Classic bandana cut. Hardcore Episode screenprint. One size fits all.' }
+};
+
+/* CART */
+const CART_KEY = 'SOFAYGO_CART';
+function getCart() { try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch(e) { return []; } }
+function saveCart(c) { localStorage.setItem(CART_KEY, JSON.stringify(c)); }
+function cartCount(c) { return c.reduce(function(s,i){return s+i.qty;},0); }
+function cartTotal(c) { return c.reduce(function(s,i){return s+i.price*i.qty;},0); }
+
+function addToCart(product, size) {
+  var cart = getCart();
+  var key = product.id + (size ? '_' + size : '_os');
+  var existing = cart.find(function(i){return i.key===key;});
+  if (existing) { existing.qty++; } else {
+    cart.push({key:key, id:product.id, name:product.name, size:size||null, price:product.price, image:product.images[0], qty:1});
+  }
+  saveCart(cart);
+  refreshCartUI();
+  openCart();
+}
+function removeFromCart(key) {
+  saveCart(getCart().filter(function(i){return i.key!==key;}));
+  refreshCartUI(); renderCartItems();
+}
+function updateQty(key, delta) {
+  var cart = getCart();
+  var item = cart.find(function(i){return i.key===key;});
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  saveCart(cart); refreshCartUI(); renderCartItems();
+}
+
+function refreshCartUI() {
+  var cart = getCart(), count = cartCount(cart);
+  var badge = document.getElementById('cart-badge');
+  if (badge) { badge.textContent = count; badge.classList.toggle('visible', count > 0); }
+  var dc = document.getElementById('drawer-count');
+  if (dc) { dc.textContent = count + (count === 1 ? ' item' : ' items'); }
+  var sub = document.getElementById('cart-subtotal');
+  if (sub) { sub.textContent = '$' + cartTotal(cart).toFixed(2); }
+}
+
+function renderCartItems() {
+  var list = document.getElementById('cart-items-list');
+  if (!list) return;
+  var cart = getCart();
+  if (!cart.length) {
+    list.innerHTML = '<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>Your cart is empty</p></div>';
+    return;
+  }
+  list.innerHTML = cart.map(function(item) {
+    return '<div class="cart-item">'
+      + '<div class="cart-item-img"><img src="' + item.image + '" alt="' + item.name + '" loading="lazy"></div>'
+      + '<div class="cart-item-details">'
+        + '<div class="cart-item-name">' + item.name + '</div>'
+        + '<div class="cart-item-meta">' + (item.size ? 'Size ' + item.size : 'One Size') + ' &middot; $' + item.price.toFixed(2) + '</div>'
+        + '<div class="cart-item-qty">'
+          + '<button class="qty-btn" onclick="updateQty(\'' + item.key + '\',-1)">&#8722;</button>'
+          + '<span class="qty-value">' + item.qty + '</span>'
+          + '<button class="qty-btn" onclick="updateQty(\'' + item.key + '\',1)">+</button>'
+        + '</div>'
+      + '</div>'
+      + '<div class="cart-item-right">'
+        + '<span class="cart-item-price">$' + (item.price * item.qty).toFixed(2) + '</span>'
+        + '<button class="cart-remove" onclick="removeFromCart(\'' + item.key + '\')" aria-label="Remove">'
+          + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>'
+        + '</button>'
+      + '</div>'
+    + '</div>';
+  }).join('');
+}
+
+function openCart() {
+  document.getElementById('cart-drawer').classList.add('open');
+  document.getElementById('cart-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderCartItems(); refreshCartUI();
+}
+function closeCart() {
+  document.getElementById('cart-drawer').classList.remove('open');
+  document.getElementById('cart-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* RENDER PRODUCT */
+function renderProduct() {
+  var params = new URLSearchParams(window.location.search);
+  var id = parseInt(params.get('id'), 10);
+  var p = PRODUCTS[id];
+  var page = document.getElementById('product-page');
+
+  if (!p) {
+    page.innerHTML = '<div class="not-found"><h2>404</h2><p>Product not found. <a href="merch.html">Back to Store</a></p></div>';
+    return;
+  }
+
+  document.title = 'SoFaygo — ' + p.name;
+
+  var hasSizes = p.sizes.length > 0;
+  var distinctImages = p.images[0] !== p.images[1];
+
+  var badgeHtml = p.badge ? '<span class="product-badge-inline' + (p.soldOut ? ' sold-out' : p.preOrder ? ' pre-order' : '') + '">' + p.badge + '</span>' : '';
+
+  var thumbsHtml = distinctImages
+    ? '<div class="product-thumbs">'
+      + p.images.map(function(img,i){
+          return '<button class="product-thumb' + (i===0?' active':'') + '" data-idx="' + i + '" aria-label="View ' + (i===0?'front':'back') + '"><img src="' + img + '" alt="' + p.name + ' ' + (i===0?'front':'back') + '" loading="lazy"></button>';
+        }).join('')
+      + '</div>'
+    : '';
+
+  var sizesHtml = hasSizes
+    ? '<div class="size-label"><span id="size-label-txt">Select Size</span><a href="merch.html#size-guide" class="size-guide-link">Size Guide</a></div>'
+      + '<div class="size-grid">' + p.sizes.map(function(s){ return '<button class="size-btn" data-size="' + s + '">' + s + '</button>'; }).join('') + '</div>'
+    : '';
+
+  var atcClass = p.soldOut ? ' sold-out-state' : (p.preOrder ? ' preorder-state' : '');
+  var atcLabel = p.soldOut ? 'Sold Out' : (p.preOrder ? 'Pre-Order &middot; ' + p.preOrder : (hasSizes ? 'Select a Size' : 'Add to Cart'));
+  var atcDisabled = (p.soldOut || (hasSizes && !p.soldOut)) ? ' disabled' : '';
+
+  page.innerHTML =
+    '<div class="breadcrumb"><a href="merch.html">Store</a><span class="breadcrumb-sep">/</span><span class="breadcrumb-current">' + p.name + '</span></div>'
+    + '<div class="product-layout">'
+      + '<div class="product-images">'
+        + '<div class="product-main-image"><img src="' + p.images[0] + '" alt="' + p.name + '" id="main-img"></div>'
+        + thumbsHtml
+      + '</div>'
+      + '<div class="product-info">'
+        + '<div class="product-eyebrow">' + p.idx + ' &middot; ' + p.category + '</div>'
+        + '<h1 class="product-name">' + p.name + '</h1>'
+        + '<div class="product-price-row"><span class="product-price">$' + p.price.toFixed(2) + '</span>' + badgeHtml + '</div>'
+        + '<div class="product-divider"></div>'
+        + '<p class="product-desc">' + p.desc + '</p>'
+        + sizesHtml
+        + '<button class="atc-btn' + atcClass + '" id="atc-btn"' + atcDisabled + '>' + atcLabel + '</button>'
+        + '<p class="atc-feedback" id="atc-feedback"></p>'
+        + '<a href="merch.html" class="back-link">&#8592; Back to Store</a>'
+      + '</div>'
+    + '</div>';
+
+  /* Thumbnail switching */
+  page.querySelectorAll('.product-thumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      page.querySelectorAll('.product-thumb').forEach(function(t){t.classList.remove('active');});
+      this.classList.add('active');
+      var img = document.getElementById('main-img');
+      img.style.opacity = '0';
+      setTimeout(function(){ img.src = p.images[parseInt(thumb.dataset.idx,10)]; img.style.opacity='1'; }, 150);
+    });
+  });
+
+  if (p.soldOut) return;
+
+  /* Size selection */
+  var selectedSize = null;
+  if (hasSizes) {
+    page.querySelectorAll('.size-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        page.querySelectorAll('.size-btn').forEach(function(b){b.classList.remove('selected');});
+        this.classList.add('selected');
+        selectedSize = this.dataset.size;
+        document.getElementById('size-label-txt').textContent = 'Size: ' + selectedSize;
+        var atcBtn = document.getElementById('atc-btn');
+        atcBtn.disabled = false;
+        atcBtn.textContent = 'Add to Cart';
+      });
+    });
+  }
+
+  /* Add to cart */
+  var atcBtn = document.getElementById('atc-btn');
+  if (atcBtn) {
+    atcBtn.addEventListener('click', function() {
+      if (hasSizes && !selectedSize) return;
+      addToCart(p, hasSizes ? selectedSize : null);
+      var fb = document.getElementById('atc-feedback');
+      fb.textContent = '✓ Added to cart';
+      fb.style.opacity = '1';
+      setTimeout(function(){ fb.style.opacity='0'; }, 2200);
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderProduct();
+  refreshCartUI();
+
+  document.getElementById('nav-cart-btn').addEventListener('click', openCart);
+  document.getElementById('cart-close').addEventListener('click', closeCart);
+  document.getElementById('cart-overlay').addEventListener('click', closeCart);
+  document.getElementById('cart-continue').addEventListener('click', closeCart);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeCart(); });
+
+  var hbtn = document.getElementById('nav-hamburger');
+  var hmenu = document.getElementById('mobile-menu');
+  if (hbtn && hmenu) {
+    hbtn.addEventListener('click', function() {
+      var open = hmenu.classList.toggle('open');
+      hbtn.classList.toggle('open');
+      hbtn.setAttribute('aria-expanded', String(open));
+      hmenu.setAttribute('aria-hidden', String(!open));
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
+    hmenu.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        hmenu.classList.remove('open'); hbtn.classList.remove('open');
+        hbtn.setAttribute('aria-expanded','false'); hmenu.setAttribute('aria-hidden','true');
+        document.body.style.overflow = '';
+      });
+    });
+  }
+});
+</script>
+</body>
+</html>
