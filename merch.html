@@ -28,7 +28,7 @@
 
     /* ── Reset ─────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: var(--font-body);
       background: var(--black);
@@ -706,8 +706,9 @@
         padding: 52px 24px 52px;
         justify-content: flex-start;
       }
-      .filter-bar { padding: 0 24px; gap: 16px; }
-      .filter-pills { gap: 4px; }
+      .filter-bar { padding: 0 24px; gap: 16px; overflow: hidden; }
+      .filter-pills { gap: 4px; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; min-width: 0; flex-shrink: 1; }
+      .filter-pills::-webkit-scrollbar { display: none; }
       #collection { padding: 52px 24px 0; }
       .product-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -822,6 +823,11 @@
 
     /* ── Device Detection — Animations ─────────────────── */
     .is-mobile .card-flipper { transition-duration: 0.58s; }
+
+    /* ── Device Detection — Filter pills ───────────────── */
+    .is-mobile .filter-bar  { overflow: hidden; }
+    .is-mobile .filter-pills { overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; min-width: 0; flex-shrink: 1; }
+    .is-mobile .filter-pills::-webkit-scrollbar { display: none; }
 
     /* ── Prefers Reduced Motion ────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
