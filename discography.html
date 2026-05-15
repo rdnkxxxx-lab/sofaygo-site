@@ -1077,9 +1077,11 @@
       e.preventDefault();
       var el = document.getElementById(this.getAttribute('href').slice(1));
       if (!el) return;
-      var scrollTo = el.getBoundingClientRect().top + window.scrollY
-                     - (window.innerHeight - el.offsetHeight) / 2;
-      scrollTo = Math.max(0, Math.min(scrollTo, document.documentElement.scrollHeight - window.innerHeight));
+      var elTop = el.getBoundingClientRect().top + window.scrollY;
+      var offset = el.offsetHeight < window.innerHeight
+        ? (window.innerHeight - el.offsetHeight) / 2
+        : window.innerHeight * 0.12;
+      var scrollTo = Math.max(0, Math.min(elTop - offset, document.documentElement.scrollHeight - window.innerHeight));
       window.scrollTo(0, scrollTo);
     });
   });
