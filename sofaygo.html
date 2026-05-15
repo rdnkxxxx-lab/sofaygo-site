@@ -1177,7 +1177,7 @@
       width: 100%;
       height: 50%;
       background: #080808;
-      transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+      transition: transform 1.6s cubic-bezier(0.76, 0, 0.24, 1);
     }
     .intro-panel-top  { top: 0; }
     .intro-panel-bottom { bottom: 0; }
@@ -1217,24 +1217,24 @@
     }
     .hero-copy .label {
       opacity: 0;
-      animation: heroFadeUp 0.7s ease 1.4s forwards;
+      animation: heroFadeUp 0.8s ease 2.4s forwards;
     }
     .hero-name {
       opacity: 0;
-      animation: heroFadeUp 0.85s ease 1.6s forwards;
+      animation: heroFadeUp 1s ease 2.65s forwards;
     }
     .hero-copy .divider-pink {
       width: 0 !important;
       opacity: 0;
-      animation: dividerGrow 0.65s ease 1.9s forwards;
+      animation: dividerGrow 0.75s ease 3.0s forwards;
     }
     .hero-badges {
       opacity: 0;
-      animation: heroFadeUp 0.7s ease 2.1s forwards;
+      animation: heroFadeUp 0.8s ease 3.2s forwards;
     }
     .hero-bio {
       opacity: 0;
-      animation: heroFadeUp 0.7s ease 2.3s forwards;
+      animation: heroFadeUp 0.8s ease 3.45s forwards;
     }
     @keyframes btnShake {
       0%, 82%, 100% { transform: translateY(0) scale(1); }
@@ -1247,7 +1247,7 @@
     }
     .hero-copy .btn-sm {
       opacity: 0;
-      animation: heroFadeUp 0.7s ease 2.5s forwards, btnShake 5s ease-in-out 4s infinite;
+      animation: heroFadeUp 0.8s ease 3.7s forwards, btnShake 5s ease-in-out 5.5s infinite;
     }
     .hero-copy .btn-sm:hover { animation-play-state: paused; }
 
@@ -2295,8 +2295,8 @@
       setTimeout(function () {
         overlay.style.display = 'none';
         document.body.classList.remove('intro-active');
-      }, 920);
-    }, 480);
+      }, 1650);
+    }, 700);
   })();
 
   /* Scroll reveal */
