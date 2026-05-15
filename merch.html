@@ -1687,7 +1687,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var delta = e.deltaY;
     if (e.deltaMode === 1) delta *= 24;
     if (e.deltaMode === 2) delta *= window.innerHeight;
-    target += delta * 0.55;
+    target += delta * 0.72;
     target = Math.max(0, Math.min(target, document.documentElement.scrollHeight - window.innerHeight));
     if (!raf) tick();
   }, { passive: false });
