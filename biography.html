@@ -1553,5 +1553,33 @@ function openCart(){document.getElementById('cart-drawer').classList.add('open')
 function closeCart(){document.getElementById('cart-drawer').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=document.getElementById('nav-cart-btn');if(cb)cb.addEventListener('click',openCart);var cl=document.getElementById('cart-close');if(cl)cl.addEventListener('click',closeCart);var ov=document.getElementById('cart-overlay');if(ov)ov.addEventListener('click',closeCart);var co=document.getElementById('cart-continue');if(co)co.addEventListener('click',closeCart);document.addEventListener('keydown',function(e){if(e.key==='Escape')closeCart();});});
 </script>
+<script>
+(function () {
+  document.documentElement.style.scrollBehavior = 'auto';
+  var target = window.scrollY;
+  var current = window.scrollY;
+  var raf = null;
+  window.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    var delta = e.deltaY;
+    if (e.deltaMode === 1) delta *= 24;
+    if (e.deltaMode === 2) delta *= window.innerHeight;
+    target += delta * 0.55;
+    target = Math.max(0, Math.min(target, document.documentElement.scrollHeight - window.innerHeight));
+    if (!raf) tick();
+  }, { passive: false });
+  function tick() {
+    current += (target - current) * 0.09;
+    window.scrollTo(0, current);
+    if (Math.abs(target - current) > 0.5) {
+      raf = requestAnimationFrame(tick);
+    } else {
+      window.scrollTo(0, target);
+      current = target;
+      raf = null;
+    }
+  }
+})();
+</script>
 </body>
 </html>
