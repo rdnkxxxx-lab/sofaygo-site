@@ -2479,54 +2479,41 @@
 
     nameEl.style.cursor = 'crosshair';
 
-    function drawStrokeAt(sx, sy, ax, ay, px, py, strokeLen) {
-      var brushHalf = 28;
-      var bristles  = 22;
-      for (var i = 0; i < bristles; i++) {
-        var t      = (i / (bristles - 1) - 0.5) * 2;
-        var spread = t * brushHalf + (Math.random() - 0.5) * 5;
-        var bx     = sx + px * spread;
-        var by     = sy + py * spread;
-        var half   = strokeLen * (Math.random() * 0.4 + 0.6) * 0.5;
-        tctx.globalAlpha = Math.random() * 0.45 + 0.5;
-        tctx.strokeStyle = '#C8171E';
-        tctx.lineWidth   = Math.random() * 3 + 2;
-        tctx.beginPath();
-        tctx.moveTo(bx - ax * half, by - ay * half);
-        tctx.lineTo(bx + ax * half, by + ay * half);
-        tctx.stroke();
-      }
-    }
-
     /* Listen on copyEl; canvas is pointer-events:none so it doesn't block clicks */
     copyEl.addEventListener('mousemove', function (e) {
       if (!cv.width || !maskReady) return;
       var r = copyEl.getBoundingClientRect();
       var x = e.clientX - r.left;
       var y = e.clientY - r.top;
+      var c = '#C8171E';
 
       var dx = prevX !== null ? x - prevX : 1;
       var dy = prevY !== null ? y - prevY : 0;
-      var fromX = prevX !== null ? prevX : x;
-      var fromY = prevY !== null ? prevY : y;
       prevX = x; prevY = y;
-
       var speed = Math.sqrt(dx * dx + dy * dy) || 1;
       var ax = dx / speed, ay = dy / speed;
       var px = -ay, py = ax;
-      var strokeLen = Math.min(speed * 1.4 + 10, 30);
 
-      /* Interpolate along the mouse path to fill gaps at high speed */
-      var steps = Math.max(1, Math.floor(speed / 5));
+      var brushHalf = 28;
+      var bristles  = 22;
+      var strokeLen = Math.min(speed * 1.4 + 10, 30);
 
       tctx.clearRect(0, 0, tmpCv.width, tmpCv.height);
       tctx.lineCap = 'round';
 
-      for (var s = 0; s < steps; s++) {
-        var frac = steps === 1 ? 1 : s / (steps - 1);
-        var sx = fromX + dx * frac;
-        var sy = fromY + dy * frac;
-        drawStrokeAt(sx, sy, ax, ay, px, py, strokeLen);
+      for (var i = 0; i < bristles; i++) {
+        var t      = (i / (bristles - 1) - 0.5) * 2;
+        var spread = t * brushHalf + (Math.random() - 0.5) * 5;
+        var bx     = x + px * spread;
+        var by     = y + py * spread;
+        var half   = strokeLen * (Math.random() * 0.4 + 0.6) * 0.5;
+        tctx.globalAlpha = Math.random() * 0.45 + 0.5;
+        tctx.strokeStyle = c;
+        tctx.lineWidth   = Math.random() * 3 + 2;
+        tctx.beginPath();
+        tctx.moveTo(bx - ax * half, by - ay * half);
+        tctx.lineTo(bx + ax * half, by + ay * half);
+        tctx.stroke();
       }
 
       tctx.globalAlpha              = 1;
@@ -2539,21 +2526,21 @@
 
     copyEl.addEventListener('mouseleave', function () { prevX = null; prevY = null; });
 
-    /* rAF-based fade — smooth 60fps instead of choppy setInterval */
-    var _fadePaused = false;
-    function _fadeTick(ts) {
-      if (_fadePaused) return;
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.globalAlpha = 0.00033;
-      ctx.fillRect(0, 0, cv.width, cv.height);
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(_fadeTick);
+    var _fadeTimer = null;
+    function _startFade() {
+      if (_fadeTimer) return;
+      _fadeTimer = setInterval(function () {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.globalAlpha = 0.010;
+        ctx.fillRect(0, 0, cv.width, cv.height);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1;
+      }, 50);
     }
-    if (document.visibilityState !== 'hidden') requestAnimationFrame(_fadeTick);
+    function _stopFade() { clearInterval(_fadeTimer); _fadeTimer = null; }
+    if (document.visibilityState !== 'hidden') _startFade();
     document.addEventListener('visibilitychange', function() {
-      _fadePaused = document.hidden;
-      if (!document.hidden) requestAnimationFrame(_fadeTick);
+      document.hidden ? _stopFade() : _startFade();
     });
   })();
 
