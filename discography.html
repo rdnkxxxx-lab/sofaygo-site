@@ -1213,8 +1213,18 @@ document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=d
   var target = window.scrollY;
   var current = window.scrollY;
   var raf = null;
+  window.addEventListener('scroll', function () {
+    if (!raf && Math.abs(current - window.scrollY) > 2) {
+      current = window.scrollY;
+      target = window.scrollY;
+    }
+  });
   window.addEventListener('wheel', function (e) {
     e.preventDefault();
+    if (Math.abs(current - window.scrollY) > 2) {
+      current = window.scrollY;
+      target = window.scrollY;
+    }
     var delta = e.deltaY;
     if (e.deltaMode === 1) delta *= 24;
     if (e.deltaMode === 2) delta *= window.innerHeight;
