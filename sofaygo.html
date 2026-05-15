@@ -11,6 +11,7 @@
   <link rel="preconnect" href="https://img.youtube.com">
   <link rel="preconnect" href="https://imsofaygo.com">
   <link rel="dns-prefetch" href="https://open.spotify.com">
+  <link rel="preload" as="image" href="https://i.pinimg.com/1200x/60/33/63/603363e046f567b41f2c359629ba9247.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Modak&display=swap" rel="stylesheet">
   <style>
     /* ── Design Tokens ─────────────────────────── */
@@ -140,6 +141,7 @@
       backdrop-filter: blur(24px) saturate(1.4);
       -webkit-backdrop-filter: blur(24px) saturate(1.4);
       border-bottom: 1px solid var(--border);
+      will-change: transform;
     }
     .nav-left, .nav-right { display: flex; gap: 32px; list-style: none; align-items: center; }
     .nav-right { justify-content: flex-end; }
@@ -239,6 +241,7 @@
       display: block;
       min-height: 100vh;
       overflow: hidden;
+      contain: paint;
     }
     .recog-photo {
       position: absolute;
@@ -294,6 +297,7 @@
       display: block;
       min-height: 100vh;
       overflow: hidden;
+      contain: paint;
     }
     .songs-left { display: none; }
     .songs-right {
@@ -1169,7 +1173,7 @@
       width: 100%;
       height: 50%;
       background: #080808;
-      transition: transform 0.92s cubic-bezier(0.76, 0, 0.24, 1);
+      transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
     }
     .intro-panel-top  { top: 0; }
     .intro-panel-bottom { bottom: 0; }
@@ -1204,28 +1208,29 @@
       to   { width: 36px; opacity: 0.5; }
     }
     .hero-photo img {
-      animation: kenBurns 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s both;
+      animation: kenBurns 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+      will-change: transform;
     }
     .hero-copy .label {
       opacity: 0;
-      animation: heroFadeUp 0.65s ease 1.1s forwards;
+      animation: heroFadeUp 0.55s ease 0.6s forwards;
     }
     .hero-name {
       opacity: 0;
-      animation: heroFadeUp 0.8s ease 1.28s forwards;
+      animation: heroFadeUp 0.7s ease 0.75s forwards;
     }
     .hero-copy .divider-pink {
       width: 0 !important;
       opacity: 0;
-      animation: dividerGrow 0.55s ease 1.52s forwards;
+      animation: dividerGrow 0.5s ease 0.95s forwards;
     }
     .hero-badges {
       opacity: 0;
-      animation: heroFadeUp 0.65s ease 1.65s forwards;
+      animation: heroFadeUp 0.55s ease 1.08s forwards;
     }
     .hero-bio {
       opacity: 0;
-      animation: heroFadeUp 0.65s ease 1.8s forwards;
+      animation: heroFadeUp 0.55s ease 1.2s forwards;
     }
     @keyframes btnShake {
       0%, 82%, 100% { transform: translateY(0) scale(1); }
@@ -1238,7 +1243,7 @@
     }
     .hero-copy .btn-sm {
       opacity: 0;
-      animation: heroFadeUp 0.65s ease 1.95s forwards, btnShake 5s ease-in-out 3s infinite;
+      animation: heroFadeUp 0.55s ease 1.35s forwards, btnShake 5s ease-in-out 2.5s infinite;
     }
     .hero-copy .btn-sm:hover { animation-play-state: paused; }
 
@@ -2286,8 +2291,8 @@
       setTimeout(function () {
         overlay.style.display = 'none';
         document.body.classList.remove('intro-active');
-      }, 960);
-    }, 680);
+      }, 460);
+    }, 250);
   })();
 
   /* Scroll reveal */
@@ -2334,8 +2339,12 @@
       setMorph(fraction);
     }
 
-    (function animate() {
-      requestAnimationFrame(animate);
+    var _gooeyRaf = null;
+    var _gooeyVisible = false;
+
+    function animate() {
+      if (!_gooeyVisible) { _gooeyRaf = null; return; }
+      _gooeyRaf = requestAnimationFrame(animate);
       const newTime = new Date();
       const shouldIncrement = cooldown > 0;
       const dt = (newTime - time) / 1000;
@@ -2351,7 +2360,19 @@
       } else {
         doCooldown();
       }
-    })();
+    }
+
+    var _gooeyIO = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        _gooeyVisible = entry.isIntersecting;
+        if (_gooeyVisible && !_gooeyRaf) {
+          time = new Date();
+          animate();
+        }
+      });
+    }, { threshold: 0.01 });
+    var _gooeySection = document.getElementById('gooey-band') || (t1 && t1.closest('section, div'));
+    if (_gooeySection) _gooeyIO.observe(_gooeySection);
   })();
 
 
@@ -2426,7 +2447,7 @@
           /* halfLeading: CSS centres the em-square inside the line box.
              With line-height < 1 this is negative (em top is above line-box top). */
           var halfLeading = (r.height - size) / 2;
-          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + halfLeading + 4);
+          mctx.fillText(ch, r.left - cr.left, r.top - cr.top + halfLeading + 8);
         }
       }
       maskReady = true;
@@ -2501,13 +2522,22 @@
 
     copyEl.addEventListener('mouseleave', function () { prevX = null; prevY = null; });
 
-    setInterval(function () {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.globalAlpha = 0.010;
-      ctx.fillRect(0, 0, cv.width, cv.height);
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 1;
-    }, 50);
+    var _fadeTimer = null;
+    function _startFade() {
+      if (_fadeTimer) return;
+      _fadeTimer = setInterval(function () {
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.globalAlpha = 0.010;
+        ctx.fillRect(0, 0, cv.width, cv.height);
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.globalAlpha = 1;
+      }, 50);
+    }
+    function _stopFade() { clearInterval(_fadeTimer); _fadeTimer = null; }
+    if (document.visibilityState !== 'hidden') _startFade();
+    document.addEventListener('visibilitychange', function() {
+      document.hidden ? _stopFade() : _startFade();
+    });
   })();
 
   /* Merch card flip — touch support */
