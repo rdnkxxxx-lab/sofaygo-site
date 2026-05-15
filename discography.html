@@ -1078,11 +1078,10 @@
       var el = document.getElementById(this.getAttribute('href').slice(1));
       if (!el) return;
       var elTop = el.getBoundingClientRect().top + window.scrollY;
-      var offset = el.offsetHeight < window.innerHeight
-        ? (window.innerHeight - el.offsetHeight) / 2
-        : window.innerHeight * 0.12;
-      var scrollTo = Math.max(0, Math.min(elTop - offset, document.documentElement.scrollHeight - window.innerHeight));
-      window.scrollTo(0, scrollTo);
+      var elH   = el.offsetHeight;
+      var vH    = window.innerHeight;
+      var offset = elH < vH ? (vH - elH) / 2 : vH * 0.22;
+      window.smoothScrollTo(elTop - offset);
     });
   });
 
@@ -1258,6 +1257,11 @@ document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=d
       raf = null;
     }
   }
+  window.smoothScrollTo = function (pos) {
+    current = window.scrollY;
+    target = Math.max(0, Math.min(pos, document.documentElement.scrollHeight - window.innerHeight));
+    if (!raf) tick();
+  };
 })();
 </script>
 </body>
