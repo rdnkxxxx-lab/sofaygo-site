@@ -1080,7 +1080,8 @@
       var elTop = el.getBoundingClientRect().top + window.scrollY;
       var elH   = el.offsetHeight;
       var vH    = window.innerHeight;
-      var offset = elH < vH ? (vH - elH) / 2 : vH * 0.22;
+      var nav   = 64;
+      var offset = elH < (vH - nav) ? nav + (vH - nav - elH) / 2 : nav + vH * 0.08;
       window.smoothScrollTo(elTop - offset);
     });
   });
