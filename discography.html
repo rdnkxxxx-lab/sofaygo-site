@@ -292,8 +292,8 @@
     .tracklist {
       list-style: none; overflow: hidden;
       max-height: 0;
-      transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1),
-                  margin-top 0.4s cubic-bezier(0.4,0,0.2,1);
+      transition: max-height 0.5s cubic-bezier(0.22,1,0.36,1),
+                  margin-top 0.4s cubic-bezier(0.22,1,0.36,1);
       margin-top: 0;
     }
     .tracklist.open { margin-top: 18px; }
@@ -301,10 +301,10 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 8px 0; border-bottom: 1px solid rgba(242,241,239,0.05);
       opacity: 0;
-      transform: translateY(-16px);
-      transition: transform 400ms cubic-bezier(0.4,0,0.2,1),
-                  opacity 400ms cubic-bezier(0.4,0,0.2,1);
-      transition-delay: calc(var(--i, 0) * 50ms);
+      transform: translateY(-10px);
+      transition: transform 500ms cubic-bezier(0.22,1,0.36,1),
+                  opacity 360ms ease-out;
+      transition-delay: calc(var(--i, 0) * 40ms);
     }
     .track-row.is-visible { opacity: 1; transform: translateY(0); }
     .track-left { display: flex; align-items: center; gap: 14px; }
@@ -1089,7 +1089,7 @@
   /* Set stagger index once — CSS reads var(--i) for transition-delay */
   document.querySelectorAll('.tracklist').forEach(ul => {
     ul.querySelectorAll('.track-row').forEach((row, i) => {
-      row.style.setProperty('--i', Math.min(i, 7));
+      row.style.setProperty('--i', Math.min(i, 6));
     });
   });
 
