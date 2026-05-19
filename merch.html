@@ -530,6 +530,35 @@
       color: rgba(248,248,246,0.28);
     }
 
+    /* ── Back-face Add to Cart ──────────────────── */
+    .card-back-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .card-add-btn {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--pink);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      cursor: pointer;
+      pointer-events: all;
+      transition: opacity 0.2s, transform 0.22s var(--ease), background 0.2s;
+    }
+    .card-add-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .card-add-btn.added { background: rgba(255,255,255,0.1); color: rgba(248,248,246,0.5); }
+
     /* ── COMING SOON ────────────────────────────── */
     #coming-soon {
       margin-top: 2px;
@@ -1558,6 +1587,51 @@
       const id = this.dataset.id;
       if (id) window.location.href = 'product.html?id=' + id;
     });
+  });
+
+  /* ── Add-to-cart button on back face ─────────── */
+  cards.forEach(card => {
+    const backFace = card.querySelector('.card-face--back');
+    if (!backFace) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'card-back-overlay';
+
+    const btn = document.createElement('button');
+    btn.className = 'card-add-btn';
+    btn.textContent = 'Add to Cart';
+
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+
+      const name  = card.querySelector('.card-name').textContent;
+      const price = parseFloat(card.dataset.price);
+      const image = card.querySelector('.card-face--front img').src;
+      const id    = card.dataset.id;
+      const key   = 'product-' + id;
+
+      var cart     = getCart();
+      var existing = cart.find(function (i) { return i.key === key; });
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ key: key, id: id, name: name, price: price, image: image, size: null, qty: 1 });
+      }
+      saveCart(cart);
+      refreshCartUI();
+
+      btn.textContent = 'Added!';
+      btn.classList.add('added');
+      setTimeout(function () {
+        btn.textContent = 'Add to Cart';
+        btn.classList.remove('added');
+      }, 1200);
+
+      card.classList.remove('tapped');
+    });
+
+    overlay.appendChild(btn);
+    backFace.appendChild(overlay);
   });
 
   /* ── Notify me form ──────────────────────────── */
