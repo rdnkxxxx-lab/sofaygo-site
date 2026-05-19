@@ -445,7 +445,6 @@
       transform-style: preserve-3d;
       transition: transform 0.72s var(--ease);
     }
-    .product-card:hover .card-flipper,
     .product-card.tapped .card-flipper { transform: rotateY(180deg); }
 
     .card-face {
@@ -493,7 +492,7 @@
       pointer-events: none;
       transition: opacity 0.28s;
     }
-    .product-card:hover .card-flip-hint { opacity: 0; }
+    .product-card:hover .card-flip-hint { opacity: 0; display: none; }
 
     .card-info {
       position: absolute;
@@ -530,17 +529,19 @@
       color: rgba(248,248,246,0.28);
     }
 
-    /* ── Back-face Add to Cart ──────────────────── */
-    .card-back-overlay {
+    /* ── Add to Cart overlay ────────────────────── */
+    .card-add-overlay {
       position: absolute;
       inset: 0;
+      z-index: 7;
       display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      align-items: flex-end;
       padding: 24px;
-      z-index: 2;
+      opacity: 0;
       pointer-events: none;
+      transition: opacity 0.25s var(--ease);
     }
+    .product-card:hover .card-add-overlay { opacity: 1; pointer-events: all; }
     .card-add-btn {
       width: 100%;
       padding: 12px 16px;
@@ -553,7 +554,6 @@
       letter-spacing: 0.26em;
       text-transform: uppercase;
       cursor: pointer;
-      pointer-events: all;
       transition: opacity 0.2s, transform 0.22s var(--ease), background 0.2s;
     }
     .card-add-btn:hover { opacity: 0.85; transform: translateY(-2px); }
@@ -1589,13 +1589,10 @@
     });
   });
 
-  /* ── Add-to-cart button on back face ─────────── */
+  /* ── Add-to-cart button overlay ─────────────── */
   cards.forEach(card => {
-    const backFace = card.querySelector('.card-face--back');
-    if (!backFace) return;
-
     const overlay = document.createElement('div');
-    overlay.className = 'card-back-overlay';
+    overlay.className = 'card-add-overlay';
 
     const btn = document.createElement('button');
     btn.className = 'card-add-btn';
@@ -1626,12 +1623,10 @@
         btn.textContent = 'Add to Cart';
         btn.classList.remove('added');
       }, 1200);
-
-      card.classList.remove('tapped');
     });
 
     overlay.appendChild(btn);
-    backFace.appendChild(overlay);
+    card.appendChild(overlay);
   });
 
   /* ── Notify me form ──────────────────────────── */
