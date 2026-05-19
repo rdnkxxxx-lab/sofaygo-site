@@ -693,36 +693,7 @@
       object-fit: contain;
     }
     .merch-card-face-back { transform: rotateY(180deg); }
-    /* ── Merch Add to Cart overlay ──────────────── */
     .merch-flip-hint { display: none; }
-    .merch-add-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 7;
-      display: flex;
-      align-items: flex-end;
-      padding: 24px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .merch-card:hover .merch-add-overlay { opacity: 1; pointer-events: all; }
-    .merch-add-btn {
-      width: 100%;
-      padding: 12px 16px;
-      background: var(--pink);
-      color: var(--white);
-      border: none;
-      font-family: var(--font-body);
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s;
-    }
-    .merch-add-btn:hover { opacity: 0.85; transform: translateY(-2px); }
-    .merch-add-btn.added { background: rgba(255,255,255,0.1); color: rgba(248,248,246,0.5); }
     .merch-sold-badge {
       position: absolute;
       top: 16px;
@@ -2762,37 +2733,6 @@ function openCart(){document.getElementById('cart-drawer').classList.add('open')
 function closeCart(){document.getElementById('cart-drawer').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');document.body.style.overflow='';}
 document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=document.getElementById('nav-cart-btn');if(cb)cb.addEventListener('click',openCart);var cl=document.getElementById('cart-close');if(cl)cl.addEventListener('click',closeCart);var ov=document.getElementById('cart-overlay');if(ov)ov.addEventListener('click',closeCart);var co=document.getElementById('cart-continue');if(co)co.addEventListener('click',closeCart);document.addEventListener('keydown',function(e){if(e.key==='Escape')closeCart();});
 
-  /* ── Add-to-cart buttons on merch cards ── */
-  document.querySelectorAll('.merch-card').forEach(function(card) {
-    var overlay = document.createElement('div');
-    overlay.className = 'merch-add-overlay';
-
-    var btn = document.createElement('button');
-    btn.className = 'merch-add-btn';
-    btn.textContent = 'Add to Cart';
-
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var name  = card.querySelector('.merch-card-name').textContent;
-      var price = parseFloat(card.dataset.price);
-      var image = card.querySelector('.merch-card-face-front img').src;
-      var id    = card.dataset.id;
-      var key   = 'product-' + id;
-
-      var cart = getCart();
-      var existing = cart.find(function(i){ return i.key === key; });
-      if (existing) { existing.qty++; } else { cart.push({key:key,id:id,name:name,price:price,image:image,size:null,qty:1}); }
-      saveCart(cart);
-      refreshCartUI();
-
-      btn.textContent = 'Added!';
-      btn.classList.add('added');
-      setTimeout(function(){ btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1200);
-    });
-
-    overlay.appendChild(btn);
-    card.appendChild(overlay);
-  });
 });
 </script>
 <script>
