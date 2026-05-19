@@ -2308,6 +2308,7 @@
   /* Spotify IFrame API */
   var _embedController = null;
   var _isPlaying = false;
+  var _pendingTrackId = null;
 
   window.onSpotifyIframeApiReady = function(IFrameAPI) {
     IFrameAPI.createController(
@@ -2320,6 +2321,11 @@
           var btn = document.getElementById('play-pause-btn');
           if (btn) btn.textContent = _isPlaying ? '⏸' : '▶';
         });
+        if (_pendingTrackId) {
+          controller.loadUri('spotify:track:' + _pendingTrackId);
+          controller.play();
+          _pendingTrackId = null;
+        }
       }
     );
   };
@@ -2341,6 +2347,8 @@
     if (_embedController) {
       _embedController.loadUri('spotify:track:' + id);
       _embedController.play();
+    } else {
+      _pendingTrackId = id;
     }
     fetch('https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Ftrack%2F' + id)
       .then(function(r){ return r.json(); })
