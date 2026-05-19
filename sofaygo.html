@@ -675,7 +675,6 @@
       transform-style: preserve-3d;
       transition: transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .merch-card:hover .merch-card-img-inner,
     .merch-card.flipped .merch-card-img-inner { transform: rotateY(180deg); }
     .merch-card-face {
       position: absolute;
@@ -694,21 +693,36 @@
       object-fit: contain;
     }
     .merch-card-face-back { transform: rotateY(180deg); }
-    .merch-flip-hint {
+    /* ── Merch Add to Cart overlay ──────────────── */
+    .merch-flip-hint { display: none; }
+    .merch-add-overlay {
       position: absolute;
-      bottom: 18px;
-      right: 20px;
-      z-index: 4;
-      font-family: var(--font-body);
-      font-size: 8px;
-      font-weight: 600;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.2);
+      inset: 0;
+      z-index: 7;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+      opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .merch-card:hover .merch-flip-hint { opacity: 0; }
+    .merch-card:hover .merch-add-overlay { opacity: 1; pointer-events: all; }
+    .merch-add-btn {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--pink);
+      color: var(--white);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s;
+    }
+    .merch-add-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+    .merch-add-btn.added { background: rgba(255,255,255,0.1); color: rgba(248,248,246,0.5); }
     .merch-sold-badge {
       position: absolute;
       top: 16px;
@@ -1067,9 +1081,6 @@
       .footer-links a::after { content: "↗"; margin-left: auto; font-family: var(--font-body); font-size: 12px; color: rgba(255,255,255,0.15); }
       .footer-bottom { flex-direction: column; gap: 5px; text-align: center; padding: 22px 28px; margin-top: 0; border-top: none; font-size: 8px; letter-spacing: 0.1em; }
 
-      /* Disable hover-based merch flip — tap toggle (.flipped) handles it */
-      .merch-card:hover .merch-card-img-inner { transform: none; }
-      .merch-card:hover .merch-card-img { transform: scale(1); }
 
       /* Player: bottom bar on mobile */
       #player-section {
@@ -1338,9 +1349,6 @@
       padding-bottom: env(safe-area-inset-bottom) !important;
     }
 
-    /* ── Device Detection — Merch flip ─────────────────── */
-    .is-mobile .merch-card:hover .merch-card-img-inner { transform: none; }
-    .is-mobile .merch-card:hover .merch-card-img       { transform: scale(1); }
 
     /* ── Device Detection — Animations ─────────────────── */
     .is-mobile [data-reveal]         { transition: opacity 0.56s ease, transform 0.56s ease; }
@@ -2114,11 +2122,11 @@
     </div>
     <div class="merch-hed-row">
       <h2 class="merch-hed">Merch</h2>
-      <p class="merch-tagline">Hover each piece to see the reverse. Tap on mobile.</p>
+      <p class="merch-tagline">Limited runs. No reprints. Every piece drops once.</p>
     </div>
   </div>
   <div class="merch-grid">
-    <div class="merch-card">
+    <div class="merch-card" data-id="m1" data-price="75">
       <div class="merch-card-img">
         <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
@@ -2129,7 +2137,6 @@
             <img src="https://imsofaygo.com/cdn/shop/files/MANIASKULLHOODIE_BLACK_2_1024x1024@2x.png?v=1763668462" alt="Mania Skull Hoodie — Back" loading="lazy">
           </div>
         </div>
-        <div class="merch-flip-hint">Flip</div>
       </div>
       <div class="merch-card-info">
         <span class="merch-card-idx">01</span>
@@ -2137,7 +2144,7 @@
         <div class="merch-card-price">$75.00 · Sold Out</div>
       </div>
     </div>
-    <div class="merch-card">
+    <div class="merch-card" data-id="m2" data-price="35">
       <div class="merch-card-img">
         <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
@@ -2148,7 +2155,6 @@
             <img src="https://imsofaygo.com/cdn/shop/files/MANIAGOTHICTEE2_1024x1024@2x.png?v=1763691915" alt="Mania Gothic Tee — Back" loading="lazy">
           </div>
         </div>
-        <div class="merch-flip-hint">Flip</div>
       </div>
       <div class="merch-card-info">
         <span class="merch-card-idx">02</span>
@@ -2156,7 +2162,7 @@
         <div class="merch-card-price">$35.00 · Sold Out</div>
       </div>
     </div>
-    <div class="merch-card">
+    <div class="merch-card" data-id="m3" data-price="75">
       <div class="merch-card-img">
         <div class="merch-sold-badge">Sold</div>
         <div class="merch-card-img-inner">
@@ -2167,7 +2173,6 @@
             <img src="https://imsofaygo.com/cdn/shop/files/HARDCORESWEATPANTS2_25083d02-534b-418a-9668-fa76e366562d_1024x1024@2x.png?v=1763626133" alt="Hardcore Sweatpants — Back" loading="lazy">
           </div>
         </div>
-        <div class="merch-flip-hint">Flip</div>
       </div>
       <div class="merch-card-info">
         <span class="merch-card-idx">03</span>
@@ -2755,7 +2760,40 @@ function refreshCartUI(){var cart=getCart(),count=cartCount(cart);var badge=docu
 function renderCartItems(){var list=document.getElementById('cart-items-list');if(!list)return;var cart=getCart();if(!cart.length){list.innerHTML='<div class="cart-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>Your cart is empty</p></div>';return;}list.innerHTML=cart.map(function(item){return '<div class="cart-item"><div class="cart-item-img"><img src="'+item.image+'" alt="'+item.name+'" loading="lazy"></div><div class="cart-item-details"><div class="cart-item-name">'+item.name+'</div><div class="cart-item-meta">'+(item.size?'Size '+item.size:'One Size')+' &middot; $'+item.price.toFixed(2)+'</div><div class="cart-item-qty"><button class="qty-btn" onclick="updateQty(\''+item.key+'\',-1)">&#8722;</button><span class="qty-value">'+item.qty+'</span><button class="qty-btn" onclick="updateQty(\''+item.key+'\',1)">+</button></div></div><div class="cart-item-right"><span class="cart-item-price">$'+(item.price*item.qty).toFixed(2)+'</span><button class="cart-remove" onclick="removeFromCart(\''+item.key+'\')" aria-label="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></button></div></div>';}).join('');}
 function openCart(){document.getElementById('cart-drawer').classList.add('open');document.getElementById('cart-overlay').classList.add('open');document.body.style.overflow='hidden';renderCartItems();refreshCartUI();}
 function closeCart(){document.getElementById('cart-drawer').classList.remove('open');document.getElementById('cart-overlay').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=document.getElementById('nav-cart-btn');if(cb)cb.addEventListener('click',openCart);var cl=document.getElementById('cart-close');if(cl)cl.addEventListener('click',closeCart);var ov=document.getElementById('cart-overlay');if(ov)ov.addEventListener('click',closeCart);var co=document.getElementById('cart-continue');if(co)co.addEventListener('click',closeCart);document.addEventListener('keydown',function(e){if(e.key==='Escape')closeCart();});});
+document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=document.getElementById('nav-cart-btn');if(cb)cb.addEventListener('click',openCart);var cl=document.getElementById('cart-close');if(cl)cl.addEventListener('click',closeCart);var ov=document.getElementById('cart-overlay');if(ov)ov.addEventListener('click',closeCart);var co=document.getElementById('cart-continue');if(co)co.addEventListener('click',closeCart);document.addEventListener('keydown',function(e){if(e.key==='Escape')closeCart();});
+
+  /* ── Add-to-cart buttons on merch cards ── */
+  document.querySelectorAll('.merch-card').forEach(function(card) {
+    var overlay = document.createElement('div');
+    overlay.className = 'merch-add-overlay';
+
+    var btn = document.createElement('button');
+    btn.className = 'merch-add-btn';
+    btn.textContent = 'Add to Cart';
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var name  = card.querySelector('.merch-card-name').textContent;
+      var price = parseFloat(card.dataset.price);
+      var image = card.querySelector('.merch-card-face-front img').src;
+      var id    = card.dataset.id;
+      var key   = 'product-' + id;
+
+      var cart = getCart();
+      var existing = cart.find(function(i){ return i.key === key; });
+      if (existing) { existing.qty++; } else { cart.push({key:key,id:id,name:name,price:price,image:image,size:null,qty:1}); }
+      saveCart(cart);
+      refreshCartUI();
+
+      btn.textContent = 'Added!';
+      btn.classList.add('added');
+      setTimeout(function(){ btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1200);
+    });
+
+    overlay.appendChild(btn);
+    card.appendChild(overlay);
+  });
+});
 </script>
 <script>
 (function () {
