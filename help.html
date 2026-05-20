@@ -183,10 +183,16 @@
       nav { padding: 0 20px; }
       .legal-header-inner { padding: 60px 24px 44px; }
       .legal-body { padding: 40px 24px 72px; }
-      footer { padding: 48px 24px 36px; }
-      .footer-links { flex-direction: column; align-items: center; gap: 14px; }
-      .footer-legal { gap: 14px; }
-      .footer-bottom { flex-direction: column; gap: 5px; text-align: center; }
+      footer { padding: 0 0 max(32px, env(safe-area-inset-bottom)); }
+      .footer-inner { gap: 0; align-items: stretch; }
+      .footer-wordmark { font-size: clamp(72px, 20vw, 92px); padding: 52px 28px 8px; text-align: center; border-bottom: none; letter-spacing: 0.04em; line-height: 1; }
+      .footer-tagline { font-size: 8px; letter-spacing: 0.24em; text-align: center; padding: 14px 28px 28px; border-bottom: 1px solid var(--border); }
+      .footer-links { display: flex; flex-direction: column; counter-reset: nav-counter; gap: 0; flex-wrap: unset; justify-content: unset; align-items: stretch; }
+      .footer-links a { counter-increment: nav-counter; display: flex; align-items: center; gap: 18px; height: 56px; padding: 0 28px; font-family: var(--font-disp); font-size: 22px; letter-spacing: 0.05em; color: rgba(255,255,255,0.55); border-bottom: 1px solid var(--border); border-right: none; text-align: left; justify-content: flex-start; }
+      .footer-links a::before { content: "0" counter(nav-counter); color: var(--pink); font-family: var(--font-body); font-size: 9px; font-weight: 700; letter-spacing: 0.18em; width: 22px; flex-shrink: 0; }
+      .footer-links a::after { content: none; }
+      .footer-legal { margin-top: 40px; padding: 0 28px; gap: 14px; }
+      .footer-bottom { flex-direction: column; gap: 5px; text-align: center; padding: 16px 28px 22px; margin-top: 0; border-top: none; font-size: 8px; letter-spacing: 0.1em; }
     }
   </style>
   <script>!function(){var u=navigator.userAgent,c=window.matchMedia('(pointer:coarse)').matches,n=window.innerWidth<768,m=/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(u)||(c&&window.innerWidth<=1200)||n;document.documentElement.classList.add(m?'is-mobile':'is-desktop')}()</script>
