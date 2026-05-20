@@ -1878,7 +1878,7 @@
       <div id="player-title" style="font-family:var(--font-body); font-size:14px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:0.02em; margin-bottom:6px;"></div>
       <div style="display:flex; align-items:center; gap:10px;">
         <div style="font-family:var(--font-body); font-size:11px; color:rgba(255,255,255,0.45); letter-spacing:0.08em;">SoFaygo</div>
-        <button id="play-pause-btn" onclick="togglePlay()" style="width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; font-size:10px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'">▶</button>
+        <button id="play-pause-btn" onclick="togglePlay()" style="width:26px; height:26px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2); color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background 0.2s; flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.background='rgba(255,255,255,0.12)'"><span style="display:block;width:0;height:0;border:4.5px solid transparent;border-left:8px solid currentColor;margin-left:2px"></span></button>
       </div>
     </div>
     <button onclick="closePlayer()" style="font-family:var(--font-body); font-size:9px; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; background:none; border:none; color:rgba(255,255,255,0.4); cursor:pointer; padding:0; align-self:flex-start; transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">Close ✕</button>
@@ -2316,7 +2316,7 @@
         controller.addListener('playback_update', function(e) {
           _isPlaying = !e.data.isPaused;
           var btn = document.getElementById('play-pause-btn');
-          if (btn) btn.textContent = _isPlaying ? '⏸' : '▶';
+          if (btn) btn.innerHTML = _isPlaying ? '<span style="display:flex;gap:3px"><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span></span>' : '<span style="display:block;width:0;height:0;border:4.5px solid transparent;border-left:8px solid currentColor;margin-left:2px"></span>';
         });
         if (_pendingTrackId) {
           controller.loadUri('spotify:track:' + _pendingTrackId);
@@ -2339,7 +2339,7 @@
     document.getElementById('player-title').textContent = row.querySelector('.track-title').textContent.trim();
     document.getElementById('player-section').style.display = 'block';
     var btn = document.getElementById('play-pause-btn');
-    if (btn) btn.textContent = '⏸';
+    if (btn) btn.innerHTML = '<span style="display:flex;gap:3px"><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span></span>';
     _isPlaying = true;
     if (_embedController) {
       _embedController.loadUri('spotify:track:' + id);
@@ -2360,7 +2360,7 @@
     if (_embedController) _embedController.pause();
     _isPlaying = false;
     var btn = document.getElementById('play-pause-btn');
-    if (btn) btn.textContent = '▶';
+    if (btn) btn.innerHTML = '<span style="display:block;width:0;height:0;border:4.5px solid transparent;border-left:8px solid currentColor;margin-left:2px"></span>';
   }
 
   /* Intro animation */
