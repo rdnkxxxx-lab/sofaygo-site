@@ -2473,8 +2473,9 @@
     setInterval(tick, 4000);
   })();
 
-  /* Hero name brush */
+  /* Hero name brush — desktop only */
   (function () {
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     var nameEl = document.querySelector('.hero-name');
     var copyEl = document.querySelector('.hero-copy');
     if (!nameEl || !copyEl) return;
