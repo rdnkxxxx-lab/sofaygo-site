@@ -2760,7 +2760,7 @@ document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=d
     if (!raf) tick();
   }, { passive: false });
   function tick() {
-    current += (target - current) * 0.09;
+    current += (target - current) * 0.065;
     window.scrollTo(0, current);
     if (Math.abs(target - current) > 0.5) {
       raf = requestAnimationFrame(tick);
