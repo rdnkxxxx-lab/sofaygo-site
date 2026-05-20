@@ -1887,17 +1887,6 @@
 
 <!-- Spotify IFrame API container -->
 <div id="embed-iframe" style="position:fixed; width:1px; height:1px; overflow:hidden; pointer-events:none; opacity:0; bottom:0; right:0;"></div>
-<script>
-  window._spotifyLoaded = false;
-  function _loadSpotify() {
-    if (window._spotifyLoaded) return;
-    window._spotifyLoaded = true;
-    var s = document.createElement('script');
-    s.src = 'https://open.spotify.com/embed/iframe-api/v1';
-    s.async = true;
-    document.head.appendChild(s);
-  }
-</script>
 
 <!-- ── MANIA ───────────────────────────────────────── -->
 <div class="album-feat" id="mania">
@@ -2302,67 +2291,6 @@
 </div>
 
 <script>
-  /* Spotify IFrame API */
-  var _embedController = null;
-  var _isPlaying = false;
-  var _pendingTrackId = null;
-
-  window.onSpotifyIframeApiReady = function(IFrameAPI) {
-    IFrameAPI.createController(
-      document.getElementById('embed-iframe'),
-      { width: '1', height: '1', uri: 'spotify:track:6aHoPULNO7pSL2ZfUY0bU8' },
-      function(controller) {
-        _embedController = controller;
-        controller.addListener('playback_update', function(e) {
-          _isPlaying = !e.data.isPaused;
-          var btn = document.getElementById('play-pause-btn');
-          if (btn) btn.innerHTML = _isPlaying ? '<span style="display:flex;gap:3px"><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span></span>' : '<span style="display:block;width:0;height:0;border:4.5px solid transparent;border-left:8px solid currentColor;margin-left:2px"></span>';
-        });
-        if (_pendingTrackId) {
-          controller.loadUri('spotify:track:' + _pendingTrackId);
-          controller.play();
-          _pendingTrackId = null;
-        }
-      }
-    );
-  };
-
-  function togglePlay() {
-    if (_embedController) _embedController.togglePlay();
-  }
-
-  /* Track player */
-  function playTrack(row, id) {
-    _loadSpotify();
-    document.querySelectorAll('.track-row.playing').forEach(function(r){ r.classList.remove('playing'); });
-    row.classList.add('playing');
-    document.getElementById('player-title').textContent = row.querySelector('.track-title').textContent.trim();
-    document.getElementById('player-section').style.display = 'block';
-    var btn = document.getElementById('play-pause-btn');
-    if (btn) btn.innerHTML = '<span style="display:flex;gap:3px"><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span><span style="width:2.5px;height:10px;background:currentColor;border-radius:1px;display:block"></span></span>';
-    _isPlaying = true;
-    if (_embedController) {
-      _embedController.loadUri('spotify:track:' + id);
-      _embedController.play();
-    } else {
-      _pendingTrackId = id;
-    }
-    fetch('https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Ftrack%2F' + id)
-      .then(function(r){ return r.json(); })
-      .then(function(data){ document.getElementById('player-cover').src = data.thumbnail_url; })
-      .catch(function(){});
-  }
-
-  function closePlayer() {
-    document.getElementById('player-section').style.display = 'none';
-    document.getElementById('player-cover').src = '';
-    document.querySelectorAll('.track-row.playing').forEach(function(r){ r.classList.remove('playing'); });
-    if (_embedController) _embedController.pause();
-    _isPlaying = false;
-    var btn = document.getElementById('play-pause-btn');
-    if (btn) btn.innerHTML = '<span style="display:block;width:0;height:0;border:4.5px solid transparent;border-left:8px solid currentColor;margin-left:2px"></span>';
-  }
-
   /* Intro animation */
   (function () {
     document.body.classList.add('intro-active');
@@ -2773,5 +2701,6 @@ document.addEventListener('DOMContentLoaded',function(){refreshCartUI();var cb=d
 })();
 </script>
 
+<script src="player.js"></script>
 </body>
 </html>
