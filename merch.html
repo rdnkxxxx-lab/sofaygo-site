@@ -1662,10 +1662,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.deltaMode === 2) delta *= window.innerHeight;
     target += delta * 0.72;
     target = Math.max(0, Math.min(target, document.documentElement.scrollHeight - window.innerHeight));
+    var maxGap = window.innerHeight * 0.9;
+    target = Math.max(current - maxGap, Math.min(current + maxGap, target));
     if (!raf) tick();
   }, { passive: false });
   function tick() {
-    current += (target - current) * 0.08;
+    current += (target - current) * 0.1;
     window.scrollTo(0, current);
     if (Math.abs(target - current) > 0.5) {
       raf = requestAnimationFrame(tick);
